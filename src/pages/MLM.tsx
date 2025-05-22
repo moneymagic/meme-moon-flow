@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Users, TrendingUp, Share2, Award, DollarSign } from 'lucide-react';
+import { ArrowLeft, Users, TrendingUp, Share2, Award, DollarSign, Infinity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const MLM = () => {
@@ -12,7 +12,7 @@ const MLM = () => {
     directReferrals: 23,
     totalCommissions: 4560,
     monthlyCommissions: 890,
-    networkDepth: 7,
+    networkDepth: "∞", // Changed to infinity symbol
     activeMembers: 1089
   };
 
@@ -45,7 +45,7 @@ const MLM = () => {
                   Voltar
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-white">Rede Multinível</h1>
+              <h1 className="text-2xl font-bold text-white">Matriz Unilevel</h1>
             </div>
             <Badge variant="outline" className="border-green-500 text-green-400">
               Sistema VastCopy
@@ -91,7 +91,7 @@ const MLM = () => {
                   <p className="text-2xl font-bold text-white">{networkStats.networkDepth} níveis</p>
                   <p className="text-blue-400 text-sm">{networkStats.activeMembers} ativos</p>
                 </div>
-                <Share2 className="h-8 w-8 text-purple-400" />
+                <Infinity className="h-8 w-8 text-purple-400" />
               </div>
             </CardContent>
           </Card>
@@ -102,7 +102,7 @@ const MLM = () => {
           <div className="lg:col-span-2 space-y-6">
             <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-white">Estrutura de Níveis</CardTitle>
+                <CardTitle className="text-white">Estrutura Unilevel com Compressão por Ranking</CardTitle>
                 <CardDescription className="text-gray-400">
                   Distribuição de comissões por nível da rede (20% do lucro total)
                 </CardDescription>
@@ -140,6 +140,11 @@ const MLM = () => {
                       </div>
                     </div>
                   ))}
+                  <div className="p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-lg mt-4 border border-white/10">
+                    <p className="text-white text-center">
+                      A profundidade da rede é ilimitada: as comissões sobem linha por linha até encontrar os ranks qualificados
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -183,7 +188,7 @@ const MLM = () => {
               <CardHeader>
                 <CardTitle className="text-white">Suas Comissões</CardTitle>
                 <CardDescription className="text-gray-400">
-                  Ganhos da rede multinível
+                  Ganhos da matriz unilevel
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -234,15 +239,22 @@ const MLM = () => {
             {/* Network Visualization */}
             <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-white">Visualização da Rede</CardTitle>
+                <CardTitle className="text-white">Matriz de Ganhos</CardTitle>
+                <CardDescription className="text-gray-400">
+                  Profundidade Infinita + Compressão por Ranking
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
                 <div className="text-center">
                   <div className="bg-gradient-to-r from-green-400 to-blue-500 p-4 rounded-full inline-block mb-4">
                     <Users className="h-8 w-8 text-white" />
                   </div>
                   <p className="text-white font-bold">Você</p>
                   <p className="text-gray-400 text-sm">Master Account</p>
+                </div>
+                <div className="bg-white/5 p-4 rounded-lg text-sm text-gray-300">
+                  <p className="mb-2">O sistema sobe linha por linha da árvore, procurando os ranks qualificados de V1 a V8.</p>
+                  <p>Cada rank tem um percentual fixo dentro dos 20% distribuídos em rede.</p>
                 </div>
                 <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
                   Ver Árvore Completa

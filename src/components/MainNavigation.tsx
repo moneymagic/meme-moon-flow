@@ -13,7 +13,7 @@ const MainNavigation = ({ className, variant = 'default' }: MainNavigationProps)
     { name: 'Home', path: '/', icon: Home },
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Network', path: '/network', icon: Network },
-    { name: 'MLM', path: '/mlm', icon: Layers },
+    { name: 'Matriz Unilevel', path: '/mlm', icon: Layers },
   ];
 
   if (variant === 'mobile') {
