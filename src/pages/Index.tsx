@@ -134,10 +134,10 @@ const Index = () => {
           </Card>
         </div>
         
-        {/* Ranking System */}
+        {/* Status Section */}
         <Card className="bg-black/30 border-white/10 backdrop-blur-sm mb-12">
           <CardHeader>
-            <CardTitle className="text-white">Sistema de Status</CardTitle>
+            <CardTitle className="text-white">Status</CardTitle>
             <CardDescription className="text-gray-400">
               Evolua no sistema e ganhe mais benefícios
             </CardDescription>
