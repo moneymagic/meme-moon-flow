@@ -6,10 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { ArrowLeft, Settings, TrendingUp, DollarSign, Activity, Users, Award } from 'lucide-react';
+import { ArrowLeft, Settings, TrendingUp, DollarSign, Activity, Users, Award, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, calculateProportionalTradeAmount } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
 const Master = () => {
@@ -17,6 +17,24 @@ const Master = () => {
   const [maxRisk, setMaxRisk] = useState('5');
   const [minProfit, setMinProfit] = useState('10');
   const { toast } = useToast();
+
+  // Estado para exemplo de proporcionalidade
+  const [masterBalance, setMasterBalance] = useState(1);
+  const [followerBalance, setFollowerBalance] = useState(2);
+  const [masterTradeAmount, setMasterTradeAmount] = useState(0.1);
+  const [followerTradeAmount, setFollowerTradeAmount] = useState(0.2);
+
+  // Efeito para calcular o valor proporcional do seguidor quando os valores mudam
+  useEffect(() => {
+    if (masterBalance > 0 && masterTradeAmount > 0) {
+      const proportionalAmount = calculateProportionalTradeAmount(
+        masterTradeAmount,
+        masterBalance,
+        followerBalance
+      );
+      setFollowerTradeAmount(proportionalAmount);
+    }
+  }, [masterBalance, followerBalance, masterTradeAmount]);
 
   // Fetch rank requirements
   const { data: rankRequirements } = useQuery({
@@ -102,6 +120,87 @@ const Master = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Configuration Panel */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Operações Proporcionais Demo */}
+            <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <AlertCircle className="mr-2 h-5 w-5" />
+                  Simulador de Operações Proporcionais
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Veja como as operações são proporcionais ao capital disponível
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Master Trader Side */}
+                  <div className="space-y-4 p-4 rounded-lg bg-purple-900/20">
+                    <h3 className="text-white font-medium">Master Trader</h3>
+                    <div className="space-y-2">
+                      <Label className="text-white">Saldo Total (SOL)</Label>
+                      <Input 
+                        type="number" 
+                        value={masterBalance}
+                        onChange={(e) => setMasterBalance(parseFloat(e.target.value) || 0)}
+                        className="bg-white/5 border-white/20 text-white"
+                        step="0.01"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Valor da Operação (SOL)</Label>
+                      <Input 
+                        type="number" 
+                        value={masterTradeAmount}
+                        onChange={(e) => setMasterTradeAmount(parseFloat(e.target.value) || 0)}
+                        className="bg-white/5 border-white/20 text-white"
+                        step="0.01"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Percentual do Capital:</p>
+                      <p className="text-white font-bold text-lg">
+                        {masterBalance > 0 ? ((masterTradeAmount / masterBalance) * 100).toFixed(2) : 0}%
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Follower Side */}
+                  <div className="space-y-4 p-4 rounded-lg bg-blue-900/20">
+                    <h3 className="text-white font-medium">Seguidor</h3>
+                    <div className="space-y-2">
+                      <Label className="text-white">Saldo Total (SOL)</Label>
+                      <Input 
+                        type="number" 
+                        value={followerBalance}
+                        onChange={(e) => setFollowerBalance(parseFloat(e.target.value) || 0)}
+                        className="bg-white/5 border-white/20 text-white"
+                        step="0.01"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Valor Proporcional (SOL)</Label>
+                      <Input 
+                        type="number" 
+                        value={followerTradeAmount}
+                        readOnly
+                        className="bg-white/5 border-white/20 text-white"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Percentual do Capital:</p>
+                      <p className="text-white font-bold text-lg">
+                        {followerBalance > 0 ? ((followerTradeAmount / followerBalance) * 100).toFixed(2) : 0}%
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-white/5 rounded-lg">
+                  <p className="text-white text-center">O sistema replica as operações do Master de forma proporcional ao capital de cada seguidor, mantendo o mesmo percentual de exposição ao risco.</p>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Bot Configuration */}
             <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
               <CardHeader>
