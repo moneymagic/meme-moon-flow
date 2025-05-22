@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { getUserRankingProgress } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
+import { Star } from "lucide-react";
 
 interface RankingProgressProps {
   className?: string;
@@ -19,7 +20,6 @@ const RankingProgress = ({ className }: RankingProgressProps) => {
   });
   
   useEffect(() => {
-    // Em uma implementação real, buscaríamos esses dados do usuário logado
     const fetchRankingData = async () => {
       try {
         const userId = "dummy-user-id"; // Em produção, seria o ID do usuário autenticado
@@ -76,8 +76,9 @@ const RankingProgress = ({ className }: RankingProgressProps) => {
               Progresso para o próximo nível
             </CardDescription>
           </div>
-          <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-            V{rankingData.currentRank}
+          <div className="flex items-center gap-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-1 rounded-full">
+            <Star className="h-4 w-4 fill-yellow-300 text-yellow-300" />
+            <span className="text-sm font-medium">V{rankingData.currentRank}</span>
           </div>
         </div>
       </CardHeader>
