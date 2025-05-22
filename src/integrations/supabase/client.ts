@@ -11,7 +11,7 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-// Tipos de operação para o sistema de copy trading
+// Tipos de operação para o sistema de trading automatizado
 export type TradeOperation = {
   traderId: string;
   tradeAmount: number;
@@ -88,6 +88,155 @@ export const getBalanceRequirements = async (): Promise<BalanceRequirements> => 
     return {
       minActiveBalance: 0.5,
       minMaintenanceBalance: 0.1
+    };
+  }
+};
+
+// Tipos para dados de crescimento do capital
+export interface CapitalGrowthData {
+  date: string;
+  value: number;
+}
+
+// Interface para operação ativa
+export interface ActiveOperation {
+  id: string;
+  coin: string;
+  entryPrice: number;
+  currentPrice: number;
+  percentChange: number;
+  direction: 'buy' | 'sell';
+  amount: number;
+  timestamp: Date;
+}
+
+// Interface para o progresso do ranking
+export interface RankingProgress {
+  currentRank: number;
+  nextRank: number;
+  currentVolume: number;
+  requiredVolume: number;
+  directReferrals: number;
+  requiredDirectReferrals: number;
+}
+
+// Função para buscar dados de crescimento do capital de um usuário
+export const getUserCapitalGrowth = async (userId: string, days: number = 30): Promise<CapitalGrowthData[]> => {
+  try {
+    // Em uma implementação real, buscaríamos esses dados do Supabase
+    // Aqui, estamos apenas retornando dados de exemplo
+    const mockData: CapitalGrowthData[] = [];
+    const today = new Date();
+    let baseValue = 2.5;
+    
+    for (let i = 0; i < days; i++) {
+      const day = new Date(today);
+      day.setDate(day.getDate() - (days - i - 1));
+      
+      // Gera um valor que varia aleatoriamente mas tem uma tendência de crescimento
+      baseValue += (Math.random() * 0.3) - 0.1;
+      
+      mockData.push({
+        date: `${day.getDate().toString().padStart(2, '0')}/${(day.getMonth() + 1).toString().padStart(2, '0')}`,
+        value: Number(baseValue.toFixed(2))
+      });
+    }
+    
+    return mockData;
+  } catch (err) {
+    console.error('Erro ao buscar dados de crescimento do capital:', err);
+    return [];
+  }
+};
+
+// Função para buscar as operações ativas para um usuário
+export const getUserActiveOperations = async (userId: string): Promise<ActiveOperation[]> => {
+  try {
+    // Em uma implementação real, buscaríamos esses dados do Supabase
+    // Aqui, estamos apenas retornando dados de exemplo
+    return [
+      { 
+        id: '1',
+        coin: "BONK", 
+        entryPrice: 0.00000135, 
+        currentPrice: 0.00000145, 
+        percentChange: 7.4, 
+        direction: "buy", 
+        amount: 0.2,
+        timestamp: new Date()
+      },
+      { 
+        id: '2',
+        coin: "PEPE", 
+        entryPrice: 0.0000125, 
+        currentPrice: 0.0000135, 
+        percentChange: 8.0, 
+        direction: "buy", 
+        amount: 0.15,
+        timestamp: new Date(Date.now() - 1000 * 60 * 30) // 30 minutos atrás
+      },
+      { 
+        id: '3',
+        coin: "SHIB", 
+        entryPrice: 0.000028, 
+        currentPrice: 0.000027, 
+        percentChange: -3.6, 
+        direction: "sell", 
+        amount: 0.18,
+        timestamp: new Date(Date.now() - 1000 * 60 * 60) // 1 hora atrás
+      }
+    ];
+  } catch (err) {
+    console.error('Erro ao buscar operações ativas:', err);
+    return [];
+  }
+};
+
+// Função para buscar o progresso do ranking de um usuário
+export const getUserRankingProgress = async (userId: string): Promise<RankingProgress | null> => {
+  try {
+    // Em uma implementação real, buscaríamos esses dados do Supabase
+    // Aqui, estamos apenas retornando dados de exemplo
+    return {
+      currentRank: 2,
+      nextRank: 3,
+      currentVolume: 80,
+      requiredVolume: 120,
+      directReferrals: 1,
+      requiredDirectReferrals: 2
+    };
+  } catch (err) {
+    console.error('Erro ao buscar progresso de ranking:', err);
+    return null;
+  }
+};
+
+// Interface para métricas de receita
+export interface RevenueMetrics {
+  dailyRevenue: number;
+  dailyChange: string;
+  historicalRevenue: number;
+  historicalChange: string;
+}
+
+// Função para buscar métricas de receita de um usuário
+export const getUserRevenueMetrics = async (userId: string): Promise<RevenueMetrics> => {
+  try {
+    // Em uma implementação real, buscaríamos esses dados do Supabase
+    // Aqui, estamos apenas retornando dados de exemplo
+    return {
+      dailyRevenue: 0.45,
+      dailyChange: "+12%",
+      historicalRevenue: 8.75,
+      historicalChange: "+32%"
+    };
+  } catch (err) {
+    console.error('Erro ao buscar métricas de receita:', err);
+    return {
+      dailyRevenue: 0,
+      dailyChange: "0%",
+      historicalRevenue: 0,
+      historicalChange: "0%"
     };
   }
 };

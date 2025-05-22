@@ -1,13 +1,12 @@
 
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Master from "./pages/Master";
-import Followers from "./pages/Followers";
+import NetworkExplorer from "./pages/NetworkExplorer";
+import Dashboard from "./pages/Dashboard";
 import MLM from "./pages/MLM";
 import NotFound from "./pages/NotFound";
 
@@ -21,8 +20,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/master" element={<Master />} />
-          <Route path="/followers" element={<Followers />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/network" element={<NetworkExplorer />} />
           <Route path="/mlm" element={<MLM />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
