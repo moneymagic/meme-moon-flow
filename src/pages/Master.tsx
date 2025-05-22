@@ -1,18 +1,66 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { ArrowLeft, Settings, TrendingUp, DollarSign, Activity } from 'lucide-react';
+import { ArrowLeft, Settings, TrendingUp, DollarSign, Activity, Users, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useToast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useQuery } from '@tanstack/react-query';
 
 const Master = () => {
   const [botActive, setBotActive] = useState(true);
   const [maxRisk, setMaxRisk] = useState('5');
   const [minProfit, setMinProfit] = useState('10');
+  const { toast } = useToast();
+
+  // Fetch rank requirements
+  const { data: rankRequirements } = useQuery({
+    queryKey: ['rankRequirements'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('rank_requirements')
+        .select('*')
+        .order('rank');
+      
+      if (error) {
+        console.error('Erro ao carregar requisitos de rank:', error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível carregar requisitos de ranking",
+          variant: "destructive"
+        });
+        return [];
+      }
+      return data || [];
+    }
+  });
+
+  // Fetch system settings
+  const { data: systemSettings } = useQuery({
+    queryKey: ['systemSettings'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('system_settings')
+        .select('*')
+        .single();
+      
+      if (error) {
+        console.error('Erro ao carregar configurações do sistema:', error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível carregar configurações do sistema",
+          variant: "destructive"
+        });
+        return null;
+      }
+      return data;
+    }
+  });
 
   const tradingPairs = [
     { name: 'BONK/SOL', status: 'active', profit24h: '+12.5%' },
@@ -20,6 +68,13 @@ const Master = () => {
     { name: 'DOGE/SOL', status: 'paused', profit24h: '-2.1%' },
     { name: 'SHIB/SOL', status: 'active', profit24h: '+15.7%' },
   ];
+
+  const handleSaveSettings = () => {
+    toast({
+      title: "Configurações salvas",
+      description: "Suas configurações foram salvas com sucesso",
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
@@ -88,7 +143,10 @@ const Master = () => {
                   </div>
                 </div>
 
-                <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0">
+                <Button 
+                  className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0"
+                  onClick={handleSaveSettings}
+                >
                   Salvar Configurações
                 </Button>
               </CardContent>
@@ -128,6 +186,58 @@ const Master = () => {
                       </div>
                     </div>
                   ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Commission Structure */}
+            <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Award className="mr-2 h-5 w-5" />
+                  Estrutura de Comissões
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Comissões do Master e distribuição na rede afiliada
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex flex-col md:flex-row justify-between items-center p-4 bg-white/10 rounded-lg">
+                    <div className="flex-1 text-center md:text-left mb-3 md:mb-0">
+                      <p className="text-gray-400">Performance Fee Total</p>
+                      <p className="text-white text-2xl font-bold">
+                        {systemSettings?.platform_fee_percentage || 30}%
+                      </p>
+                    </div>
+                    <div className="flex-1 text-center mb-3 md:mb-0">
+                      <p className="text-gray-400">Master Trader</p>
+                      <p className="text-white text-2xl font-bold">
+                        {systemSettings?.master_trader_fee_percentage || 10}%
+                      </p>
+                    </div>
+                    <div className="flex-1 text-center md:text-right">
+                      <p className="text-gray-400">Rede Afiliada</p>
+                      <p className="text-white text-2xl font-bold">
+                        {systemSettings?.affiliate_fee_percentage || 20}%
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-white/5 rounded-lg">
+                    <h3 className="text-white font-medium mb-3">Distribuição por Ranking (Diferencial)</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                      {rankRequirements?.map((rank) => (
+                        <div 
+                          key={rank.rank} 
+                          className="bg-white/5 p-3 rounded-lg"
+                        >
+                          <h4 className="text-white font-bold">V{rank.rank}</h4>
+                          <p className="text-emerald-400 text-lg">{rank.bonus_percentage}%</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -195,19 +305,32 @@ const Master = () => {
               </CardContent>
             </Card>
 
-            {/* Smart Contract Info */}
+            {/* Ranking Requirements */}
             <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-white">Smart Contract</CardTitle>
+                <CardTitle className="text-white flex items-center">
+                  <Users className="mr-2 h-5 w-5" />
+                  Requisitos de Ranking
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Volume e afiliados necessários para cada nível
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="text-sm">
-                  <p className="text-gray-400">Endereço do Contrato:</p>
-                  <p className="text-white font-mono break-all">7x8s...9mF2</p>
+              <CardContent>
+                <div className="text-xs">
+                  <div className="flex justify-between text-gray-400 border-b border-white/10 py-2">
+                    <span>Rank</span>
+                    <span>Volume</span>
+                    <span>Afiliados</span>
+                  </div>
+                  {rankRequirements?.slice(1).map((rank) => (
+                    <div key={rank.rank} className="flex justify-between border-b border-white/10 py-2">
+                      <span className="text-white">V{rank.rank}</span>
+                      <span className="text-white">{rank.volume_required} SOL</span>
+                      <span className="text-white">{rank.same_rank_referrals_required} x V{rank.rank-1}</span>
+                    </div>
+                  ))}
                 </div>
-                <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
-                  Ver no Explorer
-                </Button>
               </CardContent>
             </Card>
           </div>

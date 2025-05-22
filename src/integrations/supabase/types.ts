@@ -9,13 +9,252 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      affiliate_commissions: {
+        Row: {
+          affiliate_id: string
+          amount: number
+          copied_trade_id: string | null
+          created_at: string
+          id: string
+          level: number
+          paid: boolean | null
+          percentage: number
+          transaction_hash: string | null
+          updated_at: string
+        }
+        Insert: {
+          affiliate_id: string
+          amount: number
+          copied_trade_id?: string | null
+          created_at?: string
+          id?: string
+          level: number
+          paid?: boolean | null
+          percentage: number
+          transaction_hash?: string | null
+          updated_at?: string
+        }
+        Update: {
+          affiliate_id?: string
+          amount?: number
+          copied_trade_id?: string | null
+          created_at?: string
+          id?: string
+          level?: number
+          paid?: boolean | null
+          percentage?: number
+          transaction_hash?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_commissions_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliates: {
+        Row: {
+          created_at: string
+          direct_referrals_count: number | null
+          id: string
+          max_rank_available: number | null
+          personal_profit: number | null
+          rank: number | null
+          rank_qualified_referrals: Json | null
+          referral_code: string
+          sponsor_id: string | null
+          total_earnings: number | null
+          total_referrals: number | null
+          updated_at: string
+          user_id: string
+          volume_network: number | null
+          volume_personal: number | null
+        }
+        Insert: {
+          created_at?: string
+          direct_referrals_count?: number | null
+          id?: string
+          max_rank_available?: number | null
+          personal_profit?: number | null
+          rank?: number | null
+          rank_qualified_referrals?: Json | null
+          referral_code: string
+          sponsor_id?: string | null
+          total_earnings?: number | null
+          total_referrals?: number | null
+          updated_at?: string
+          user_id: string
+          volume_network?: number | null
+          volume_personal?: number | null
+        }
+        Update: {
+          created_at?: string
+          direct_referrals_count?: number | null
+          id?: string
+          max_rank_available?: number | null
+          personal_profit?: number | null
+          rank?: number | null
+          rank_qualified_referrals?: Json | null
+          referral_code?: string
+          sponsor_id?: string | null
+          total_earnings?: number | null
+          total_referrals?: number | null
+          updated_at?: string
+          user_id?: string
+          volume_network?: number | null
+          volume_personal?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          id: string
+          updated_at: string
+          username: string | null
+          wallet_address: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          id: string
+          updated_at?: string
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          updated_at?: string
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Relationships: []
+      }
+      rank_requirements: {
+        Row: {
+          bonus_percentage: number
+          created_at: string
+          direct_referrals_required: number
+          id: string
+          rank: number
+          rank_name: string
+          same_rank_referrals_required: number
+          updated_at: string
+          volume_required: number
+        }
+        Insert: {
+          bonus_percentage?: number
+          created_at?: string
+          direct_referrals_required: number
+          id?: string
+          rank: number
+          rank_name: string
+          same_rank_referrals_required: number
+          updated_at?: string
+          volume_required: number
+        }
+        Update: {
+          bonus_percentage?: number
+          created_at?: string
+          direct_referrals_required?: number
+          id?: string
+          rank?: number
+          rank_name?: string
+          same_rank_referrals_required?: number
+          updated_at?: string
+          volume_required?: number
+        }
+        Relationships: []
+      }
+      system_settings: {
+        Row: {
+          admin_wallet_address: string
+          affiliate_fee_percentage: number | null
+          created_at: string
+          id: string
+          level_1_percentage: number | null
+          level_2_percentage: number | null
+          level_3_percentage: number | null
+          level_4_percentage: number | null
+          level_5_percentage: number | null
+          level_6_percentage: number | null
+          level_7_percentage: number | null
+          level_8_percentage: number | null
+          master_trader_fee_percentage: number | null
+          platform_fee_percentage: number | null
+          updated_at: string
+        }
+        Insert: {
+          admin_wallet_address: string
+          affiliate_fee_percentage?: number | null
+          created_at?: string
+          id?: string
+          level_1_percentage?: number | null
+          level_2_percentage?: number | null
+          level_3_percentage?: number | null
+          level_4_percentage?: number | null
+          level_5_percentage?: number | null
+          level_6_percentage?: number | null
+          level_7_percentage?: number | null
+          level_8_percentage?: number | null
+          master_trader_fee_percentage?: number | null
+          platform_fee_percentage?: number | null
+          updated_at?: string
+        }
+        Update: {
+          admin_wallet_address?: string
+          affiliate_fee_percentage?: number | null
+          created_at?: string
+          id?: string
+          level_1_percentage?: number | null
+          level_2_percentage?: number | null
+          level_3_percentage?: number | null
+          level_4_percentage?: number | null
+          level_5_percentage?: number | null
+          level_6_percentage?: number | null
+          level_7_percentage?: number | null
+          level_8_percentage?: number | null
+          master_trader_fee_percentage?: number | null
+          platform_fee_percentage?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_qualified_referrals: {
+        Args: { user_id_param: string; target_rank: number }
+        Returns: number
+      }
+      calculate_user_rank: {
+        Args: { user_id_param: string }
+        Returns: number
+      }
+      distribute_affiliate_commissions: {
+        Args: {
+          copied_trade_id_param: string
+          profit_amount_param: number
+          follower_user_id_param: string
+        }
+        Returns: undefined
+      }
+      update_affiliate_metrics: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
