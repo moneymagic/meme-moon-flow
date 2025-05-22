@@ -137,7 +137,7 @@ const Index = () => {
         {/* Ranking System */}
         <Card className="bg-black/30 border-white/10 backdrop-blur-sm mb-12">
           <CardHeader>
-            <CardTitle className="text-white">Sistema de Ranking</CardTitle>
+            <CardTitle className="text-white">Sistema de Status</CardTitle>
             <CardDescription className="text-gray-400">
               Evolua no sistema e ganhe mais benefícios
             </CardDescription>
@@ -147,7 +147,7 @@ const Index = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-white/10">
-                    <th className="text-left text-gray-400 py-3 px-4">Rank</th>
+                    <th className="text-left text-gray-400 py-3 px-4">Nível</th>
                     <th className="text-left text-gray-400 py-3 px-4">Volume</th>
                     <th className="text-left text-gray-400 py-3 px-4">Requisito</th>
                     <th className="text-left text-gray-400 py-3 px-4">Bônus MLM</th>
@@ -178,12 +178,20 @@ const Index = () => {
                     <td className="py-3 px-4 text-white">2 diretos V2</td>
                     <td className="py-3 px-4 text-white">6%</td>
                   </tr>
+                  <tr className="border-b border-white/10">
+                    <td className="py-3 px-4">
+                      <Badge className="bg-indigo-700 hover:bg-indigo-600">V4</Badge>
+                    </td>
+                    <td className="py-3 px-4 text-white">200 SOL</td>
+                    <td className="py-3 px-4 text-white">2 diretos V3</td>
+                    <td className="py-3 px-4 text-white">8%</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
             <div className="mt-4 text-center">
               <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
-                Ver todos os rankings
+                Ver todos os níveis
               </Button>
             </div>
           </CardContent>
