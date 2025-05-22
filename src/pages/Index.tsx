@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowUpRight, TrendingUp, Wallet, Users } from 'lucide-react';
+import { ArrowUpRight, TrendingUp, Wallet, Users, Network } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 
 const Index = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -28,7 +29,44 @@ const Index = () => {
               </div>
               <h1 className="text-2xl font-bold text-white">MemeFlow</h1>
             </div>
+            
             <div className="flex items-center space-x-4">
+              <NavigationMenu className="hidden md:block">
+                <NavigationMenuList className="gap-2">
+                  <NavigationMenuItem>
+                    <Link to="/">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle() + " text-white bg-transparent hover:bg-white/10 hover:text-white"}>
+                        Home
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                  
+                  <NavigationMenuItem>
+                    <Link to="/dashboard">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle() + " text-white bg-transparent hover:bg-white/10 hover:text-white"}>
+                        Dashboard
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                  
+                  <NavigationMenuItem>
+                    <Link to="/network">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle() + " text-white bg-transparent hover:bg-white/10 hover:text-white"}>
+                        Network
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                  
+                  <NavigationMenuItem>
+                    <Link to="/mlm">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle() + " text-white bg-transparent hover:bg-white/10 hover:text-white"}>
+                        MLM
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+              
               {!isConnected ? (
                 <Button 
                   onClick={() => setIsConnected(true)}
@@ -133,69 +171,6 @@ const Index = () => {
             </CardContent>
           </Card>
         </div>
-        
-        {/* Status Section */}
-        <Card className="bg-black/30 border-white/10 backdrop-blur-sm mb-12">
-          <CardHeader>
-            <CardTitle className="text-white">Status</CardTitle>
-            <CardDescription className="text-gray-400">
-              Evolua no sistema e ganhe mais benefícios
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left text-gray-400 py-3 px-4">Nível</th>
-                    <th className="text-left text-gray-400 py-3 px-4">Volume</th>
-                    <th className="text-left text-gray-400 py-3 px-4">Requisito</th>
-                    <th className="text-left text-gray-400 py-3 px-4">Bônus MLM</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-white/10">
-                    <td className="py-3 px-4">
-                      <Badge className="bg-gray-700 hover:bg-gray-600">V1</Badge>
-                    </td>
-                    <td className="py-3 px-4 text-white">0 SOL</td>
-                    <td className="py-3 px-4 text-white">Entrada</td>
-                    <td className="py-3 px-4 text-white">2%</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="py-3 px-4">
-                      <Badge className="bg-blue-700 hover:bg-blue-600">V2</Badge>
-                    </td>
-                    <td className="py-3 px-4 text-white">34 SOL</td>
-                    <td className="py-3 px-4 text-white">—</td>
-                    <td className="py-3 px-4 text-white">4%</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="py-3 px-4">
-                      <Badge className="bg-purple-700 hover:bg-purple-600">V3</Badge>
-                    </td>
-                    <td className="py-3 px-4 text-white">120 SOL</td>
-                    <td className="py-3 px-4 text-white">2 diretos V2</td>
-                    <td className="py-3 px-4 text-white">6%</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="py-3 px-4">
-                      <Badge className="bg-indigo-700 hover:bg-indigo-600">V4</Badge>
-                    </td>
-                    <td className="py-3 px-4 text-white">200 SOL</td>
-                    <td className="py-3 px-4 text-white">2 diretos V3</td>
-                    <td className="py-3 px-4 text-white">8%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="mt-4 text-center">
-              <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
-                Ver todos os níveis
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
         
         {/* CTA */}
         <div className="bg-gradient-to-r from-blue-600/30 to-purple-600/30 rounded-xl p-8 text-center border border-white/10">
