@@ -38,3 +38,56 @@ export const calculateProportionalTradeAmount = (
   // Retornar o valor arredondado com 4 casas decimais (adequado para criptomoedas)
   return Number(followerTradeAmount.toFixed(4));
 };
+
+// Interface para configurações de saldo mínimo
+export interface BalanceRequirements {
+  minActiveBalance: number;   // Saldo mínimo para conta ser considerada ativa
+  minMaintenanceBalance: number;  // Saldo mínimo para manter a conta operacional
+}
+
+// Função para verificar se um usuário está ativo com base no saldo
+export const isUserActive = async (userId: string): Promise<boolean> => {
+  try {
+    // Chamada para a função RPC do Supabase
+    const { data, error } = await supabase.rpc('is_user_active', { user_id_param: userId });
+    
+    if (error) {
+      console.error('Erro ao verificar status de atividade do usuário:', error);
+      return false;
+    }
+    
+    return data || false;
+  } catch (err) {
+    console.error('Erro ao chamar função de verificação de atividade:', err);
+    return false;
+  }
+};
+
+// Função para obter requisitos de saldo do sistema
+export const getBalanceRequirements = async (): Promise<BalanceRequirements> => {
+  try {
+    const { data, error } = await supabase
+      .from('system_settings')
+      .select('min_active_balance, min_maintenance_balance')
+      .single();
+    
+    if (error) {
+      console.error('Erro ao obter requisitos de saldo:', error);
+      return {
+        minActiveBalance: 0.5,
+        minMaintenanceBalance: 0.1
+      };
+    }
+    
+    return {
+      minActiveBalance: data.min_active_balance,
+      minMaintenanceBalance: data.min_maintenance_balance
+    };
+  } catch (err) {
+    console.error('Erro ao buscar requisitos de saldo:', err);
+    return {
+      minActiveBalance: 0.5,
+      minMaintenanceBalance: 0.1
+    };
+  }
+};

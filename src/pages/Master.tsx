@@ -6,10 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { ArrowLeft, Settings, TrendingUp, DollarSign, Activity, Users, Award, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Settings, TrendingUp, DollarSign, Activity, Users, Award, AlertCircle, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase, calculateProportionalTradeAmount } from '@/integrations/supabase/client';
+import { supabase, calculateProportionalTradeAmount, getBalanceRequirements } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
 const Master = () => {
@@ -24,6 +24,12 @@ const Master = () => {
   const [masterTradeAmount, setMasterTradeAmount] = useState(0.1);
   const [followerTradeAmount, setFollowerTradeAmount] = useState(0.2);
 
+  // Estado para requisitos de saldo
+  const [balanceRequirements, setBalanceRequirements] = useState({
+    minActiveBalance: 0.5,
+    minMaintenanceBalance: 0.1
+  });
+
   // Efeito para calcular o valor proporcional do seguidor quando os valores mudam
   useEffect(() => {
     if (masterBalance > 0 && masterTradeAmount > 0) {
@@ -35,6 +41,16 @@ const Master = () => {
       setFollowerTradeAmount(proportionalAmount);
     }
   }, [masterBalance, followerBalance, masterTradeAmount]);
+
+  // Efeito para obter requisitos de saldo
+  useEffect(() => {
+    const fetchBalanceRequirements = async () => {
+      const requirements = await getBalanceRequirements();
+      setBalanceRequirements(requirements);
+    };
+    
+    fetchBalanceRequirements();
+  }, []);
 
   // Fetch rank requirements
   const { data: rankRequirements } = useQuery({
@@ -120,6 +136,54 @@ const Master = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Configuration Panel */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Requisitos de Saldo */}
+            <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Info className="mr-2 h-5 w-5" />
+                  Requisitos de Saldo Mínimo
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Saldos mínimos necessários para ativação e manutenção da conta
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="p-4 bg-green-900/20 rounded-lg border border-green-500/30">
+                    <h3 className="text-white font-medium flex items-center mb-2">
+                      <Activity className="h-4 w-4 mr-2 text-green-400" />
+                      Saldo de Ativação
+                    </h3>
+                    <p className="text-3xl font-bold text-white">
+                      {balanceRequirements.minActiveBalance} <span className="text-sm text-gray-400">SOL</span>
+                    </p>
+                    <p className="text-gray-400 text-sm mt-2">
+                      Saldo mínimo para ativar sua conta e começar a operar
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-500/30">
+                    <h3 className="text-white font-medium flex items-center mb-2">
+                      <Activity className="h-4 w-4 mr-2 text-blue-400" />
+                      Saldo de Manutenção
+                    </h3>
+                    <p className="text-3xl font-bold text-white">
+                      {balanceRequirements.minMaintenanceBalance} <span className="text-sm text-gray-400">SOL</span>
+                    </p>
+                    <p className="text-gray-400 text-sm mt-2">
+                      Saldo mínimo para manter sua conta operacional
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="p-4 bg-white/5 rounded-lg">
+                  <p className="text-white text-center">
+                    Sua conta será desativada automaticamente se o saldo cair abaixo do valor mínimo de manutenção.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Operações Proporcionais Demo */}
             <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
               <CardHeader>
@@ -422,11 +486,13 @@ const Master = () => {
                     <span>Volume</span>
                     <span>Afiliados</span>
                   </div>
-                  {rankRequirements?.slice(1).map((rank) => (
+                  {rankRequirements?.map((rank) => (
                     <div key={rank.rank} className="flex justify-between border-b border-white/10 py-2">
                       <span className="text-white">V{rank.rank}</span>
                       <span className="text-white">{rank.volume_required} SOL</span>
-                      <span className="text-white">{rank.same_rank_referrals_required} x V{rank.rank-1}</span>
+                      <span className="text-white">
+                        {rank.rank >= 3 ? `${rank.direct_referrals_required} x V${rank.rank-1}` : '-'}
+                      </span>
                     </div>
                   ))}
                 </div>

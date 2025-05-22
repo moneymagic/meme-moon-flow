@@ -191,6 +191,8 @@ export type Database = {
           level_7_percentage: number | null
           level_8_percentage: number | null
           master_trader_fee_percentage: number | null
+          min_active_balance: number | null
+          min_maintenance_balance: number | null
           platform_fee_percentage: number | null
           updated_at: string
         }
@@ -208,6 +210,8 @@ export type Database = {
           level_7_percentage?: number | null
           level_8_percentage?: number | null
           master_trader_fee_percentage?: number | null
+          min_active_balance?: number | null
+          min_maintenance_balance?: number | null
           platform_fee_percentage?: number | null
           updated_at?: string
         }
@@ -225,6 +229,8 @@ export type Database = {
           level_7_percentage?: number | null
           level_8_percentage?: number | null
           master_trader_fee_percentage?: number | null
+          min_active_balance?: number | null
+          min_maintenance_balance?: number | null
           platform_fee_percentage?: number | null
           updated_at?: string
         }
@@ -250,6 +256,10 @@ export type Database = {
           follower_user_id_param: string
         }
         Returns: undefined
+      }
+      is_user_active: {
+        Args: { user_id_param: string }
+        Returns: boolean
       }
       update_affiliate_metrics: {
         Args: Record<PropertyKey, never>
