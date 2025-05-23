@@ -21,8 +21,7 @@ const MainNavigation = ({ className, variant = 'default' }: MainNavigationProps)
         { name: 'Linha Descendente', path: '/network/downline' },
         { name: 'Detalhes da Equipe', path: '/network/team' }
       ] 
-    },
-    // MLM item removido daqui
+    }
   ];
 
   if (variant === 'mobile') {
