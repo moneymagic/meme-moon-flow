@@ -1,6 +1,6 @@
 
 import { getUserAffiliateData } from './AffiliateService';
-import { getUserBalance } from './UserBalanceService';
+import { getUserBalance, isUserActive } from './UserBalanceService';
 import { getTradeHistory } from './TradeService';
 import { rankCommissionPercentages } from './RankService';
 
