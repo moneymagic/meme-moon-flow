@@ -101,24 +101,6 @@ const Dashboard = () => {
             {/* Progresso de Ranking */}
             <RankingProgress />
             
-            {/* Ações Rápidas */}
-            <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-white">Ações Rápidas</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0">
-                  Depositar Fundos
-                </Button>
-                <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0">
-                  Gerar Link de Referral
-                </Button>
-                <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
-                  Configurações
-                </Button>
-              </CardContent>
-            </Card>
-            
             {/* Requisitos de Saldo */}
             <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
               <CardHeader>
