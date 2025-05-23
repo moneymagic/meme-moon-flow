@@ -3,22 +3,59 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Settings, Wallet } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import GrowthChart from "@/components/GrowthChart";
 import ActiveOperations from "@/components/ActiveOperations";
 import RankingProgress from "@/components/RankingProgress";
 import RevenueMetrics from "@/components/RevenueMetrics";
 import Layout from "@/components/Layout";
+import { getDashboardData } from "@/services/DashboardService";
+import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
-  const [isConnected, setIsConnected] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dashboardData, setDashboardData] = useState({
+    balance: 0,
+    profitToday: 0,
+    profitTotal: 0,
+    currentRank: "V1",
+    volumeToNextRank: 0,
+    qualifiedDirects: 0,
+    totalDirects: 0,
+    tradeHistory: [],
+    openTrades: [],
+    isActive: false,
+    capitalGrowth: [],
+    activeOperations: [],
+    rankingProgress: null
+  });
+  const { toast } = useToast();
   
-  const userInfo = {
-    balance: 3.85,
-    rank: "V2",
-    walletAddress: "7x8s...9mF2"
-  };
+  // For demo purposes, using a fixed user ID
+  // In a real app, this would come from authentication
+  const mockUserId = "d290f1ee-6c54-4b01-90e6-d701748f0851";
+  
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getDashboardData(mockUserId);
+        setDashboardData(data);
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load dashboard data. Please try again later.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchDashboardData();
+  }, [toast]);
 
   return (
     <Layout>
@@ -30,7 +67,7 @@ const Dashboard = () => {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
                   <p className="text-gray-400">Saldo Disponível</p>
-                  <p className="text-3xl font-bold text-white mt-1">{userInfo.balance} SOL</p>
+                  <p className="text-3xl font-bold text-white mt-1">{dashboardData.balance} SOL</p>
                 </div>
               </div>
             </CardContent>
@@ -73,7 +110,9 @@ const Dashboard = () => {
                   </div>
                   <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg mt-2">
                     <p className="text-green-300 text-sm">
-                      Sua conta está ativa e funcionando corretamente
+                      {dashboardData.isActive 
+                        ? "Sua conta está ativa e funcionando corretamente" 
+                        : "Sua conta está inativa. Adicione saldo para ativá-la."}
                     </p>
                   </div>
                 </CardContent>

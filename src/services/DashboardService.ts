@@ -1,6 +1,31 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { CapitalGrowthData, ActiveOperation, RankingProgress, isUserActive, getBalanceRequirements, getUserCapitalGrowth, getUserActiveOperations, getUserRankingProgress, getUserRevenueMetrics } from "@/integrations/supabase/client";
+
+// Import types explicitly instead of relying on inferred types
+interface CapitalGrowthData {
+  date: string;
+  value: number;
+}
+
+interface ActiveOperation {
+  id: string;
+  coin: string;
+  entryPrice: number;
+  currentPrice: number;
+  percentChange: number;
+  direction: 'buy' | 'sell';
+  amount: number;
+  timestamp: Date;
+}
+
+interface RankingProgress {
+  currentRank: number;
+  nextRank: number;
+  currentVolume: number;
+  requiredVolume: number;
+  directReferrals: number;
+  requiredDirectReferrals: number;
+}
 
 /**
  * Comprehensive function to fetch all data needed for the dashboard
@@ -216,4 +241,88 @@ export function formatRank(rankNumber: number | null): string {
     return "V1";
   }
   return `V${rankNumber}`;
+}
+
+// Helper functions implementations
+async function isUserActive(userId: string): Promise<boolean> {
+  try {
+    // Here we would call the Supabase function to check if the user is active
+    // For now, we'll return true as a placeholder
+    const { data, error } = await supabase.rpc('is_user_active', { user_id_param: userId });
+    if (error) throw error;
+    return data || false;
+  } catch (error) {
+    console.error("Error checking user active status:", error);
+    return false;
+  }
+}
+
+async function getUserCapitalGrowth(userId: string): Promise<CapitalGrowthData[]> {
+  try {
+    // Mock implementation for now
+    const result: CapitalGrowthData[] = [];
+    const today = new Date();
+    
+    for (let i = 0; i < 30; i++) {
+      const date = new Date();
+      date.setDate(today.getDate() - i);
+      result.unshift({
+        date: `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}`,
+        value: Math.random() * 5 + 1
+      });
+    }
+    
+    return result;
+  } catch (error) {
+    console.error("Error fetching capital growth data:", error);
+    return [];
+  }
+}
+
+async function getUserActiveOperations(userId: string): Promise<ActiveOperation[]> {
+  try {
+    // Mock implementation for now
+    return [
+      {
+        id: '1',
+        coin: 'PEPE',
+        entryPrice: 0.00000125,
+        currentPrice: 0.00000135,
+        percentChange: 8,
+        direction: 'buy',
+        amount: 0.15,
+        timestamp: new Date()
+      },
+      {
+        id: '2',
+        coin: 'BONK',
+        entryPrice: 0.00000135,
+        currentPrice: 0.00000145,
+        percentChange: 7.4,
+        direction: 'buy',
+        amount: 0.2,
+        timestamp: new Date()
+      }
+    ];
+  } catch (error) {
+    console.error("Error fetching active operations:", error);
+    return [];
+  }
+}
+
+async function getUserRankingProgress(userId: string): Promise<RankingProgress | null> {
+  try {
+    // Mock implementation for now
+    return {
+      currentRank: 2,
+      nextRank: 3,
+      currentVolume: 80,
+      requiredVolume: 120,
+      directReferrals: 1,
+      requiredDirectReferrals: 2
+    };
+  } catch (error) {
+    console.error("Error fetching ranking progress:", error);
+    return null;
+  }
 }
