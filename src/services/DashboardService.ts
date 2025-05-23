@@ -46,7 +46,6 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
     const today = new Date();
     const startOfDay = new Date(today);
     startOfDay.setHours(0, 0, 0, 0);
-    const todayISOString = startOfDay.toISOString();
     
     // Get profit metrics
     const { data: profitData, error: profitError } = await supabase
