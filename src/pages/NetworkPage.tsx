@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Layout from "@/components/Layout";
@@ -73,27 +74,28 @@ const NetworkPage = () => {
     }
   ];
 
-  // MLM ranks and commission structure
+  // MLM ranks and commission structure - Updated with new percentages
   const rankPercents: Record<Rank, number> = {
     V1: 2,
-    V2: 2,
-    V3: 2,
-    V4: 2,
-    V5: 2,
-    V6: 2,
-    V7: 2,
-    V8: 6,
+    V2: 4,
+    V3: 6,
+    V4: 8,
+    V5: 11,
+    V6: 14,
+    V7: 17,
+    V8: 20,
   };
 
+  // Updated rank requirements according to new progression rules
   const rankRequirements: Record<Rank, { sol: number, linesWithRank: Rank | null }> = {
     V1: { sol: 0, linesWithRank: null },
-    V2: { sol: 34, linesWithRank: null },
-    V3: { sol: 120, linesWithRank: 'V2' },
-    V4: { sol: 200, linesWithRank: 'V3' },
-    V5: { sol: 400, linesWithRank: 'V4' },
-    V6: { sol: 800, linesWithRank: 'V5' },
-    V7: { sol: 1600, linesWithRank: 'V6' },
-    V8: { sol: 3200, linesWithRank: 'V7' },
+    V2: { sol: 34, linesWithRank: 'V1' },
+    V3: { sol: 60, linesWithRank: 'V2' },
+    V4: { sol: 120, linesWithRank: 'V3' },
+    V5: { sol: 200, linesWithRank: 'V4' },
+    V6: { sol: 350, linesWithRank: 'V5' },
+    V7: { sol: 550, linesWithRank: 'V6' },
+    V8: { sol: 800, linesWithRank: 'V7' },
   };
 
   // Team members downline data
