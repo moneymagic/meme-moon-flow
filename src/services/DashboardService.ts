@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 // Import types explicitly with type keyword to avoid deep type instantiation
@@ -88,7 +89,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
       
     console.log(`Profit - Today: ${profitToday} SOL, Total: ${profitTotal} SOL`);
     
-    // Get recent trade history
+    // Get recent trade history - use explicit typing to break recursive type references
     const { data: tradeHistory, error: historyError } = await supabase
       .from('copy_trades')
       .select('*')
@@ -102,7 +103,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
       throw new Error("Failed to fetch trade history");
     }
     
-    // Get open trades (we'll assume there's an is_open field)
+    // Get open trades - we'll assume there's an is_open field
     const { data: openTrades, error: openError } = await supabase
       .from('copy_trades')
       .select('*')
@@ -186,7 +187,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
     
     console.log(`Directs - Qualified: ${qualifiedDirects}, Total: ${totalDirects}`);
     
-    // Get supplementary visualization data
+    // Get supplementary visualization data using helper functions with explicit return types
     const capitalGrowth = await getUserCapitalGrowth(userId);
     const activeOperations = await getUserActiveOperations(userId);
     const rankingProgress = await getUserRankingProgress(userId);
