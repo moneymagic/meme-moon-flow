@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { TrendingUp, Wallet, Users, BarChart3, ChevronRight } from 'lucide-react';
+import { TrendingUp, Wallet, Users, BarChart3, ChevronRight, Gem } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { motion } from 'framer-motion';
@@ -17,21 +17,32 @@ const Index = () => {
       value: '₴ 12.8M', 
       icon: BarChart3, 
       change: '+15.3%',
-      color: 'from-blue-500 to-purple-600'
+      color: 'from-blue-600 to-indigo-700',
+      bgColor: 'bg-gradient-to-r from-blue-900/80 to-indigo-900/80'
     },
     { 
       label: 'Lucro Total Gerado', 
       value: '₴ 3.2M', 
       icon: TrendingUp, 
       change: '+21.7%',
-      color: 'from-green-500 to-emerald-600'
+      color: 'from-green-600 to-emerald-700',
+      bgColor: 'bg-gradient-to-r from-green-900/80 to-emerald-900/80'
     },
     { 
       label: 'Usuários Ativos', 
       value: '8,547', 
       icon: Users, 
       change: '+32.4%',
-      color: 'from-amber-500 to-orange-600' 
+      color: 'from-amber-600 to-orange-700',
+      bgColor: 'bg-gradient-to-r from-amber-900/80 to-orange-900/80'
+    },
+    { 
+      label: 'Rentabilidade Média', 
+      value: '26.4%', 
+      icon: Gem, 
+      change: '+8.2%',
+      color: 'from-purple-600 to-fuchsia-700',
+      bgColor: 'bg-gradient-to-r from-purple-900/80 to-fuchsia-900/80'
     },
   ];
 
@@ -146,7 +157,7 @@ const Index = () => {
         </motion.div>
         
         {/* Metrics Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
           {projectMetrics.map((metric, index) => (
             <motion.div
               key={index}
@@ -156,14 +167,14 @@ const Index = () => {
             >
               <Card className="overflow-hidden backdrop-blur-sm border-0 shadow-xl">
                 <div className={`bg-gradient-to-r ${metric.color} h-2`} />
-                <CardContent className="p-8 bg-black/40">
+                <CardContent className={`p-8 ${metric.bgColor} text-white`}>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-gray-400 text-sm">{metric.label}</p>
+                      <p className="text-gray-200 text-sm">{metric.label}</p>
                       <p className="text-4xl font-bold text-white mt-2">{metric.value}</p>
                       <div className="flex items-center mt-3">
-                        <span className="text-green-400 text-sm">{metric.change}</span>
-                        <TrendingUp className="h-3 w-3 text-green-400 ml-1" />
+                        <span className="text-green-300 text-sm font-medium">{metric.change}</span>
+                        <TrendingUp className="h-3 w-3 text-green-300 ml-1" />
                       </div>
                     </div>
                     <div className={`bg-gradient-to-r ${metric.color} p-4 rounded-lg`}>
