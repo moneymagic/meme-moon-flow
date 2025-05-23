@@ -96,7 +96,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
       .eq('user_id', userId)
       .eq('is_successful', true)
       .order('timestamp', { ascending: false })
-      .limit(5);
+      .limit(5) as { data: TradeHistoryItem[] | null, error: any };
       
     if (historyError) {
       console.error("Error fetching trade history:", historyError);
@@ -109,7 +109,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
       .select('*')
       .eq('user_id', userId)
       .eq('is_open', true)
-      .order('timestamp', { ascending: false });
+      .order('timestamp', { ascending: false }) as { data: OpenTradeItem[] | null, error: any };
       
     if (openError) {
       console.error("Error fetching open trades:", openError);
