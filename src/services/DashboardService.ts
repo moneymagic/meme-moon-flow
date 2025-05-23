@@ -1,8 +1,26 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
-// Import types explicitly with type keyword
+// Import types explicitly with type keyword to avoid deep type instantiation
 import type { CapitalGrowthData, ActiveOperation, RankingProgress } from "@/integrations/supabase/client";
+
+// Define simplified trade types to avoid circular references
+interface TradeHistoryItem {
+  id: string;
+  token_symbol: string;
+  profit_sol: number;
+  timestamp: string;
+  entry_price: number;
+  exit_price: number;
+  [key: string]: any; // Allow for additional properties without circular references
+}
+
+interface OpenTradeItem {
+  id: string;
+  token_symbol: string;
+  entry_price: number;
+  timestamp: string;
+  [key: string]: any; // Allow for additional properties without circular references
+}
 
 // Define the return type explicitly to avoid deep type instantiation
 export interface DashboardData {
@@ -13,8 +31,8 @@ export interface DashboardData {
   volumeToNextRank: number;
   qualifiedDirects: number;
   totalDirects: number;
-  tradeHistory: any[]; // Using any to break potential circular references
-  openTrades: any[]; // Using any to break potential circular references
+  tradeHistory: TradeHistoryItem[];
+  openTrades: OpenTradeItem[];
   isActive: boolean;
   capitalGrowth: CapitalGrowthData[];
   activeOperations: ActiveOperation[];
