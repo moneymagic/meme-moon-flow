@@ -1,34 +1,9 @@
 
 import { supabase } from "@/integrations/supabase/client";
-
-// Define simpler interfaces for our data types
-interface CapitalGrowthData {
-  date: string;
-  value: number;
-}
-
-interface ActiveOperation {
-  id: string;
-  coin: string;
-  entryPrice: number;
-  currentPrice: number;
-  percentChange: number;
-  direction: 'buy' | 'sell';
-  amount: number;
-  timestamp: Date;
-}
-
-interface RankingProgress {
-  currentRank: number;
-  nextRank: number;
-  currentVolume: number;
-  requiredVolume: number;
-  directReferrals: number;
-  requiredDirectReferrals: number;
-}
+import { CapitalGrowthData, ActiveOperation, RankingProgress } from "@/integrations/supabase/client";
 
 // Define the return type explicitly to avoid deep type instantiation
-interface DashboardData {
+export interface DashboardData {
   balance: number;
   profitToday: number;
   profitTotal: number;
