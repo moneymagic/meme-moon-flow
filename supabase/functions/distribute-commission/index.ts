@@ -47,6 +47,7 @@ function isRankQualified(userRank: Rank | null, requiredRank: Rank): boolean {
 function distributeCommission(uplines: Upline[]): CommissionDistribution {
   const distribution: CommissionDistribution = {};
   const rankLevels: Rank[] = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8'];
+  let totalDistributed = 0;
   
   // Initialize all uplines with 0% commission
   uplines.forEach(upline => {
@@ -57,6 +58,7 @@ function distributeCommission(uplines: Upline[]): CommissionDistribution {
   rankLevels.forEach(rankLevel => {
     const requiredRank = getMinimumRankRequired(rankLevel);
     const commissionPercentage = rankCommissionPercentages[rankLevel];
+    let distributed = false;
     
     // Find the first upline that qualifies for this rank level
     for (let i = 0; i < uplines.length; i++) {
@@ -64,10 +66,18 @@ function distributeCommission(uplines: Upline[]): CommissionDistribution {
       if (isRankQualified(upline.rank, requiredRank)) {
         // Assign commission to this upline
         distribution[upline.id] = (distribution[upline.id] || 0) + commissionPercentage;
+        totalDistributed += commissionPercentage;
+        distributed = true;
         break;
       }
     }
   });
+  
+  // Calculate residual amount and assign it to the memeflow platform
+  const residual = 20 - totalDistributed;
+  if (residual > 0) {
+    distribution['memeflow'] = (distribution['memeflow'] || 0) + residual;
+  }
 
   return distribution;
 }
