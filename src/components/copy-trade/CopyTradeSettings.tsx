@@ -68,6 +68,18 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
         return;
       }
       
+      // Get current user ID
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      
+      if (!userId) {
+        toast({
+          title: "Authentication error",
+          description: "Please log in to save settings",
+          variant: "destructive"
+        });
+        return;
+      }
+      
       // Update or insert copy settings
       const { data: existingSettings } = await supabase
         .from('copy_settings')
@@ -92,6 +104,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
         const { error } = await supabase
           .from('copy_settings')
           .insert({
+            user_id: userId,
             is_active: settings.isActive,
             trader_address: settings.traderAddress,
             allocated_capital_sol: settings.allocatedCapital
