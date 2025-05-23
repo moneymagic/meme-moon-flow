@@ -1,12 +1,13 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Index from '@/pages';
-import Dashboard from '@/pages/Dashboard';
-import NetworkExplorer from '@/pages/NetworkExplorer';
-import MLM from '@/pages/MLM';
-import Master from '@/pages/Master';
-import Followers from '@/pages/Followers';
-import NotFound from '@/pages/NotFound';
+import Index from './pages/Index';
+import Dashboard from './pages/Dashboard';
+import NetworkExplorer from './pages/NetworkExplorer';
+import MLM from './pages/MLM';
+import Master from './pages/Master';
+import Followers from './pages/Followers';
+import NotFound from './pages/NotFound';
 import NetworkDetailPage from './pages/NetworkDetailPage';
 
 function App() {
