@@ -1,6 +1,6 @@
 
 import React from 'react';
-import MainNavigation from './MainNavigation';
+import { MainNavigation } from './MainNavigation';
 
 interface LayoutProps {
   children: React.ReactNode;

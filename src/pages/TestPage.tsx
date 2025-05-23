@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Layout } from '@/components/Layout';
+import Layout from '@/components/Layout';
 import { CopyTradeTestPanel } from '@/components/admin/CopyTradeTestPanel';
 import { Toaster } from "sonner";
 
