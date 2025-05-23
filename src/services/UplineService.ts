@@ -10,8 +10,10 @@ import { Rank, Upline } from "./CommissionService";
 export async function getUplines(userId: string): Promise<Upline[]> {
   try {
     // Query the uplines table to get the user's upline chain
+    // We use the any type here as a workaround since the uplines table
+    // is new and not yet in the TypeScript definitions
     const { data: uplineData, error: uplineError } = await supabase
-      .from('uplines')
+      .from('uplines' as any)
       .select('upline_id, position')
       .eq('user_id', userId)
       .order('position', { ascending: true })
@@ -28,7 +30,8 @@ export async function getUplines(userId: string): Promise<Upline[]> {
     }
     
     // Extract the upline IDs
-    const uplineIds = uplineData.map(item => item.upline_id);
+    // Use type assertion to help TypeScript understand the structure
+    const uplineIds = (uplineData as Array<{upline_id: string}>).map(item => item.upline_id);
     
     // Query profiles to get ranks for all uplines in a single query
     const { data: profileData, error: profileError } = await supabase
@@ -42,7 +45,7 @@ export async function getUplines(userId: string): Promise<Upline[]> {
     }
     
     // Map upline data with ranks
-    const uplines: Upline[] = uplineData.map(upline => {
+    const uplines: Upline[] = (uplineData as Array<{upline_id: string, position: number}>).map(upline => {
       // Find the corresponding profile data
       const profile = profileData?.find(p => p.user_id === upline.upline_id);
       
@@ -77,7 +80,7 @@ export async function setUplines(
   try {
     // First, delete any existing upline relationships
     const { error: deleteError } = await supabase
-      .from('uplines')
+      .from('uplines' as any)
       .delete()
       .eq('user_id', userId);
       
@@ -95,7 +98,7 @@ export async function setUplines(
     
     // Insert new upline relationships
     const { error: insertError } = await supabase
-      .from('uplines')
+      .from('uplines' as any)
       .insert(uplinesToInsert);
       
     if (insertError) {
