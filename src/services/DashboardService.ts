@@ -1,5 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
+
+// Import types explicitly with type keyword
 import type { CapitalGrowthData, ActiveOperation, RankingProgress } from "@/integrations/supabase/client";
 
 // Define the return type explicitly to avoid deep type instantiation
@@ -11,8 +13,8 @@ export interface DashboardData {
   volumeToNextRank: number;
   qualifiedDirects: number;
   totalDirects: number;
-  tradeHistory: any[];
-  openTrades: any[];
+  tradeHistory: any[]; // Using any to break potential circular references
+  openTrades: any[]; // Using any to break potential circular references
   isActive: boolean;
   capitalGrowth: CapitalGrowthData[];
   activeOperations: ActiveOperation[];
