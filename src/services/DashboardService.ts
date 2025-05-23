@@ -27,11 +27,8 @@ interface RankingProgress {
   requiredDirectReferrals: number;
 }
 
-/**
- * Comprehensive function to fetch all data needed for the dashboard
- * Consolidates data from multiple sources into a single object
- */
-export async function getDashboardData(userId: string): Promise<{
+// Define the return type explicitly to avoid deep type instantiation
+interface DashboardData {
   balance: number;
   profitToday: number;
   profitTotal: number;
@@ -45,7 +42,13 @@ export async function getDashboardData(userId: string): Promise<{
   capitalGrowth: CapitalGrowthData[];
   activeOperations: ActiveOperation[];
   rankingProgress: RankingProgress | null;
-}> {
+}
+
+/**
+ * Comprehensive function to fetch all data needed for the dashboard
+ * Consolidates data from multiple sources into a single object
+ */
+export async function getDashboardData(userId: string): Promise<DashboardData> {
   try {
     console.log(`Fetching dashboard data for user: ${userId}`);
     
