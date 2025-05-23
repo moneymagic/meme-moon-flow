@@ -29,9 +29,10 @@ export async function getUplines(userId: string): Promise<Upline[]> {
       return [];
     }
     
-    // Extract the upline IDs
-    // Use type assertion to help TypeScript understand the structure
-    const uplineIds = (uplineData as Array<{upline_id: string}>).map(item => item.upline_id);
+    // Extract the upline IDs - using unknown as intermediate step for type safety
+    const safeUplineData = uplineData as unknown;
+    const typedUplineData = safeUplineData as Array<{upline_id: string, position: number}>;
+    const uplineIds = typedUplineData.map(item => item.upline_id);
     
     // Query profiles to get ranks for all uplines in a single query
     const { data: profileData, error: profileError } = await supabase
@@ -44,8 +45,8 @@ export async function getUplines(userId: string): Promise<Upline[]> {
       return [];
     }
     
-    // Map upline data with ranks
-    const uplines: Upline[] = (uplineData as Array<{upline_id: string, position: number}>).map(upline => {
+    // Map upline data with ranks - using unknown as intermediate step for type safety
+    const uplines: Upline[] = (safeUplineData as Array<{upline_id: string, position: number}>).map(upline => {
       // Find the corresponding profile data
       const profile = profileData?.find(p => p.user_id === upline.upline_id);
       
