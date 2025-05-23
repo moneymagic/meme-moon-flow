@@ -5,6 +5,8 @@ import NetworkMembersTable from './NetworkMembersTable';
 import DownlineStats from './DownlineStats';
 import MLMContent from './MLMContent';
 
+export type Rank = 'V1' | 'V2' | 'V3' | 'V4' | 'V5' | 'V6' | 'V7' | 'V8';
+
 export interface NetworkTabsData {
   networkStats: {
     totalMembers: number;
@@ -44,8 +46,8 @@ export interface NetworkTabsData {
     teamSize: number;
     rank?: number;
   }[];
-  rankPercents: Record<string, number>;
-  rankRequirements: Record<string, { sol: number; linesWithRank: string | null }>;
+  rankPercents: Record<Rank, number>;
+  rankRequirements: Record<Rank, { sol: number; linesWithRank: Rank | null }>;
   topPerformers: {
     name: string;
     level: number;

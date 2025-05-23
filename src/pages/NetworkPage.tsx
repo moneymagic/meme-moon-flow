@@ -2,9 +2,7 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Layout from "@/components/Layout";
-import { NetworkTabsData, OverviewTabContent, DownlineTabContent, MLMTabContent } from "@/components/network/TabComponents";
-
-type Rank = 'V1' | 'V2' | 'V3' | 'V4' | 'V5' | 'V6' | 'V7' | 'V8';
+import { NetworkTabsData, OverviewTabContent, DownlineTabContent, MLMTabContent, Rank } from "@/components/network/TabComponents";
 
 const NetworkPage = () => {
   const [activeTab, setActiveTab] = useState("overview");

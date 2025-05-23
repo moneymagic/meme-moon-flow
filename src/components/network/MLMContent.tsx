@@ -1,9 +1,7 @@
-
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Users, DollarSign, Infinity } from 'lucide-react';
-
-type Rank = 'V1' | 'V2' | 'V3' | 'V4' | 'V5' | 'V6' | 'V7' | 'V8';
+import { Rank } from './TabComponents';
 
 interface MLMContentProps {
   networkStats: {
