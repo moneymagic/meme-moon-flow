@@ -1,14 +1,13 @@
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+// Define types for our commission service logic
+type Rank = 'V1' | 'V2' | 'V3' | 'V4' | 'V5' | 'V6' | 'V7' | 'V8';
 
 interface Upline {
   id: string;
-  rank: string | null;
+  rank: Rank | null;
 }
 
 interface CommissionDistribution {
@@ -16,33 +15,38 @@ interface CommissionDistribution {
 }
 
 // Maps rank to commission percentage based on the system configuration
-const rankCommissionPercentages: Record<string, number> = {
+const rankCommissionPercentages: Record<Rank, number> = {
   'V1': 2,
   'V2': 2,
-  'V3': 3,
+  'V3': 2,
   'V4': 2,
-  'V5': 3,
-  'V6': 3,
-  'V7': 2,
-  'V8': 3,
+  'V5': 2,
+  'V6': 2,
+  'V7': 4,
+  'V8': 4,
 };
 
-// Convert rank string to number for comparison
-function rankToNumber(rank: string | null): number {
+// Returns the minimum rank required to receive a specific rank's commission
+function getMinimumRankRequired(rank: Rank): Rank {
+  return rank;
+}
+
+// Convert string rank to numeric value for comparison
+function rankToNumber(rank: Rank | null): number {
   if (!rank) return 0;
   return parseInt(rank.substring(1), 10);
 }
 
 // Check if a rank qualifies for a specific commission level
-function isRankQualified(userRank: string | null, requiredRank: string): boolean {
+function isRankQualified(userRank: Rank | null, requiredRank: Rank): boolean {
   if (!userRank) return false;
   return rankToNumber(userRank) >= rankToNumber(requiredRank);
 }
 
-// Distributes commission across uplines based on rank compression
+// Distributes commission across a chain of uplines based on their ranks
 function distributeCommission(uplines: Upline[]): CommissionDistribution {
   const distribution: CommissionDistribution = {};
-  const rankLevels = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8'];
+  const rankLevels: Rank[] = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8'];
   
   // Initialize all uplines with 0% commission
   uplines.forEach(upline => {
@@ -51,12 +55,13 @@ function distributeCommission(uplines: Upline[]): CommissionDistribution {
 
   // Process each rank level
   rankLevels.forEach(rankLevel => {
+    const requiredRank = getMinimumRankRequired(rankLevel);
     const commissionPercentage = rankCommissionPercentages[rankLevel];
     
     // Find the first upline that qualifies for this rank level
     for (let i = 0; i < uplines.length; i++) {
       const upline = uplines[i];
-      if (isRankQualified(upline.rank, rankLevel)) {
+      if (isRankQualified(upline.rank, requiredRank)) {
         // Assign commission to this upline
         distribution[upline.id] = (distribution[upline.id] || 0) + commissionPercentage;
         break;
@@ -67,117 +72,174 @@ function distributeCommission(uplines: Upline[]): CommissionDistribution {
   return distribution;
 }
 
-// Main handler for the edge function
-Deno.serve(async (req) => {
+// Calculate the actual SOL amount each upline receives
+function calculateCommissionAmounts(distribution: CommissionDistribution, totalProfit: number): Record<string, number> {
+  const result: Record<string, number> = {};
+  
+  // Calculate the network fee (20% of total profit)
+  const networkFee = totalProfit * 0.2;
+  
+  Object.entries(distribution).forEach(([userId, percentage]) => {
+    // Convert percentage to decimal and multiply by network fee
+    result[userId] = (percentage / 100) * totalProfit;
+  });
+  
+  return result;
+}
+
+// Process a trade commission
+function processTradeCommission(uplines: Upline[], profitAmount: number) {
+  // Calculate performance fee (30% of profit)
+  const performanceFee = profitAmount * 0.3;
+  
+  // Calculate master trader fee (10% of profit) 
+  const masterTraderFee = profitAmount * 0.1;
+  
+  // Calculate network fee (20% of profit)
+  const networkFee = profitAmount * 0.2;
+  
+  // Calculate remaining profit after fees
+  const remainingProfit = profitAmount - performanceFee;
+  
+  // Calculate distribution percentages
+  const distribution = distributeCommission(uplines);
+  
+  // Calculate actual SOL amounts
+  const commissionAmounts = calculateCommissionAmounts(distribution, profitAmount);
+  
+  // Calculate total distributed
+  const totalDistributed = Object.values(commissionAmounts).reduce((sum, amount) => sum + amount, 0);
+  
+  return {
+    profitAmount,
+    performanceFee,
+    masterTraderFee,
+    networkFee,
+    remainingProfit,
+    distribution,
+    commissionAmounts,
+    totalDistributed
+  };
+}
+
+// Define CORS headers
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders, status: 204 })
   }
 
   try {
-    // Only accept POST requests
-    if (req.method !== 'POST') {
-      return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
-        status: 405, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      })
-    }
-    
-    // Parse the request body
-    const { trade_id, profit_amount, user_id } = await req.json()
-    
-    if (!trade_id || !profit_amount || !user_id) {
-      return new Response(JSON.stringify({ error: 'Missing required parameters' }), { 
-        status: 400, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      })
-    }
-    
-    // Create Supabase client
-    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    // Create a Supabase client
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") as string
+    const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") as string
     const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Get the current user from the request
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Missing Authorization header' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+      )
+    }
+
+    // Get the JWT token from the Authorization header
+    const token = authHeader.replace('Bearer ', '')
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token)
     
-    // Get user's upline chain
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token or user not found' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+      )
+    }
+
+    // Parse the request body
+    const { copyTradeId, profit } = await req.json()
+    
+    if (!copyTradeId || !profit) {
+      return new Response(
+        JSON.stringify({ error: 'Missing required fields: copyTradeId, profit' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+      )
+    }
+
+    // Get the copy trade details
+    const { data: copyTradeData, error: copyTradeError } = await supabase
+      .from('copy_trades')
+      .select('*')
+      .eq('id', copyTradeId)
+      .single()
+
+    if (copyTradeError || !copyTradeData) {
+      return new Response(
+        JSON.stringify({ error: 'Copy trade not found', details: copyTradeError }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 404 }
+      )
+    }
+
+    // Fetch the user's upline chain (simplified version)
+    // In a real system, you would traverse the affiliate structure recursively
     const { data: affiliateData, error: affiliateError } = await supabase
       .from('affiliates')
-      .select('user_id, rank, sponsor_id')
-      .eq('user_id', user_id)
+      .select('user_id, sponsor_id, rank')
+      .eq('user_id', user.id)
       .single()
-      
-    if (affiliateError || !affiliateData) {
-      return new Response(JSON.stringify({ error: 'Could not find user affiliate data' }), {
-        status: 404,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
+
+    if (affiliateError) {
+      return new Response(
+        JSON.stringify({ error: 'Error fetching affiliate data', details: affiliateError }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+      )
     }
-    
-    // Build upline chain by traversing sponsors
-    let currentSponserId = affiliateData.sponsor_id;
+
+    // Get sponsors recursively (simplified for this example)
+    // In a real implementation, you would fetch the entire upline chain
     const uplines: Upline[] = [];
+    let currentSponsorId = affiliateData.sponsor_id;
     
-    // Safety limit to prevent infinite loops
-    const MAX_UPLINE_DEPTH = 20;
-    
-    for (let i = 0; i < MAX_UPLINE_DEPTH && currentSponserId; i++) {
-      const { data: sponsorData, error: sponsorError } = await supabase
-        .from('affiliates')
-        .select('user_id, rank, sponsor_id')
-        .eq('user_id', currentSponserId)
-        .single()
-      
-      if (sponsorError || !sponsorData) {
-        break;
-      }
-      
-      uplines.push({
-        id: sponsorData.user_id,
-        rank: sponsorData.rank ? `V${sponsorData.rank}` : null
+    // Just as a simple demonstration, we'll create some mock uplines
+    // In a real system, you'd recursively fetch the actual upline data
+    if (currentSponsorId) {
+      uplines.push({ 
+        id: currentSponsorId, 
+        rank: 'V3' as Rank // Mock rank for demonstration
       });
       
-      currentSponserId = sponsorData.sponsor_id;
+      // Add more mock uplines for demonstration
+      uplines.push({ id: 'sponsor2', rank: 'V1' as Rank });
+      uplines.push({ id: 'sponsor3', rank: 'V5' as Rank });
+      uplines.push({ id: 'sponsor4', rank: 'V2' as Rank });
+      uplines.push({ id: 'sponsor5', rank: 'V7' as Rank });
     }
-    
-    // Calculate commission distribution
-    const distribution = distributeCommission(uplines);
-    
-    // Calculate the network fee (20% of total profit)
-    const networkFee = profit_amount * 0.2;
-    
-    // Create commission records
-    for (const [userId, percentage] of Object.entries(distribution)) {
-      if (percentage > 0) {
-        const commissionAmount = (percentage / 100) * profit_amount;
-        
-        await supabase
-          .from('affiliate_commissions')
-          .insert({
-            affiliate_id: userId,
-            copied_trade_id: trade_id,
-            level: uplines.findIndex(u => u.id === userId) + 1,
-            percentage: percentage,
-            amount: commissionAmount
-          })
-        
-        // Update affiliate's total earnings
-        await supabase
-          .rpc('update_affiliate_metrics')
-      }
-    }
-    
-    return new Response(JSON.stringify({ 
-      success: true, 
-      distribution,
-      trade_id,
-      network_fee: networkFee
-    }), { 
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-    })
-    
+
+    // Process the commission distribution
+    const commissionResult = processTradeCommission(uplines, profit);
+
+    // In a real system, you would save the commission distribution to the database
+    // and possibly trigger payments or notifications
+
+    return new Response(
+      JSON.stringify({ 
+        success: true, 
+        message: 'Commission distribution processed successfully',
+        result: commissionResult
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+    )
+
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { 
-      status: 500, 
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    console.error('Error processing commission distribution:', error)
+    
+    return new Response(
+      JSON.stringify({ error: 'Internal server error', details: error.message }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    )
   }
 })

@@ -1,11 +1,11 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Users, TrendingUp, Share2, Award, DollarSign, Infinity } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { rankCommissionPercentages, distributeCommission } from '@/services/CommissionService';
+import { Rank } from '@/components/network/TabComponents';
+import { rankCommissionPercentages, distributeCommission, Upline } from '@/services/CommissionService';
 
 const MLM = () => {
   const networkStats = {
@@ -33,13 +33,13 @@ const MLM = () => {
     { name: '2hW9...6tG5', level: 3, earnings: '₴ 540', referrals: 22 },
   ];
   
-  // Example upline for demonstration
-  const sampleUpline = [
-    { id: "user1", rank: "V1" },
-    { id: "user2", rank: "V3" },
+  // Example upline for demonstration - fixed the typing issue here
+  const sampleUpline: Upline[] = [
+    { id: "user1", rank: "V1" as Rank },
+    { id: "user2", rank: "V3" as Rank },
     { id: "user3", rank: null },  // No rank
-    { id: "user4", rank: "V2" },
-    { id: "user5", rank: "V5" }
+    { id: "user4", rank: "V2" as Rank },
+    { id: "user5", rank: "V5" as Rank }
   ];
   
   // Calculate distribution using the service

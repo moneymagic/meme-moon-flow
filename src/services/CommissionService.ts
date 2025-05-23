@@ -16,12 +16,12 @@ export interface CommissionDistribution {
 export const rankCommissionPercentages: Record<Rank, number> = {
   'V1': 2,
   'V2': 2,
-  'V3': 3,
+  'V3': 2,
   'V4': 2,
-  'V5': 3,
-  'V6': 3,
-  'V7': 2,
-  'V8': 3,
+  'V5': 2,
+  'V6': 2,
+  'V7': 4,
+  'V8': 4,
 };
 
 /**
