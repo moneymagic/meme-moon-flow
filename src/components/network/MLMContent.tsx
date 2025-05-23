@@ -1,9 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Users, DollarSign, Infinity } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 import { Rank } from './TabComponents';
+import { distributeCommission, rankCommissionPercentages, processTradeCommission, Upline } from '@/services/CommissionService';
 
 interface MLMContentProps {
   networkStats: {
@@ -34,6 +36,44 @@ const MLMContent: React.FC<MLMContentProps> = ({
   const performanceFee = profitExample * 0.3;
   const masterTraderFee = profitExample * 0.1;
   const networkFee = profitExample * 0.2;
+  
+  // Sample upline for demonstration
+  const [uplineSample, setUplineSample] = useState<Upline[]>([
+    { id: "user1", rank: "V1" },
+    { id: "user2", rank: "V3" },
+    { id: "user3", rank: null },  // No rank
+    { id: "user4", rank: "V2" },
+    { id: "user5", rank: "V5" },
+    { id: "user6", rank: null },  // No rank
+    { id: "user7", rank: "V8" }
+  ]);
+  
+  // Calculate commission distribution based on the sample upline
+  const commissionResult = processTradeCommission(uplineSample, profitExample);
+  
+  // Generate example distribution text based on actual calculation
+  const generateDistributionExample = () => {
+    const results = [];
+    let remainingPercentage = 20;
+    
+    Object.entries(commissionResult.distribution)
+      .filter(([_, percentage]) => percentage > 0)
+      .forEach(([userId, percentage]) => {
+        const upline = uplineSample.find(u => u.id === userId);
+        if (upline && upline.rank) {
+          results.push(`${upline.rank} receives ${(percentage).toFixed(1)}% (${(commissionResult.commissionAmounts[userId]).toFixed(1)} SOL)`);
+          remainingPercentage -= percentage;
+        }
+      });
+    
+    if (remainingPercentage > 0.1) {
+      results.push(`Remaining ${remainingPercentage.toFixed(1)}% stays with the platform`);
+    }
+    
+    return results;
+  };
+  
+  const distributionExample = generateDistributionExample();
 
   return (
     <>
@@ -100,7 +140,7 @@ const MLMContent: React.FC<MLMContentProps> = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {Object.entries(rankPercents).map(([rank, percent]) => (
+                    {Object.entries(rankCommissionPercentages).map(([rank, percent]) => (
                       <tr key={rank} className="border-b border-white/10 hover:bg-white/5">
                         <td className="py-3 px-4">
                           <div className="bg-purple-500/20 text-purple-300 text-xs px-2 py-1 rounded-full w-fit">
@@ -139,14 +179,13 @@ const MLMContent: React.FC<MLMContentProps> = ({
                     <span className="text-white font-medium">{networkFee.toFixed(2)} SOL</span>
                   </div>
                   <div className="border-t border-white/10 pt-3 text-sm">
-                    <p className="text-white mb-2">In a typical upline structure:</p>
+                    <p className="text-white mb-2">In this upline structure with rank compression:</p>
                     <ul className="space-y-2 text-gray-300">
-                      <li>V1 receives 2 SOL (2%)</li>
-                      <li>V3 receives 6 SOL (6%)</li>
-                      <li>V5 receives 11 SOL (11%)</li>
-                      <li>V8 receives the remaining 1 SOL (20% total)</li>
+                      {distributionExample.map((line, idx) => (
+                        <li key={idx}>{line}</li>
+                      ))}
                     </ul>
-                    <p className="mt-4 text-blue-400">The system ensures all 20% is distributed efficiently</p>
+                    <p className="mt-4 text-blue-400">The system ensures efficient distribution with rank-based compression</p>
                   </div>
                 </div>
               </div>
@@ -195,16 +234,16 @@ const MLMContent: React.FC<MLMContentProps> = ({
               <div className="bg-black/40 rounded-lg p-4 border border-white/10">
                 <h4 className="text-white font-medium mb-2">Complete Distribution</h4>
                 <p className="text-gray-300 text-sm">
-                  The system always distributes the full 20% commission, starting from the lowest ranks (V1)
-                  and working upward. If a qualified rank is not found, the commission flows up until it finds
-                  a qualified recipient.
+                  The system always attempts to distribute commissions starting from the V1 level upward.
+                  If a member doesn't qualify for their rank's commission, that commission "compresses"
+                  upward to the next qualified member in the upline.
                 </p>
               </div>
               <div className="bg-black/40 rounded-lg p-4 border border-white/10">
                 <h4 className="text-white font-medium mb-2">Rank Benefits</h4>
                 <p className="text-gray-300 text-sm">
-                  Higher ranks receive substantially higher percentages. If all ranks aren't present in an upline,
-                  any remaining commission that wasn't distributed goes to the highest qualified rank found.
+                  Higher ranks receive substantially higher percentages. Members must qualify for each rank
+                  to receive its commission. This creates strong incentives for rank advancement and team building.
                 </p>
               </div>
             </div>

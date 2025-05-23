@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Users, TrendingUp, Share2, Award, DollarSign, Infinity } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { rankCommissionPercentages, distributeCommission } from '@/services/CommissionService';
 
 const MLM = () => {
   const networkStats = {
@@ -31,6 +32,27 @@ const MLM = () => {
     { name: '5vB6...1dF3', level: 1, earnings: '₴ 690', referrals: 25 },
     { name: '2hW9...6tG5', level: 3, earnings: '₴ 540', referrals: 22 },
   ];
+  
+  // Example upline for demonstration
+  const sampleUpline = [
+    { id: "user1", rank: "V1" },
+    { id: "user2", rank: "V3" },
+    { id: "user3", rank: null },  // No rank
+    { id: "user4", rank: "V2" },
+    { id: "user5", rank: "V5" }
+  ];
+  
+  // Calculate distribution using the service
+  const distribution = distributeCommission(sampleUpline);
+  
+  // Format distribution for display
+  const formattedDistribution = Object.entries(distribution)
+    .filter(([_, percentage]) => percentage > 0)
+    .map(([userId, percentage]) => {
+      const upline = sampleUpline.find(u => u.id === userId);
+      return `${upline?.rank || "Unknown"}: ${percentage}%`;
+    })
+    .join(", ");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
@@ -143,6 +165,9 @@ const MLM = () => {
                   <div className="p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-lg mt-4 border border-white/10">
                     <p className="text-white text-center">
                       A profundidade da rede é ilimitada: as comissões sobem linha por linha até encontrar os ranks qualificados
+                    </p>
+                    <p className="text-sm text-center text-blue-300 mt-2">
+                      Exemplo: {formattedDistribution}
                     </p>
                   </div>
                 </div>
