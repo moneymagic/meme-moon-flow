@@ -3,10 +3,10 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface CommissionCardProps {
-  monthlyCommissions: number;
+  monthlyCommissions?: number;
 }
 
-const CommissionCard: React.FC<CommissionCardProps> = ({ monthlyCommissions }) => {
+const CommissionCard: React.FC<CommissionCardProps> = ({ monthlyCommissions = 890 }) => {
   return (
     <Card className="bg-black/30 border-white/10 backdrop-blur-sm mt-6">
       <CardHeader>

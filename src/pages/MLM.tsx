@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -81,7 +82,7 @@ const MLM = () => {
 
   useEffect(() => {
     fetchData();
-  }, [toast]);
+  }, []);
 
   return (
     <Layout>
@@ -111,7 +112,7 @@ const MLM = () => {
             <div className="space-y-6">
               <ReferralCard directReferrals={networkStats.directReferrals} />
               <NetworkVisualizationCard />
-              <CommissionCard />
+              <CommissionCard monthlyCommissions={890} />
             </div>
           </div>
         </div>
