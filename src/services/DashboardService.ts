@@ -1,7 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-// Import types explicitly instead of relying on inferred types
+// Define simpler interfaces for our data types
 interface CapitalGrowthData {
   date: string;
   value: number;
