@@ -110,6 +110,75 @@ export type Database = {
         }
         Relationships: []
       }
+      copy_settings: {
+        Row: {
+          allocated_capital_sol: number
+          created_at: string
+          id: string
+          is_active: boolean
+          trader_address: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          allocated_capital_sol?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          trader_address: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          allocated_capital_sol?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          trader_address?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      copy_trades: {
+        Row: {
+          entry_price: number
+          exit_price: number
+          fee_paid_sol: number
+          id: string
+          is_successful: boolean | null
+          profit_sol: number
+          timestamp: string
+          token_symbol: string
+          trader_address: string
+          user_id: string
+        }
+        Insert: {
+          entry_price: number
+          exit_price: number
+          fee_paid_sol: number
+          id?: string
+          is_successful?: boolean | null
+          profit_sol: number
+          timestamp?: string
+          token_symbol: string
+          trader_address: string
+          user_id: string
+        }
+        Update: {
+          entry_price?: number
+          exit_price?: number
+          fee_paid_sol?: number
+          id?: string
+          is_successful?: boolean | null
+          profit_sol?: number
+          timestamp?: string
+          token_symbol?: string
+          trader_address?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -236,6 +305,57 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          amount_sol: number
+          created_at: string
+          description: string | null
+          id: string
+          type: Database["public"]["Enums"]["transaction_type"]
+          user_id: string
+        }
+        Insert: {
+          amount_sol: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          type: Database["public"]["Enums"]["transaction_type"]
+          user_id: string
+        }
+        Update: {
+          amount_sol?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          type?: Database["public"]["Enums"]["transaction_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          balance_sol: number
+          deposit_address: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance_sol?: number
+          deposit_address?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance_sol?: number
+          deposit_address?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -249,6 +369,10 @@ export type Database = {
         Args: { user_id_param: string }
         Returns: number
       }
+      deposit_sol: {
+        Args: { p_user_id: string; p_amount: number; p_description?: string }
+        Returns: boolean
+      }
       distribute_affiliate_commissions: {
         Args: {
           copied_trade_id_param: string
@@ -261,13 +385,24 @@ export type Database = {
         Args: { user_id_param: string }
         Returns: boolean
       }
+      process_trading_fee: {
+        Args: {
+          p_user_id: string
+          p_trader_address: string
+          p_token_symbol: string
+          p_entry_price: number
+          p_exit_price: number
+          p_profit_sol: number
+        }
+        Returns: Json
+      }
       update_affiliate_metrics: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
     }
     Enums: {
-      [_ in never]: never
+      transaction_type: "deposit" | "fee" | "refund"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -382,6 +517,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      transaction_type: ["deposit", "fee", "refund"],
+    },
   },
 } as const

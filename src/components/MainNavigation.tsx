@@ -1,79 +1,87 @@
 
-import { Link } from 'react-router-dom';
-import { Home, LayoutDashboard, Network, Users } from 'lucide-react';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import { HomeIcon, AreaChart, Network, Users, CopyCheck } from 'lucide-react';
+import { Badge } from './ui/badge';
+import { useWindowSize } from '@/hooks/use-mobile';
 
 const MainNavigation = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  const menuItems = [
-    { name: 'Home', path: '/', icon: Home },
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Network', path: '/network', icon: Network },
-  ];
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState('dashboard');
+  const { isMobile } = useWindowSize();
+
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.includes('/dashboard')) {
+      setActiveItem('dashboard');
+    } else if (path.includes('/network')) {
+      setActiveItem('network');
+    } else if (path.includes('/mlm')) {
+      setActiveItem('mlm');
+    } else if (path.includes('/copy-trade')) {
+      setActiveItem('copy-trade');
+    } else {
+      setActiveItem('');
+    }
+  }, [location]);
 
   return (
-    <div className="flex items-center justify-between w-full">
-      <div className="flex items-center space-x-4">
+    <div className="flex flex-col h-full">
+      <div className="p-4 mb-4">
         <Link to="/">
-          <div className="bg-gradient-to-r from-green-400 to-blue-500 p-2 rounded-lg">
-            <Home className="h-5 w-5 text-white" />
+          <Button className="w-full bg-blue-600 hover:bg-blue-700" size="lg">
+            <HomeIcon className="mr-2 h-5 w-5" /> Início
+          </Button>
+        </Link>
+      </div>
+
+      <div className="space-y-1 px-3">
+        <Link to="/dashboard">
+          <div
+            className={`flex items-center rounded-lg px-3 py-2 transition-colors ${
+              activeItem === 'dashboard' ? 'bg-purple-800 text-white' : 'text-gray-300 hover:bg-purple-800/40'
+            }`}
+          >
+            <AreaChart className="mr-2 h-5 w-5" />
+            <span>{isMobile ? 'Dashboard' : 'Dashboard'}</span>
           </div>
         </Link>
-        <h1 className="text-2xl font-bold text-white">MemeFlow</h1>
-      </div>
-      
-      {/* Desktop Navigation */}
-      <div className="hidden md:flex items-center space-x-4">
-        {menuItems.map((item) => (
-          <Link 
-            key={item.name}
-            to={item.path}
-            className="flex items-center px-3 py-2 text-white hover:bg-white/10 rounded-md transition-colors"
+        
+        <Link to="/network">
+          <div
+            className={`flex items-center rounded-lg px-3 py-2 transition-colors ${
+              activeItem === 'network' ? 'bg-purple-800 text-white' : 'text-gray-300 hover:bg-purple-800/40'
+            }`}
           >
-            <item.icon className="mr-2 h-4 w-4" />
-            {item.name}
-          </Link>
-        ))}
-      </div>
-      
-      {/* Mobile Menu Button */}
-      <div className="md:hidden">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="text-white"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
-            {mobileMenuOpen ? (
-              <path d="M18 6L6 18M6 6l12 12" />
-            ) : (
-              <path d="M3 12h18M3 6h18M3 18h18" />
-            )}
-          </svg>
-        </Button>
-      </div>
-      
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="absolute top-16 left-0 right-0 p-4 bg-black/90 backdrop-blur-md z-50 md:hidden">
-          <div className="flex flex-col space-y-2">
-            {menuItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className="flex items-center px-4 py-2.5 text-white hover:bg-white/10 rounded-md"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <item.icon className="mr-3 h-5 w-5" />
-                {item.name}
-              </Link>
-            ))}
+            <Network className="mr-2 h-5 w-5" />
+            <span>{isMobile ? 'Network' : 'Network'}</span>
           </div>
-        </div>
-      )}
+        </Link>
+        
+        <Link to="/mlm">
+          <div
+            className={`flex items-center rounded-lg px-3 py-2 transition-colors ${
+              activeItem === 'mlm' ? 'bg-purple-800 text-white' : 'text-gray-300 hover:bg-purple-800/40'
+            }`}
+          >
+            <Users className="mr-2 h-5 w-5" />
+            <span>{isMobile ? 'MLM' : 'MLM'}</span>
+          </div>
+        </Link>
+        
+        <Link to="/copy-trade">
+          <div
+            className={`flex items-center rounded-lg px-3 py-2 transition-colors ${
+              activeItem === 'copy-trade' ? 'bg-purple-800 text-white' : 'text-gray-300 hover:bg-purple-800/40'
+            }`}
+          >
+            <CopyCheck className="mr-2 h-5 w-5" />
+            <span>{isMobile ? 'Copy Trade' : 'Copy Trading'}</span>
+            <Badge className="ml-2 bg-blue-600 text-xs" variant="secondary">New</Badge>
+          </div>
+        </Link>
+      </div>
     </div>
   );
 };

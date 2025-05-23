@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import NetworkPage from './pages/NetworkPage';
 import MLM from './pages/MLM';
 import NotFound from './pages/NotFound';
+import CopyTradePage from './pages/CopyTradePage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/network" element={<NetworkPage />} />
         <Route path="/mlm" element={<MLM />} />
+        <Route path="/copy-trade" element={<CopyTradePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
