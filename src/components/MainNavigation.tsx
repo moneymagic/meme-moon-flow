@@ -43,30 +43,6 @@ export function MainNavigation() {
         >
           Copy Trading
         </Link>
-        {!isMobile && (
-          <>
-            <Link
-              to="/test"
-              className={`text-sm font-medium transition-colors ${
-                isActive('/test')
-                  ? 'text-primary'
-                  : 'text-muted-foreground hover:text-primary'
-              }`}
-            >
-              Test Tools
-            </Link>
-            <Link
-              to="/admin"
-              className={`text-sm font-medium transition-colors ${
-                isActive('/admin')
-                  ? 'text-primary'
-                  : 'text-muted-foreground hover:text-primary'
-              }`}
-            >
-              Admin
-            </Link>
-          </>
-        )}
       </div>
     </nav>
   );

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { RefreshCw, TrendingUp, TrendingDown } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -190,102 +189,6 @@ const CopyTradeHistory = ({ isLoading }: CopyTradeHistoryProps) => {
               <p className="text-sm mt-2">Your copy trading activities will appear here</p>
             </div>
           )}
-        </CardContent>
-      </Card>
-      
-      {/* Simulate a trade for testing */}
-      <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-white">Simulate Trade (Development)</CardTitle>
-          <CardDescription className="text-gray-400">
-            For testing purposes only
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex space-x-2">
-            <Button 
-              onClick={async () => {
-                try {
-                  const userId = (await supabase.auth.getUser()).data.user?.id;
-                  
-                  if (!userId) {
-                    console.error("No user ID found");
-                    return;
-                  }
-                  
-                  await supabase.rpc('process_trading_fee', {
-                    p_user_id: userId,
-                    p_trader_address: "Simulated_Trader_Address",
-                    p_token_symbol: "BONK",
-                    p_entry_price: 0.00000135,
-                    p_exit_price: 0.00000145,
-                    p_profit_sol: 0.5
-                  });
-                  
-                  // Refresh the page to see the new trade
-                  window.location.reload();
-                } catch (error) {
-                  console.error("Error simulating trade:", error);
-                }
-              }}
-              className="bg-green-600 hover:bg-green-700"
-            >
-              <TrendingUp className="h-4 w-4 mr-2" />
-              Simulate Profitable Trade
-            </Button>
-            
-            <Button 
-              onClick={async () => {
-                try {
-                  const userId = (await supabase.auth.getUser()).data.user?.id;
-                  
-                  if (!userId) {
-                    console.error("No user ID found");
-                    return;
-                  }
-                  
-                  // First ensure the user has a copy_settings record
-                  const { data: settingsData } = await supabase
-                    .from('copy_settings')
-                    .select('id')
-                    .maybeSingle();
-                    
-                  if (!settingsData) {
-                    await supabase
-                      .from('copy_settings')
-                      .insert({
-                        user_id: userId,
-                        trader_address: "Default_Trader_Address",
-                        is_active: true,
-                        allocated_capital_sol: 1
-                      });
-                  }
-                  
-                  await supabase
-                    .from('copy_trades')
-                    .insert({
-                      user_id: userId,
-                      trader_address: "Simulated_Trader_Address",
-                      token_symbol: "PEPE",
-                      entry_price: 0.0000125,
-                      exit_price: 0.0000128,
-                      profit_sol: 0.3,
-                      fee_paid_sol: 0,
-                      is_successful: false
-                    });
-                  
-                  // Refresh the page to see the new trade
-                  window.location.reload();
-                } catch (error) {
-                  console.error("Error simulating failed trade:", error);
-                }
-              }}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              <TrendingDown className="h-4 w-4 mr-2" />
-              Simulate Failed Fee Payment
-            </Button>
-          </div>
         </CardContent>
       </Card>
     </div>

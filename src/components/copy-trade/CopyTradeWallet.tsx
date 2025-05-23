@@ -1,11 +1,10 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowUpRight, Copy, RefreshCw, AlertCircle } from 'lucide-react';
-import { supabase } from "@/integrations/supabase/client";
+import { RefreshCw, Copy, AlertCircle } from 'lucide-react';
 import QRCode from 'qrcode.react';
 
 interface CopyTradeWalletProps {
@@ -19,8 +18,6 @@ interface CopyTradeWalletProps {
 
 const CopyTradeWallet = ({ walletData, isLoading }: CopyTradeWalletProps) => {
   const { toast } = useToast();
-  const [simulateAmount, setSimulateAmount] = useState<string>("");
-  const [isProcessing, setIsProcessing] = useState(false);
   
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(walletData.depositAddress);
@@ -28,52 +25,6 @@ const CopyTradeWallet = ({ walletData, isLoading }: CopyTradeWalletProps) => {
       title: "Address copied!",
       description: "Deposit address copied to clipboard"
     });
-  };
-  
-  const simulateDeposit = async () => {
-    try {
-      setIsProcessing(true);
-      
-      const amount = parseFloat(simulateAmount);
-      
-      if (isNaN(amount) || amount <= 0) {
-        toast({
-          title: "Invalid amount",
-          description: "Please enter a valid deposit amount",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      // Call the deposit_sol function to simulate a deposit
-      const { data, error } = await supabase
-        .rpc('deposit_sol', {
-          p_user_id: (await supabase.auth.getUser()).data.user?.id,
-          p_amount: amount,
-          p_description: 'Simulated deposit'
-        });
-        
-      if (error) throw error;
-      
-      toast({
-        title: "Deposit successful!",
-        description: `${amount} SOL has been added to your wallet`
-      });
-      
-      // Refresh the page to update the balance
-      window.location.reload();
-      
-    } catch (error) {
-      console.error("Error simulating deposit:", error);
-      toast({
-        title: "Deposit failed",
-        description: "Could not process your deposit",
-        variant: "destructive"
-      });
-    } finally {
-      setIsProcessing(false);
-      setSimulateAmount("");
-    }
   };
   
   if (isLoading) {
@@ -136,39 +87,6 @@ const CopyTradeWallet = ({ walletData, isLoading }: CopyTradeWalletProps) => {
                 </p>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* Simulated deposit section for development */}
-      <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-white">Simulate Deposit (Development)</CardTitle>
-          <CardDescription className="text-gray-400">
-            For testing purposes only
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex space-x-2">
-            <Input 
-              type="number" 
-              placeholder="Amount in SOL"
-              className="bg-black/40 border-gray-700 text-white"
-              value={simulateAmount}
-              onChange={(e) => setSimulateAmount(e.target.value)}
-            />
-            <Button 
-              onClick={simulateDeposit}
-              disabled={isProcessing}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              {isProcessing ? (
-                <RefreshCw className="h-4 w-4 animate-spin mr-2" />
-              ) : (
-                <ArrowUpRight className="h-4 w-4 mr-2" />
-              )}
-              Deposit
-            </Button>
           </div>
         </CardContent>
       </Card>
