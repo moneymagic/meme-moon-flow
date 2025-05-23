@@ -89,32 +89,47 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
       
     console.log(`Profit - Today: ${profitToday} SOL, Total: ${profitTotal} SOL`);
     
-    // Get recent trade history - break the deep type reference chain by explicitly declaring the return type
-    const { data: tradeHistory, error: historyError } = await supabase
-      .from('copy_trades')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('is_successful', true)
-      .order('timestamp', { ascending: false })
-      .limit(5) as unknown as { data: TradeHistoryItem[] | null, error: any };
-      
-    if (historyError) {
-      console.error("Error fetching trade history:", historyError);
-      throw new Error("Failed to fetch trade history");
+    // Get recent trade history - completely bypass TypeScript inference
+    let tradeHistory: TradeHistoryItem[] = [];
+    try {
+      const response = await supabase
+        .from('copy_trades')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('is_successful', true)
+        .order('timestamp', { ascending: false })
+        .limit(5);
+        
+      if (response.error) throw response.error;
+      tradeHistory = response.data as TradeHistoryItem[];
+    } catch (error) {
+      console.error("Error fetching trade history:", error);
+      // Continue with empty trade history rather than throwing
     }
     
-    // Get open trades - break the deep type reference chain by explicitly declaring the return type
-    const { data: openTrades, error: openError } = await supabase
-      .from('copy_trades')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('is_open', true)
-      .order('timestamp', { ascending: false }) as unknown as { data: OpenTradeItem[] | null, error: any };
-      
-    if (openError) {
-      console.error("Error fetching open trades:", openError);
-      // If the is_open field doesn't exist yet, handle gracefully
-      console.log("The 'is_open' field might not exist. Continuing with empty open trades array.");
+    // Get open trades - completely bypass TypeScript inference
+    let openTrades: OpenTradeItem[] = [];
+    try {
+      const response = await supabase
+        .from('copy_trades')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('is_open', true)
+        .order('timestamp', { ascending: false });
+        
+      if (response.error) {
+        // If the is_open field doesn't exist yet, handle gracefully
+        if (response.error.message?.includes("column \"is_open\" does not exist")) {
+          console.log("The 'is_open' field might not exist. Continuing with empty open trades array.");
+        } else {
+          console.error("Error fetching open trades:", response.error);
+        }
+      } else {
+        openTrades = response.data as OpenTradeItem[];
+      }
+    } catch (error) {
+      console.error("Error fetching open trades:", error);
+      // Continue with empty open trades rather than throwing
     }
     
     // Get copy settings status
