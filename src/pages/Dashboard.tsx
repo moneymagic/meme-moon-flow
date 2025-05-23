@@ -65,20 +65,6 @@ const Dashboard = () => {
                 <p className="text-gray-400">Saldo Disponível</p>
                 <p className="text-3xl font-bold text-white mt-1">{userInfo.balance} SOL</p>
               </div>
-              <div className="mt-4 md:mt-0">
-                <div className="flex flex-wrap gap-2">
-                  <Link to="/network">
-                    <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0">
-                      Explorador de Rede
-                    </Button>
-                  </Link>
-                  <Link to="/mlm">
-                    <Button className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0">
-                      Programa MLM
-                    </Button>
-                  </Link>
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>
