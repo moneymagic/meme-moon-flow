@@ -1,22 +1,32 @@
 
 import React from 'react';
-import { CommissionResult } from '@/services/CommissionTypes';
+import { Rank } from '@/services/CommissionTypes';
 
 interface CommissionExampleProps {
-  profitExample: number;
-  performanceFee: number;
-  masterTraderFee: number;
-  networkFee: number;
-  distributionExample: string[];
+  profitExample?: number;
+  performanceFee?: number;
+  masterTraderFee?: number;
+  networkFee?: number;
+  distributionExample?: string[];
+  rankPercentages?: Record<Rank, number>;
 }
 
 const CommissionExample: React.FC<CommissionExampleProps> = ({
-  profitExample,
-  performanceFee,
-  masterTraderFee,
-  networkFee,
-  distributionExample
+  profitExample = 100,
+  performanceFee = 30,
+  masterTraderFee = 10,
+  networkFee = 20,
+  distributionExample = [],
+  rankPercentages
 }) => {
+  // Generate example distribution based on rankPercentages if provided
+  const exampleDistribution = distributionExample.length > 0 ? distributionExample : 
+    rankPercentages ? 
+      Object.entries(rankPercentages).map(([rank, percentage]) => 
+        `${rank} receives ${percentage}% (${(profitExample * percentage / 100).toFixed(2)} SOL)`
+      ) : 
+      ["V3 receives 5% (5.00 SOL)", "V5 receives 10% (10.00 SOL)", "Remaining 5% stays with the platform"];
+
   return (
     <div className="w-full md:w-1/2">
       <h3 className="text-white font-semibold mb-3">Commission Distribution Example</h3>
@@ -38,7 +48,7 @@ const CommissionExample: React.FC<CommissionExampleProps> = ({
           <div className="border-t border-white/10 pt-3 text-sm">
             <p className="text-white mb-2">In this upline structure with rank compression:</p>
             <ul className="space-y-2 text-gray-300">
-              {distributionExample.map((line, idx) => (
+              {exampleDistribution.map((line, idx) => (
                 <li key={idx}>{line}</li>
               ))}
             </ul>
