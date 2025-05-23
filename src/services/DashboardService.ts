@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { CapitalGrowthData, ActiveOperation, RankingProgress } from "@/integrations/supabase/client";
+import type { CapitalGrowthData, ActiveOperation, RankingProgress } from "@/integrations/supabase/client";
 
 // Define the return type explicitly to avoid deep type instantiation
 export interface DashboardData {
