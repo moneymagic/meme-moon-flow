@@ -89,27 +89,27 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
       
     console.log(`Profit - Today: ${profitToday} SOL, Total: ${profitTotal} SOL`);
     
-    // Get recent trade history - use explicit typing to break recursive type references
+    // Get recent trade history - break the deep type reference chain by explicitly declaring the return type
     const { data: tradeHistory, error: historyError } = await supabase
       .from('copy_trades')
       .select('*')
       .eq('user_id', userId)
       .eq('is_successful', true)
       .order('timestamp', { ascending: false })
-      .limit(5) as { data: TradeHistoryItem[] | null, error: any };
+      .limit(5) as unknown as { data: TradeHistoryItem[] | null, error: any };
       
     if (historyError) {
       console.error("Error fetching trade history:", historyError);
       throw new Error("Failed to fetch trade history");
     }
     
-    // Get open trades - we'll assume there's an is_open field
+    // Get open trades - break the deep type reference chain by explicitly declaring the return type
     const { data: openTrades, error: openError } = await supabase
       .from('copy_trades')
       .select('*')
       .eq('user_id', userId)
       .eq('is_open', true)
-      .order('timestamp', { ascending: false }) as { data: OpenTradeItem[] | null, error: any };
+      .order('timestamp', { ascending: false }) as unknown as { data: OpenTradeItem[] | null, error: any };
       
     if (openError) {
       console.error("Error fetching open trades:", openError);
