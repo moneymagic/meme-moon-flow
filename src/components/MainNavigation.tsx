@@ -55,6 +55,16 @@ export function MainNavigation() {
             >
               Test Tools
             </Link>
+            <Link
+              to="/admin"
+              className={`text-sm font-medium transition-colors ${
+                isActive('/admin')
+                  ? 'text-primary'
+                  : 'text-muted-foreground hover:text-primary'
+              }`}
+            >
+              Admin
+            </Link>
           </>
         )}
       </div>
