@@ -1,8 +1,8 @@
 
-import { getUserNetworkStatistics } from './AffiliateService';
-import { getUserBalanceData } from './UserBalanceService';
+import { getUserAffiliateData } from './AffiliateService';
+import { getUserBalance } from './UserBalanceService';
 import { getTradeHistory } from './TradeService';
-import { getReferralPercentages, getNetworkGrowth, getRevenueChartData } from './VisualizationService';
+import { rankCommissionPercentages } from './RankService';
 
 /**
  * Retrieves all dashboard data for a user
@@ -12,26 +12,20 @@ import { getReferralPercentages, getNetworkGrowth, getRevenueChartData } from '.
 export async function getDashboardData(userId: string) {
   const [
     tradeHistory,
-    networkStats,
-    balanceData,
-    referralData,
-    networkGrowth,
-    revenueData
+    affiliateData,
+    balanceData
   ] = await Promise.all([
     getTradeHistory(userId),
-    getUserNetworkStatistics(userId),
-    getUserBalanceData(userId),
-    getReferralPercentages(),
-    getNetworkGrowth(),
-    getRevenueChartData()
+    getUserAffiliateData(userId),
+    getUserBalance(userId)
   ]);
 
   return {
     tradeHistory,
-    networkStats,
+    networkStats: affiliateData,
     balanceData,
-    referralData,
-    networkGrowth,
-    revenueData
+    referralData: rankCommissionPercentages,
+    networkGrowth: [],
+    revenueData: []
   };
 }
