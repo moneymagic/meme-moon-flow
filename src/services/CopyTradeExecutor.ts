@@ -1,6 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { Rank, Upline, distributeCommission, rankToNumber, calculateCommissionAmounts, processTradeCommission } from "./CommissionService";
+import { getUplines } from "./UplineService";
 
 /**
  * Calculates the proportional amount for a follower's trade based on the master's trade
@@ -42,9 +43,16 @@ export function getMockUplines(userId: string): Upline[] {
  */
 async function getUserUplines(userId: string): Promise<Upline[]> {
   try {
-    // In a real implementation, we would query the database to get the user's uplines
-    // For now, return mock uplines
-    return getMockUplines(userId);
+    // Get the real uplines from the database
+    const uplines = await getUplines(userId);
+    
+    // If no uplines found, return empty array
+    if (!uplines || uplines.length === 0) {
+      console.log(`No uplines found for user ${userId}, using mock data`);
+      return getMockUplines(userId);
+    }
+    
+    return uplines;
   } catch (error) {
     console.error("Error retrieving user uplines:", error);
     return [];
