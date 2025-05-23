@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
-import { Network, Home, LayoutDashboard, Layers, Users, ChevronDown } from 'lucide-react';
+import { Network, Home, LayoutDashboard, Users, ChevronDown } from 'lucide-react';
 
 interface MainNavigationProps {
   className?: string;
@@ -22,7 +22,7 @@ const MainNavigation = ({ className, variant = 'default' }: MainNavigationProps)
         { name: 'Detalhes da Equipe', path: '/network/team' }
       ] 
     },
-    { name: 'Matriz Unilevel', path: '/mlm', icon: Layers },
+    // MLM item removido daqui
   ];
 
   if (variant === 'mobile') {
