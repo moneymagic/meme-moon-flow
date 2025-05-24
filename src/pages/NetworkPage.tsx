@@ -1,199 +1,198 @@
 
-import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
-import { NetworkTabsData, OverviewTabContent, DownlineTabContent, MLMTabContent, Rank } from "@/components/network/TabComponents";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Users, TrendingUp, Network, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const NetworkPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
-
-  // Network overview data
+  
   const networkStats = {
-    totalMembers: 1247,
-    totalVolume: 398,
-    averageRank: 2.1,
-    directReferrals: 23,
-    totalCommissions: 4560,
-    monthlyCommissions: 890,
-    networkDepth: "∞",
-    activeMembers: 1089
+    totalMembers: 234,
+    activeMembers: 156,
+    monthlyVolume: 12450.75,
+    totalCommissions: 890.23
   };
 
-  // Downline stats
-  const downlineStats = {
-    totalMembers: 121965,
-    activeMembers: 4,
-    inactiveMembers: 95,
-    beginnerTeam: 583,
-    intermediateTeam: 20,
-    directDownlines: 4,
-    maxTeamRequirement: 20,
-    currentTeam: 2,
-    maxDownlinesRequirement: 1500,
-    currentDownlines: 621,
-    maxDirectRequirement: 20,
-    currentDirect: 4
-  };
-
-  // Network members data
-  const networkData = [
-    { 
-      user: "Alex M.", 
-      level: 1, 
-      volume: 32,
-      rank: "V2",
-      referrals: 3
-    },
-    { 
-      user: "Sarah K.", 
-      level: 1, 
-      volume: 105,
-      rank: "V3", 
-      referrals: 4
-    },
-    { 
-      user: "Marcus T.", 
-      level: 2, 
-      volume: 25,
-      rank: "V2",
-      referrals: 1
-    },
-    { 
-      user: "Lisa P.", 
-      level: 2, 
-      volume: 46,
-      rank: "V2",
-      referrals: 2
-    },
-    { 
-      user: "John D.", 
-      level: 3, 
-      volume: 12,
-      rank: "V1",
-      referrals: 0
-    }
+  const recentMembers = [
+    { id: 1, name: "user123.sol", joinDate: "2024-01-15", status: "active" },
+    { id: 2, name: "crypto_whale.sol", joinDate: "2024-01-14", status: "active" },
+    { id: 3, name: "blockchain_dev.sol", joinDate: "2024-01-13", status: "pending" },
   ];
-
-  // MLM ranks and commission structure - Updated with new percentages
-  const rankPercents: Record<Rank, number> = {
-    V1: 2,
-    V2: 4,
-    V3: 6,
-    V4: 8,
-    V5: 11,
-    V6: 14,
-    V7: 17,
-    V8: 20,
-  };
-
-  // Updated rank requirements according to new progression rules
-  const rankRequirements: Record<Rank, { sol: number, linesWithRank: Rank | null }> = {
-    V1: { sol: 0, linesWithRank: null },
-    V2: { sol: 34, linesWithRank: 'V1' },
-    V3: { sol: 60, linesWithRank: 'V2' },
-    V4: { sol: 120, linesWithRank: 'V3' },
-    V5: { sol: 200, linesWithRank: 'V4' },
-    V6: { sol: 350, linesWithRank: 'V5' },
-    V7: { sol: 550, linesWithRank: 'V6' },
-    V8: { sol: 800, linesWithRank: 'V7' },
-  };
-
-  // Team members downline data
-  const teamMembers = [
-    { 
-      id: '1', 
-      username: '3gu***7u*', 
-      joinDate: '2024-09-30', 
-      teamSize: 1 
-    },
-    { 
-      id: '2', 
-      username: 'lea***sar', 
-      joinDate: '2024-02-04', 
-      teamSize: 14,
-      rank: 2
-    },
-    { 
-      id: '3', 
-      username: 'Fab***der', 
-      joinDate: '2024-01-16', 
-      teamSize: 1,
-      rank: 1
-    },
-    { 
-      id: '4', 
-      username: 'dud***yal', 
-      joinDate: '2024-01-11', 
-      teamSize: 1,
-      rank: 1
-    },
-    { 
-      id: '5', 
-      username: 'Vip***ho', 
-      joinDate: '2024-01-11', 
-      teamSize: 11,
-      rank: 1
-    },
-  ];
-
-  // Top performing networkers
-  const topPerformers = [
-    { name: '9mF2...7x8s', level: 1, earnings: '₴ 1,250', referrals: 45 },
-    { name: '3kR1...9pL4', level: 1, earnings: '₴ 980', referrals: 38 },
-    { name: '8nQ7...2mK9', level: 2, earnings: '₴ 750', referrals: 29 },
-    { name: '5vB6...1dF3', level: 1, earnings: '₴ 690', referrals: 25 },
-    { name: '2hW9...6tG5', level: 3, earnings: '₴ 540', referrals: 22 },
-  ];
-
-  // Sample ranks for the rank table
-  const levels = [
-    { level: 1, members: 23, commission: '5%', earnings: '₴ 345' },
-    { level: 2, members: 89, commission: '3%', earnings: '₴ 234' },
-    { level: 3, members: 156, commission: '2%', earnings: '₴ 187' },
-    { level: 4, members: 234, commission: '1%', earnings: '₴ 98' },
-    { level: 5, members: 345, commission: '0.5%', earnings: '₴ 67' },
-  ];
-
-  // Consolidate all data needed for the tabs
-  const tabsData: NetworkTabsData = {
-    networkStats,
-    networkData,
-    downlineStats,
-    teamMembers,
-    rankPercents,
-    rankRequirements,
-    topPerformers,
-    levels
-  };
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pt-8">
-        <div className="container mx-auto px-6 py-4">
-          <h1 className="text-3xl font-bold text-white mb-6">Network</h1>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 py-8">
+        <div className="max-w-7xl mx-auto px-8">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Network</h1>
+                <p className="text-slate-600 font-light">Gerencie sua rede e acompanhe o crescimento</p>
+              </div>
+              <Link to="/mlm">
+                <Button className="bg-slate-900 hover:bg-slate-800 text-white rounded-2xl px-6 py-2.5 font-medium shadow-lg shadow-slate-900/25">
+                  <Eye className="w-4 h-4 mr-2" />
+                  Ver Matriz MLM
+                </Button>
+              </Link>
+            </div>
+          </div>
 
-          <Tabs defaultValue="overview" className="w-full" value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-3 mb-8 bg-black/30">
-              <TabsTrigger value="overview" className="text-white data-[state=active]:bg-blue-600">Overview</TabsTrigger>
-              <TabsTrigger value="downline" className="text-white data-[state=active]:bg-blue-600">Downline</TabsTrigger>
-              <TabsTrigger value="mlm" className="text-white data-[state=active]:bg-blue-600">MLM Structure</TabsTrigger>
-            </TabsList>
-            
-            {/* Network Overview Tab */}
-            <TabsContent value="overview" className="space-y-6">
-              <OverviewTabContent data={tabsData} />
-            </TabsContent>
-            
-            {/* Downline Details Tab */}
-            <TabsContent value="downline" className="space-y-6">
-              <DownlineTabContent data={tabsData} />
-            </TabsContent>
-            
-            {/* MLM Structure Tab */}
-            <TabsContent value="mlm" className="space-y-6">
-              <MLMTabContent data={tabsData} />
-            </TabsContent>
-          </Tabs>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                    <Users className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-slate-600 font-light text-sm">Total Membros</p>
+                    <p className="text-2xl font-light text-slate-900 tracking-tight">{networkStats.totalMembers}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-slate-600 font-light text-sm">Membros Ativos</p>
+                    <p className="text-2xl font-light text-slate-900 tracking-tight">{networkStats.activeMembers}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center">
+                    <Network className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-slate-600 font-light text-sm">Volume Mensal</p>
+                    <p className="text-2xl font-light text-slate-900 tracking-tight">{networkStats.monthlyVolume} SOL</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-slate-600 font-light text-sm">Comissões</p>
+                    <p className="text-2xl font-light text-slate-900 tracking-tight">{networkStats.totalCommissions} SOL</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Content */}
+          <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-slate-900 font-medium tracking-tight">Gestão da Rede</CardTitle>
+              <CardDescription className="text-slate-600 font-light">
+                Acompanhe o desempenho e crescimento da sua rede
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="bg-slate-100/80 rounded-2xl p-1 mb-6">
+                  <TabsTrigger 
+                    value="overview" 
+                    className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                  >
+                    Visão Geral
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="members" 
+                    className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                  >
+                    Membros
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="analytics" 
+                    className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                  >
+                    Analytics
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="overview" className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium text-slate-900 tracking-tight">Últimos Membros</h3>
+                      <div className="space-y-3">
+                        {recentMembers.map((member) => (
+                          <div key={member.id} className="flex items-center justify-between p-4 bg-slate-50/80 rounded-2xl">
+                            <div>
+                              <p className="font-medium text-slate-900 font-mono text-sm">{member.name}</p>
+                              <p className="text-slate-600 font-light text-xs">{member.joinDate}</p>
+                            </div>
+                            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              member.status === 'active' 
+                                ? 'bg-emerald-100 text-emerald-700' 
+                                : 'bg-amber-100 text-amber-700'
+                            }`}>
+                              {member.status === 'active' ? 'Ativo' : 'Pendente'}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium text-slate-900 tracking-tight">Ações Rápidas</h3>
+                      <div className="space-y-3">
+                        <Link to="/mlm">
+                          <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-2xl py-3 font-medium">
+                            Ver Matriz Unilevel
+                          </Button>
+                        </Link>
+                        <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 rounded-2xl py-3 font-medium">
+                          Exportar Relatório
+                        </Button>
+                        <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 rounded-2xl py-3 font-medium">
+                          Convidar Membro
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="members">
+                  <div className="text-center py-12">
+                    <Users className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-slate-900 mb-2">Lista de Membros</h3>
+                    <p className="text-slate-600 font-light">Funcionalidade em desenvolvimento</p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="analytics">
+                  <div className="text-center py-12">
+                    <TrendingUp className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-slate-900 mb-2">Analytics Avançado</h3>
+                    <p className="text-slate-600 font-light">Funcionalidade em desenvolvimento</p>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </Layout>

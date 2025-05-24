@@ -18,10 +18,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   if (isLoading) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pt-4">
-          <div className="container mx-auto px-6 py-8">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 py-8">
+          <div className="max-w-7xl mx-auto px-8">
             <div className="flex justify-center items-center h-64">
-              <p className="text-white text-xl">Loading dashboard data...</p>
+              <div className="text-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse mx-auto mb-4"></div>
+                <p className="text-slate-600 font-light">Carregando dashboard...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -31,8 +34,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pt-4">
-        <div className="container mx-auto px-6 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 py-8">
+        <div className="max-w-7xl mx-auto px-8">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Dashboard</h1>
+            <p className="text-slate-600 font-light">Acompanhe seus investimentos e ganhos</p>
+          </div>
+
           {/* Saldo e métricas */}
           <DashboardBalance balance={balance} />
 
