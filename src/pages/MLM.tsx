@@ -60,7 +60,6 @@ const MLM = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Simulate fetching data
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setNetworkStats({
         totalMembers: 212,
@@ -85,19 +84,34 @@ const MLM = () => {
   }, []);
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
-        <MLMHeader />
-        <div className="container mx-auto px-6 py-8">
-          <MLMStatsCards stats={networkStats} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900">
+      <MLMHeader />
+      <div className="container mx-auto px-8 py-12">
+        <MLMStatsCards stats={networkStats} />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-            <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-8">
               <Tabs value={tab} onValueChange={handleTabChange}>
-                <TabsList className="bg-black/20 border-white/10">
-                  <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-                  <TabsTrigger value="commission">Comissões</TabsTrigger>
-                  <TabsTrigger value="compression">Compressão</TabsTrigger>
+                <TabsList className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-1">
+                  <TabsTrigger 
+                    value="overview" 
+                    className="rounded-xl font-medium data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70"
+                  >
+                    Visão Geral
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="commission" 
+                    className="rounded-xl font-medium data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70"
+                  >
+                    Comissões
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="compression" 
+                    className="rounded-xl font-medium data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70"
+                  >
+                    Compressão
+                  </TabsTrigger>
                 </TabsList>
                 <MLMMainContent 
                   tab={tab} 
@@ -105,19 +119,19 @@ const MLM = () => {
                   levels={levels}
                 />
               </Tabs>
-              
-              <TopPerformers topPerformers={topPerformers} />
             </div>
             
-            <div className="space-y-6">
-              <ReferralCard directReferrals={networkStats.directReferrals} />
-              <NetworkVisualizationCard />
-              <CommissionCard monthlyCommissions={890} />
-            </div>
+            <TopPerformers topPerformers={topPerformers} />
+          </div>
+          
+          <div className="space-y-8">
+            <ReferralCard directReferrals={networkStats.directReferrals} />
+            <NetworkVisualizationCard />
+            <CommissionCard monthlyCommissions={890} />
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 

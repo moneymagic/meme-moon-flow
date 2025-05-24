@@ -4,14 +4,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Users, TrendingUp, Infinity } from 'lucide-react';
 
 interface MLMStatsCardsProps {
-  stats: {
+  stats?: {
     totalMembers: number;
     activeMembers: number;
     totalVolume: number;
     averageRank: number;
     directReferrals: number;
   };
-  // Adding support for networkStats prop structure as well
   networkStats?: {
     totalMembers: number;
     totalVolume: number;
@@ -32,45 +31,72 @@ const MLMStatsCards: React.FC<MLMStatsCardsProps> = ({ stats, networkStats }) =>
     totalVolume: networkStats.totalVolume,
     averageRank: networkStats.averageRank,
     directReferrals: networkStats.directReferrals
-  } : stats;
+  } : stats || {
+    totalMembers: 0,
+    activeMembers: 0,
+    totalVolume: 0,
+    averageRank: 0,
+    directReferrals: 0
+  };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-      <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-400 text-sm">Total Members</p>
-              <p className="text-2xl font-bold text-white">{displayStats.totalMembers.toLocaleString()}</p>
-              <p className="text-green-400 text-sm">+12% this month</p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+      {/* Total Members Card */}
+      <Card className="relative overflow-hidden bg-white/5 backdrop-blur-xl border-0 shadow-2xl rounded-3xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-600/10"></div>
+        <CardContent className="relative p-8">
+          <div className="flex items-start justify-between">
+            <div className="space-y-3">
+              <p className="text-white/60 text-sm font-medium tracking-wide uppercase">Total Members</p>
+              <p className="text-4xl font-light text-white tracking-tight">{displayStats.totalMembers.toLocaleString()}</p>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                <span className="text-emerald-400 text-sm font-medium">+12% this month</span>
+              </div>
             </div>
-            <Users className="h-8 w-8 text-blue-400" />
+            <div className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl">
+              <Users className="h-7 w-7 text-blue-400" />
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-400 text-sm">Total Volume</p>
-              <p className="text-2xl font-bold text-white">{displayStats.totalVolume.toLocaleString()} SOL</p>
-              <p className="text-green-400 text-sm">+8.5% this month</p>
+      {/* Total Volume Card */}
+      <Card className="relative overflow-hidden bg-white/5 backdrop-blur-xl border-0 shadow-2xl rounded-3xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-600/10"></div>
+        <CardContent className="relative p-8">
+          <div className="flex items-start justify-between">
+            <div className="space-y-3">
+              <p className="text-white/60 text-sm font-medium tracking-wide uppercase">Total Volume</p>
+              <p className="text-4xl font-light text-white tracking-tight">{displayStats.totalVolume.toLocaleString()} SOL</p>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                <span className="text-emerald-400 text-sm font-medium">+8.5% this month</span>
+              </div>
             </div>
-            <TrendingUp className="h-8 w-8 text-green-400" />
+            <div className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl">
+              <TrendingUp className="h-7 w-7 text-emerald-400" />
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-400 text-sm">Network Depth</p>
-              <p className="text-2xl font-bold text-white">∞ levels</p>
-              <p className="text-blue-400 text-sm">{displayStats.activeMembers} active</p>
+      {/* Network Depth Card */}
+      <Card className="relative overflow-hidden bg-white/5 backdrop-blur-xl border-0 shadow-2xl rounded-3xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-violet-600/10"></div>
+        <CardContent className="relative p-8">
+          <div className="flex items-start justify-between">
+            <div className="space-y-3">
+              <p className="text-white/60 text-sm font-medium tracking-wide uppercase">Network Depth</p>
+              <p className="text-4xl font-light text-white tracking-tight">∞ levels</p>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-violet-400 rounded-full"></div>
+                <span className="text-violet-400 text-sm font-medium">{displayStats.activeMembers} active</span>
+              </div>
             </div>
-            <Infinity className="h-8 w-8 text-purple-400" />
+            <div className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl">
+              <Infinity className="h-7 w-7 text-violet-400" />
+            </div>
           </div>
         </CardContent>
       </Card>
