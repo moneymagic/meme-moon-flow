@@ -1,14 +1,13 @@
 
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Wallet, History, Settings, Play, Pause } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { TrendingUp, Wallet, Activity, Shield, Play, Pause, ArrowUpRight, Zap } from "lucide-react";
 
 const CopyTradePage = () => {
   const [isActive, setIsActive] = useState(true);
-  const [activeTab, setActiveTab] = useState("overview");
 
   const stats = {
     totalProfit: 45.67,
@@ -18,206 +17,186 @@ const CopyTradePage = () => {
   };
 
   const recentTrades = [
-    { id: 1, pair: "SOL/USDC", type: "buy", amount: "2.5 SOL", profit: "+1.23 SOL", time: "2h ago" },
-    { id: 2, pair: "ETH/USDC", type: "sell", amount: "0.1 ETH", profit: "+0.45 SOL", time: "4h ago" },
-    { id: 3, pair: "BTC/USDC", type: "buy", amount: "0.01 BTC", profit: "-0.12 SOL", time: "6h ago" },
+    { id: 1, pair: "SOL/USDC", type: "buy", amount: "2.5 SOL", profit: "+1.23 SOL", time: "2h ago", status: "completed" },
+    { id: 2, pair: "ETH/USDC", type: "sell", amount: "0.1 ETH", profit: "+0.45 SOL", time: "4h ago", status: "completed" },
+    { id: 3, pair: "BTC/USDC", type: "buy", amount: "0.01 BTC", profit: "-0.12 SOL", time: "6h ago", status: "completed" },
   ];
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 py-8">
-        <div className="max-w-7xl mx-auto px-8">
-          {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Copy Trading</h1>
-                <p className="text-slate-600 font-light">Automatize seus investimentos seguindo traders experientes</p>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className={`px-4 py-2 rounded-2xl text-sm font-medium ${
-                  isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
-                }`}>
+      <div className="min-h-screen bg-gradient-to-b from-white via-slate-50/30 to-white">
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          {/* Hero Section */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-full px-4 py-2 mb-6">
+              <Zap className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-blue-700">AI-Powered Trading</span>
+            </div>
+            
+            <h1 className="text-5xl font-thin text-gray-900 mb-4 tracking-tight">
+              Copy Trading
+            </h1>
+            <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto mb-8">
+              Automatize seus investimentos seguindo os melhores traders do mercado
+            </p>
+            
+            <div className="flex items-center justify-center space-x-4">
+              <div className={`flex items-center space-x-2 px-4 py-2 rounded-full ${
+                isActive ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
+              }`}>
+                <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <span className={`text-sm font-medium ${isActive ? 'text-green-700' : 'text-red-700'}`}>
                   {isActive ? 'Ativo' : 'Pausado'}
-                </div>
-                <Button
-                  onClick={() => setIsActive(!isActive)}
-                  className={`rounded-2xl px-6 py-2.5 font-medium ${
-                    isActive 
-                      ? 'bg-red-600 hover:bg-red-700 text-white' 
-                      : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                  }`}
-                >
-                  {isActive ? (
-                    <>
-                      <Pause className="w-4 h-4 mr-2" />
-                      Pausar
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-4 h-4 mr-2" />
-                      Ativar
-                    </>
-                  )}
-                </Button>
+                </span>
               </div>
+              
+              <Button
+                onClick={() => setIsActive(!isActive)}
+                className={`rounded-full px-6 py-2 font-medium transition-all duration-300 ${
+                  isActive 
+                    ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/25' 
+                    : 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/25'
+                }`}
+              >
+                {isActive ? (
+                  <>
+                    <Pause className="w-4 h-4 mr-2" />
+                    Pausar
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 mr-2" />
+                    Ativar
+                  </>
+                )}
+              </Button>
             </div>
           </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-slate-600 font-light text-sm">Lucro Total</p>
-                    <p className="text-2xl font-light text-slate-900 tracking-tight">{stats.totalProfit} SOL</p>
-                  </div>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="w-6 h-6 text-white" />
                 </div>
+                <p className="text-sm text-gray-500 font-medium mb-1">Lucro Total</p>
+                <p className="text-2xl font-light text-gray-900">{stats.totalProfit} SOL</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-slate-600 font-light text-sm">Retorno Mensal</p>
-                    <p className="text-2xl font-light text-slate-900 tracking-tight">{stats.monthlyReturn}%</p>
-                  </div>
+            <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="w-6 h-6 text-white" />
                 </div>
+                <p className="text-sm text-gray-500 font-medium mb-1">Retorno Mensal</p>
+                <p className="text-2xl font-light text-gray-900">{stats.monthlyReturn}%</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center">
-                    <History className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-slate-600 font-light text-sm">Total Trades</p>
-                    <p className="text-2xl font-light text-slate-900 tracking-tight">{stats.totalTrades}</p>
-                  </div>
+            <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Activity className="w-6 h-6 text-white" />
                 </div>
+                <p className="text-sm text-gray-500 font-medium mb-1">Total Trades</p>
+                <p className="text-2xl font-light text-gray-900">{stats.totalTrades}</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-slate-600 font-light text-sm">Win Rate</p>
-                    <p className="text-2xl font-light text-slate-900 tracking-tight">{stats.winRate}%</p>
-                  </div>
+            <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-6 h-6 text-white" />
                 </div>
+                <p className="text-sm text-gray-500 font-medium mb-1">Win Rate</p>
+                <p className="text-2xl font-light text-gray-900">{stats.winRate}%</p>
               </CardContent>
             </Card>
           </div>
 
-          {/* Main Content */}
-          <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-slate-900 font-medium tracking-tight">Gestão de Copy Trading</CardTitle>
-              <CardDescription className="text-slate-600 font-light">
-                Configure e monitore suas operações automatizadas
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="bg-slate-100/80 rounded-2xl p-1 mb-6">
-                  <TabsTrigger 
-                    value="overview" 
-                    className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
-                  >
-                    Visão Geral
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="history" 
-                    className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
-                  >
-                    Histórico
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="settings" 
-                    className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
-                  >
-                    Configurações
-                  </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="overview" className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-slate-900 tracking-tight">Trades Recentes</h3>
-                      <div className="space-y-3">
-                        {recentTrades.map((trade) => (
-                          <div key={trade.id} className="flex items-center justify-between p-4 bg-slate-50/80 rounded-2xl">
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-2 h-2 rounded-full ${
-                                trade.type === 'buy' ? 'bg-emerald-500' : 'bg-red-500'
-                              }`}></div>
-                              <div>
-                                <p className="font-medium text-slate-900 text-sm">{trade.pair}</p>
-                                <p className="text-slate-600 font-light text-xs">{trade.amount} • {trade.time}</p>
-                              </div>
-                            </div>
-                            <div className={`text-sm font-medium ${
-                              trade.profit.startsWith('+') ? 'text-emerald-600' : 'text-red-600'
-                            }`}>
-                              {trade.profit}
-                            </div>
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Trades Section */}
+            <div className="lg:col-span-2">
+              <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm">
+                <CardContent className="p-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-light text-gray-900">Atividade Recente</h2>
+                    <Button variant="ghost" className="text-gray-500 hover:text-gray-700">
+                      Ver Todos
+                      <ArrowUpRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {recentTrades.map((trade) => (
+                      <div key={trade.id} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 hover:bg-gray-50 transition-colors duration-200">
+                        <div className="flex items-center space-x-4">
+                          <div className={`w-3 h-3 rounded-full ${
+                            trade.type === 'buy' ? 'bg-green-500' : 'bg-blue-500'
+                          }`}></div>
+                          <div>
+                            <p className="font-medium text-gray-900">{trade.pair}</p>
+                            <p className="text-sm text-gray-500">{trade.amount} • {trade.time}</p>
                           </div>
-                        ))}
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200">
+                            {trade.status}
+                          </Badge>
+                          <span className={`font-medium ${
+                            trade.profit.startsWith('+') ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {trade.profit}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-slate-900 tracking-tight">Configuração Rápida</h3>
-                      <div className="space-y-3">
-                        <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-2xl py-3 font-medium">
-                          <Wallet className="w-4 h-4 mr-2" />
-                          Conectar Wallet
-                        </Button>
-                        <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 rounded-2xl py-3 font-medium">
-                          <Settings className="w-4 h-4 mr-2" />
-                          Configurar Limites
-                        </Button>
-                        <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 rounded-2xl py-3 font-medium">
-                          <History className="w-4 h-4 mr-2" />
-                          Ver Relatório
-                        </Button>
-                      </div>
-                    </div>
+                    ))}
                   </div>
-                </TabsContent>
+                </CardContent>
+              </Card>
+            </div>
 
-                <TabsContent value="history">
-                  <div className="text-center py-12">
-                    <History className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-slate-900 mb-2">Histórico Completo</h3>
-                    <p className="text-slate-600 font-light">Funcionalidade em desenvolvimento</p>
+            {/* Actions Sidebar */}
+            <div className="space-y-6">
+              <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Ações Rápidas</h3>
+                  <div className="space-y-3">
+                    <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white rounded-xl py-3 font-medium">
+                      <Wallet className="w-4 h-4 mr-2" />
+                      Conectar Wallet
+                    </Button>
+                    <Button variant="outline" className="w-full border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl py-3 font-medium">
+                      Configurar Limites
+                    </Button>
+                    <Button variant="outline" className="w-full border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl py-3 font-medium">
+                      Ver Relatórios
+                    </Button>
                   </div>
-                </TabsContent>
+                </CardContent>
+              </Card>
 
-                <TabsContent value="settings">
-                  <div className="text-center py-12">
-                    <Settings className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-slate-900 mb-2">Configurações Avançadas</h3>
-                    <p className="text-slate-600 font-light">Funcionalidade em desenvolvimento</p>
+              <Card className="border-0 bg-gradient-to-br from-blue-50 to-purple-50 shadow-sm">
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                      <Shield className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">Segurança</h3>
+                      <p className="text-sm text-gray-600">Protegido por Solana</p>
+                    </div>
                   </div>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    Seus fundos estão seguros na blockchain Solana com contratos inteligentes auditados.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </div>
     </Layout>
