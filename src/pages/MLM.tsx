@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MLMHeader from "@/components/network/mlm/MLMHeader";
+import { Badge } from "@/components/ui/badge";
+import { Sparkles } from "lucide-react";
 import MLMStatsCards from "@/components/network/mlm/MLMStatsCards";
 import MLMMainContent from "@/components/network/mlm/MLMMainContent";
 import ReferralCard from "@/components/network/mlm/ReferralCard";
@@ -84,54 +85,77 @@ const MLM = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900">
-      <MLMHeader />
-      <div className="container mx-auto px-8 py-12">
-        <MLMStatsCards stats={networkStats} />
+    <Layout>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 py-8">
+        <div className="max-w-7xl mx-auto px-8">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-purple-500 rounded-2xl blur opacity-75"></div>
+                <div className="relative bg-gradient-to-r from-violet-400 to-purple-500 p-3 rounded-2xl">
+                  <Sparkles className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Matriz Unilevel</h1>
+                <p className="text-slate-600 font-light">Sistema avançado de comissões VastCopy</p>
+              </div>
+              <Badge 
+                variant="outline" 
+                className="border-emerald-400/50 text-emerald-600 bg-emerald-50 backdrop-blur-sm rounded-2xl px-4 py-2 font-medium ml-auto"
+              >
+                Sistema VastCopy
+              </Badge>
+            </div>
+          </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
-          <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-8">
-              <Tabs value={tab} onValueChange={handleTabChange}>
-                <TabsList className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-1">
-                  <TabsTrigger 
-                    value="overview" 
-                    className="rounded-xl font-medium data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70"
-                  >
-                    Visão Geral
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="commission" 
-                    className="rounded-xl font-medium data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70"
-                  >
-                    Comissões
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="compression" 
-                    className="rounded-xl font-medium data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70"
-                  >
-                    Compressão
-                  </TabsTrigger>
-                </TabsList>
-                <MLMMainContent 
-                  tab={tab} 
-                  rankPercentages={rankCommissionPercentages} 
-                  levels={levels}
-                />
-              </Tabs>
+          <MLMStatsCards stats={networkStats} />
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+            <div className="lg:col-span-2 space-y-8">
+              <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/50 p-8 shadow-sm">
+                <Tabs value={tab} onValueChange={handleTabChange}>
+                  <TabsList className="bg-slate-100/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl p-1">
+                    <TabsTrigger 
+                      value="overview" 
+                      className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                    >
+                      Visão Geral
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="commission" 
+                      className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                    >
+                      Comissões
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="compression" 
+                      className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                    >
+                      Compressão
+                    </TabsTrigger>
+                  </TabsList>
+                  <MLMMainContent 
+                    tab={tab} 
+                    rankPercentages={rankCommissionPercentages} 
+                    levels={levels}
+                  />
+                </Tabs>
+              </div>
+              
+              <TopPerformers topPerformers={topPerformers} />
             </div>
             
-            <TopPerformers topPerformers={topPerformers} />
-          </div>
-          
-          <div className="space-y-8">
-            <ReferralCard directReferrals={networkStats.directReferrals} />
-            <NetworkVisualizationCard />
-            <CommissionCard monthlyCommissions={890} />
+            <div className="space-y-8">
+              <ReferralCard directReferrals={networkStats.directReferrals} />
+              <NetworkVisualizationCard />
+              <CommissionCard monthlyCommissions={890} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
