@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 const MLMHeader: React.FC = () => {
   return (
-    <header className="border-b border-white/10 backdrop-blur-xl bg-slate-900/80">
+    <header className="border-b border-white/10 backdrop-blur-xl bg-black/80">
       <div className="container mx-auto px-8 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
@@ -15,7 +15,7 @@ const MLMHeader: React.FC = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="text-purple-200 hover:bg-white/10 hover:text-white rounded-2xl font-medium transition-all duration-300"
+                className="text-gray-300 hover:bg-white/10 hover:text-white rounded-2xl font-medium transition-all duration-300"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Voltar
@@ -23,8 +23,8 @@ const MLMHeader: React.FC = () => {
             </Link>
             <div className="flex items-center space-x-4">
               <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-violet-500 to-purple-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                <div className="relative bg-gradient-to-r from-violet-500 to-purple-600 p-2 rounded-2xl shadow-lg">
+                <div className="absolute -inset-1 bg-gradient-to-r from-gray-500 to-gray-700 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                <div className="relative bg-gradient-to-r from-gray-500 to-gray-700 p-2 rounded-2xl shadow-lg">
                   <Sparkles className="h-5 w-5 text-white" />
                 </div>
               </div>
