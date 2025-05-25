@@ -68,12 +68,6 @@ const NetworkPage = () => {
                 <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Matriz Unilevel</h1>
                 <p className="text-slate-600 font-light">Sistema de comissões com corte por diferença de ranking</p>
               </div>
-              <Badge 
-                variant="outline" 
-                className="border-purple-400/50 text-purple-700 bg-purple-50 rounded-2xl px-4 py-2 font-medium"
-              >
-                Royal Q Style
-              </Badge>
             </div>
           </div>
 
