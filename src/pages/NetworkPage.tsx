@@ -4,23 +4,58 @@ import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, TrendingUp, Network, Download, UserPlus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Users, TrendingUp, Network, Download, UserPlus, Copy, Crown, Star, Infinity, Award } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const NetworkPage = () => {
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
+  const [referralCode] = useState("ROYAL2024VQ");
   
   const networkStats = {
-    totalMembers: 234,
-    activeMembers: 156,
-    monthlyVolume: 12450.75,
-    totalCommissions: 890.23
+    totalMembers: 121965,
+    activeMembers: 4,
+    inactiveMembers: 95,
+    cumulativeProfit: 183986,
+    todayProfit: 0,
+    currentRank: "V3",
+    directReferrals: 4,
+    teamSize: 621,
+    maxTeam: 1500,
+    directDownlines: 4,
+    maxDirectDownlines: 20,
+    teamProgress: 2,
+    maxTeamProgress: 3
   };
 
-  const recentMembers = [
-    { id: 1, name: "user123.sol", joinDate: "2024-01-15", status: "active" },
-    { id: 2, name: "crypto_whale.sol", joinDate: "2024-01-14", status: "active" },
-    { id: 3, name: "blockchain_dev.sol", joinDate: "2024-01-13", status: "pending" },
+  const teamMembers = [
+    { id: 1, name: "3gu***7u*", joinDate: "2024-09-30", teamSize: 1, rank: "V1", isActive: true },
+    { id: 2, name: "lea***sar", joinDate: "2024-02-04", teamSize: 14, rank: "V2", isActive: true },
+    { id: 3, name: "Fab***der", joinDate: "2024-01-16", teamSize: 1, rank: "V1", isActive: false },
+    { id: 4, name: "dud***val", joinDate: "2024-01-11", teamSize: 1, rank: "V1", isActive: false },
+    { id: 5, name: "Vip***ho", joinDate: "2024-01-11", teamSize: 11, rank: "V2", isActive: true },
   ];
+
+  const rankRequirements = [
+    { rank: "V1", profitRequired: 100, directsRequired: 0, description: "Rank inicial" },
+    { rank: "V2", profitRequired: 500, directsRequired: 2, description: "2 diretos V1" },
+    { rank: "V3", profitRequired: 2000, directsRequired: 3, description: "3 diretos V2" },
+    { rank: "V4", profitRequired: 10000, directsRequired: 4, description: "4 diretos V3" },
+    { rank: "V5", profitRequired: 50000, directsRequired: 5, description: "5 diretos V4" },
+    { rank: "V6", profitRequired: 100000, directsRequired: 6, description: "6 diretos V5" },
+    { rank: "V7", profitRequired: 250000, directsRequired: 7, description: "7 diretos V6" },
+    { rank: "V8", profitRequired: 500000, directsRequired: 8, description: "8 diretos V7" },
+  ];
+
+  const copyReferralLink = () => {
+    const link = `https://vastcopy.com/ref/${referralCode}`;
+    navigator.clipboard.writeText(link);
+    toast({
+      title: "Link copiado!",
+      description: "Seu link de indicação foi copiado para a área de transferência.",
+    });
+  };
 
   return (
     <Layout>
@@ -28,77 +63,111 @@ const NetworkPage = () => {
         <div className="max-w-7xl mx-auto px-8">
           {/* Header */}
           <div className="mb-8">
-            <div>
-              <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Network</h1>
-              <p className="text-slate-600 font-light">Gerencie sua rede e acompanhe o crescimento</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Matriz Unilevel</h1>
+                <p className="text-slate-600 font-light">Sistema de comissões com corte por diferença de ranking</p>
+              </div>
+              <Badge 
+                variant="outline" 
+                className="border-purple-400/50 text-purple-700 bg-purple-50 rounded-2xl px-4 py-2 font-medium"
+              >
+                Royal Q Style
+              </Badge>
             </div>
           </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
+          {/* Main Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200/50 rounded-3xl shadow-sm">
               <CardContent className="p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 font-light text-sm">Total Membros</p>
-                    <p className="text-2xl font-light text-slate-900 tracking-tight">{networkStats.totalMembers}</p>
+                    <p className="text-blue-600 font-medium text-sm mb-1">Número de equipe</p>
+                    <p className="text-3xl font-light text-blue-900 tracking-tight">{networkStats.totalMembers.toLocaleString()}</p>
+                    <p className="text-blue-600 text-sm font-light">pessoas</p>
+                  </div>
+                  <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center">
+                    <Users className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
+            <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200/50 rounded-3xl shadow-sm">
               <CardContent className="p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-white" />
-                  </div>
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 font-light text-sm">Membros Ativos</p>
-                    <p className="text-2xl font-light text-slate-900 tracking-tight">{networkStats.activeMembers}</p>
+                    <p className="text-emerald-600 font-medium text-sm mb-1">Lucro cumulativo</p>
+                    <p className="text-3xl font-light text-emerald-900 tracking-tight">{networkStats.cumulativeProfit.toLocaleString()}</p>
+                    <p className="text-emerald-600 text-sm font-light">RB</p>
+                  </div>
+                  <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
+            <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200/50 rounded-3xl shadow-sm">
               <CardContent className="p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center">
-                    <Network className="w-5 h-5 text-white" />
-                  </div>
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 font-light text-sm">Volume Mensal</p>
-                    <p className="text-2xl font-light text-slate-900 tracking-tight">{networkStats.monthlyVolume} SOL</p>
+                    <p className="text-purple-600 font-medium text-sm mb-1">Meu Rank</p>
+                    <p className="text-3xl font-light text-purple-900 tracking-tight">{networkStats.currentRank}</p>
+                    <p className="text-purple-600 text-sm font-light">atual</p>
+                  </div>
+                  <div className="w-12 h-12 bg-purple-500 rounded-2xl flex items-center justify-center">
+                    <Crown className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
+            <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200/50 rounded-3xl shadow-sm">
               <CardContent className="p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-white" />
-                  </div>
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 font-light text-sm">Comissões</p>
-                    <p className="text-2xl font-light text-slate-900 tracking-tight">{networkStats.totalCommissions} SOL</p>
+                    <p className="text-amber-600 font-medium text-sm mb-1">Lucro para hoje</p>
+                    <p className="text-3xl font-light text-amber-900 tracking-tight">{networkStats.todayProfit}</p>
+                    <p className="text-amber-600 text-sm font-light">RB</p>
+                  </div>
+                  <div className="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center">
+                    <Star className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Main Content */}
+          {/* Referral Link Card */}
+          <Card className="bg-gradient-to-r from-blue-600 to-purple-600 border-0 rounded-3xl shadow-lg mb-8">
+            <CardContent className="p-8">
+              <div className="flex items-center justify-between">
+                <div className="text-white">
+                  <h3 className="text-xl font-medium mb-2">Seu Link de Indicação</h3>
+                  <p className="text-blue-100 mb-4">Compartilhe e ganhe comissões por cada pessoa que entrar</p>
+                  <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 font-mono text-white">
+                    https://vastcopy.com/ref/{referralCode}
+                  </div>
+                </div>
+                <Button 
+                  onClick={copyReferralLink}
+                  className="bg-white text-blue-600 hover:bg-blue-50 rounded-2xl px-6 py-3 font-medium"
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  Copiar Link
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Main Content Tabs */}
           <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
             <CardHeader className="pb-4">
               <CardTitle className="text-slate-900 font-medium tracking-tight">Gestão da Rede</CardTitle>
               <CardDescription className="text-slate-600 font-light">
-                Acompanhe o desempenho e crescimento da sua rede
+                Acompanhe o desempenho e crescimento da sua rede unilevel
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -111,71 +180,163 @@ const NetworkPage = () => {
                     Visão Geral
                   </TabsTrigger>
                   <TabsTrigger 
-                    value="members" 
+                    value="team" 
                     className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
                   >
-                    Membros
+                    Equipe
                   </TabsTrigger>
                   <TabsTrigger 
-                    value="analytics" 
+                    value="rankings" 
                     className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
                   >
-                    Analytics
+                    Rankings
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="commissions" 
+                    className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                  >
+                    Comissões
                   </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-slate-900 tracking-tight">Últimos Membros</h3>
-                      <div className="space-y-3">
-                        {recentMembers.map((member) => (
-                          <div key={member.id} className="flex items-center justify-between p-4 bg-slate-50/80 rounded-2xl">
-                            <div>
-                              <p className="font-medium text-slate-900 font-mono text-sm">{member.name}</p>
-                              <p className="text-slate-600 font-light text-xs">{member.joinDate}</p>
+                    {/* Team Progress */}
+                    <Card className="bg-slate-50/80 border-slate-200/50 rounded-2xl">
+                      <CardHeader>
+                        <CardTitle className="text-lg font-medium text-slate-900">Equipe-Global</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-600">Número de downlines diretos</span>
+                          <span className="font-medium">({networkStats.directDownlines}/{networkStats.maxDirectDownlines})</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-600">Número de equipe</span>
+                          <span className="font-medium">({networkStats.teamSize}/{networkStats.maxTeam})</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-600">Equipe</span>
+                          <span className="font-medium">({networkStats.teamProgress}/{networkStats.maxTeamProgress})</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Active/Inactive Members */}
+                    <Card className="bg-slate-50/80 border-slate-200/50 rounded-2xl">
+                      <CardHeader>
+                        <CardTitle className="text-lg font-medium text-slate-900">Linha Descendente Direta</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4 text-center">
+                          <div>
+                            <p className="text-2xl font-light text-slate-900">{networkStats.activeMembers}</p>
+                            <p className="text-sm text-slate-600">Ativado</p>
+                          </div>
+                          <div>
+                            <p className="text-2xl font-light text-slate-900">{networkStats.inactiveMembers}</p>
+                            <p className="text-sm text-slate-600">Desativado</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="team" className="space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium text-slate-900">Detalhe direto da linha descendente</h3>
+                    <div className="space-y-3">
+                      {teamMembers.map((member) => (
+                        <div key={member.id} className="flex items-center justify-between p-4 bg-slate-50/80 rounded-2xl border border-slate-200/50">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-10 h-10 bg-gradient-to-br from-slate-400 to-slate-600 rounded-full flex items-center justify-center">
+                              <span className="text-white font-medium text-sm">
+                                {member.name.charAt(0).toUpperCase()}
+                              </span>
                             </div>
-                            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              member.status === 'active' 
-                                ? 'bg-emerald-100 text-emerald-700' 
-                                : 'bg-amber-100 text-amber-700'
-                            }`}>
-                              {member.status === 'active' ? 'Ativo' : 'Pendente'}
+                            <div>
+                              <p className="font-medium text-slate-900">{member.name}</p>
+                              <p className="text-slate-600 text-sm">{member.joinDate}</p>
                             </div>
                           </div>
-                        ))}
-                      </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="text-right">
+                              <p className="text-sm text-slate-600">Número de equipe</p>
+                              <p className="font-medium">{member.teamSize}</p>
+                            </div>
+                            <Badge 
+                              variant={member.isActive ? "default" : "secondary"}
+                              className={`${
+                                member.isActive 
+                                  ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' 
+                                  : 'bg-slate-100 text-slate-600'
+                              } rounded-full px-3 py-1`}
+                            >
+                              {member.rank}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
                     </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="rankings" className="space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium text-slate-900">Estrutura de Rankings</h3>
+                    <div className="grid gap-4">
+                      {rankRequirements.map((rank, index) => (
+                        <div key={rank.rank} className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/50">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-4">
+                              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+                                networkStats.currentRank === rank.rank 
+                                  ? 'bg-gradient-to-br from-purple-500 to-purple-600' 
+                                  : 'bg-gradient-to-br from-slate-400 to-slate-500'
+                              }`}>
+                                <Award className="w-6 h-6 text-white" />
+                              </div>
+                              <div>
+                                <p className="font-medium text-slate-900">{rank.rank}</p>
+                                <p className="text-slate-600 text-sm">{rank.description}</p>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-slate-600 text-sm">Lucro necessário</p>
+                              <p className="font-medium">{rank.profitRequired.toLocaleString()} SOL</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="commissions" className="space-y-6">
+                  <div className="space-y-6">
+                    <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200/50 rounded-2xl">
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-medium text-emerald-900 mb-4">Sistema de Comissões</h3>
+                        <div className="space-y-3 text-emerald-800">
+                          <p><strong>Performance Fee:</strong> 30% sobre o lucro total</p>
+                          <p><strong>Master Trader:</strong> 10% (vai direto para o trader)</p>
+                          <p><strong>Rede Unilevel:</strong> 20% (distribuído com corte por ranking)</p>
+                        </div>
+                      </CardContent>
+                    </Card>
                     
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-slate-900 tracking-tight">Ações</h3>
-                      <div className="space-y-3">
-                        <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-2xl py-3 font-medium">
-                          <UserPlus className="w-4 h-4 mr-2" />
-                          Convidar Membro
-                        </Button>
-                        <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 rounded-2xl py-3 font-medium">
-                          <Download className="w-4 h-4 mr-2" />
-                          Exportar Relatório
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="members">
-                  <div className="text-center py-12">
-                    <Users className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-slate-900 mb-2">Lista de Membros</h3>
-                    <p className="text-slate-600 font-light">Funcionalidade em desenvolvimento</p>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="analytics">
-                  <div className="text-center py-12">
-                    <TrendingUp className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-slate-900 mb-2">Analytics Avançado</h3>
-                    <p className="text-slate-600 font-light">Funcionalidade em desenvolvimento</p>
+                    <Card className="bg-slate-50/80 border-slate-200/50 rounded-2xl">
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-medium text-slate-900 mb-4">Como Funciona o Corte</h3>
+                        <div className="space-y-3 text-slate-700">
+                          <p>• A distribuição dos 20% é feita de baixo para cima na linha</p>
+                          <p>• Quando encontra alguém com rank igual ou superior, o pagamento para</p>
+                          <p>• Isso incentiva o crescimento de rank de toda a equipe</p>
+                          <p>• A profundidade é infinita até encontrar o corte</p>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
                 </TabsContent>
               </Tabs>
