@@ -5,7 +5,7 @@ import WalletConnect from "@/components/WalletConnect";
 import { useWallet } from "@/contexts/WalletContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Bot, Network, Shield, Zap, Infinity } from "lucide-react";
+import { ArrowRight, Bot, Network, Shield, Zap, Infinity, Play } from "lucide-react";
 
 const Index = () => {
   const { isConnected } = useWallet();
@@ -14,180 +14,203 @@ const Index = () => {
     {
       icon: Bot,
       title: "IA Trading Automatizado",
-      description: "Estratégias otimizadas por inteligência artificial, sem esforço manual."
+      description: "Estratégias otimizadas por inteligência artificial para maximizar seus lucros 24/7."
     },
     {
       icon: Network,
-      title: "Sistema de comissões multinível (V1 a V8)",
-      description: "Ganhe comissões com base no crescimento e performance da sua rede."
+      title: "Sistema Multinível V1-V8",
+      description: "Construa sua rede e receba comissões escaláveis de forma transparente."
     },
     {
       icon: Shield,
-      title: "Transparência total",
-      description: "Toda movimentação é registrada na blockchain Solana."
+      title: "Transparência Blockchain",
+      description: "Todas as operações registradas na Solana para total auditabilidade."
     },
     {
       icon: Zap,
-      title: "Web3 Login com Carteira",
-      description: "Sem senha. Sem e-mail. Só conectar a Phantom."
-    },
-    {
-      icon: Infinity,
-      title: "Performance Fee Inteligente",
-      description: "Taxa cobrada apenas quando há lucro. Tudo distribuído de forma automática."
+      title: "Login Web3 Instantâneo",
+      description: "Conecte sua Phantom e comece imediatamente. Sem cadastros complexos."
     }
   ];
 
   const steps = [
     {
-      number: "1",
-      title: "Conecte sua carteira Solana",
-      description: "Instale a Phantom e conecte em segundos"
+      number: "01",
+      title: "Conecte sua carteira",
+      description: "Use Phantom ou qualquer carteira Solana compatível"
     },
     {
-      number: "2", 
-      title: "Ative o IA Trading",
-      description: "Configure suas estratégias automatizadas"
+      number: "02", 
+      title: "Configure estratégias de IA",
+      description: "Personalize o bot conforme seu perfil de risco"
     },
     {
-      number: "3",
-      title: "Receba lucros e comissões da rede em tempo real",
-      description: "Acompanhe seus ganhos no dashboard"
+      number: "03",
+      title: "Monitore resultados",
+      description: "Acompanhe lucros e comissões em tempo real"
     }
   ];
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-black to-slate-800 text-white">
+      <div className="min-h-screen bg-white">
         {/* Hero Section */}
-        <div className="max-w-7xl mx-auto px-8 py-16">
-          {/* Header Principal */}
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-8">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium">100% Web3 · Blockchain Solana</span>
-            </div>
-            
-            <h1 className="text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
-              🚀 MemeMoon Flow
-            </h1>
-            
-            <h2 className="text-2xl text-slate-300 mb-8 font-light max-w-4xl mx-auto leading-relaxed">
-              A primeira plataforma 100% Web3 de <span className="text-white font-semibold">IA Trading com Marketing de Rede</span> na Solana
-            </h2>
-
-            <div className="max-w-3xl mx-auto mb-12">
-              <p className="text-xl text-slate-400 font-light leading-relaxed">
-                🧠 <strong className="text-white">Inteligência Artificial + Comissões em Rede</strong><br/>
-                Conecte sua carteira Solana e ative um sistema de trading automatizado por IA.<br/>
-                Ganhe comissões através de um modelo de marketing multinível transparente e on-chain.
-              </p>
-            </div>
-          </div>
-
-          {/* Grid Principal - Wallet Connect + Info */}
-          <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
-            {/* Coluna da esquerda - Wallet Connect */}
-            <div className="order-2 lg:order-1">
-              <WalletConnect />
+        <section className="relative overflow-hidden">
+          <div className="max-w-6xl mx-auto px-8 py-32">
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 bg-slate-100 rounded-full px-6 py-3 mb-8">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-slate-600">Powered by Solana Blockchain</span>
+              </div>
               
-              {isConnected && (
-                <div className="mt-6 text-center">
+              <h1 className="text-7xl font-light text-slate-900 mb-6 tracking-tight leading-[0.9]">
+                MemeMoon<br />
+                <span className="font-medium">Flow</span>
+              </h1>
+              
+              <p className="text-2xl text-slate-600 mb-12 font-light max-w-3xl mx-auto leading-relaxed">
+                A primeira plataforma de trading com IA e marketing multinível<br />
+                completamente descentralizada na blockchain Solana.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20">
+                <div className="w-full sm:w-auto">
+                  <WalletConnect />
+                </div>
+                
+                {isConnected && (
                   <a href="/dashboard">
-                    <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 rounded-2xl font-semibold text-lg flex items-center gap-3 mx-auto">
+                    <Button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 rounded-2xl font-medium text-lg flex items-center gap-3">
                       Acessar Dashboard
                       <ArrowRight className="w-5 h-5" />
                     </Button>
                   </a>
-                </div>
-              )}
-            </div>
-
-            {/* Coluna da direita - Destaque */}
-            <div className="order-1 lg:order-2 text-center lg:text-left">
-              <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
-                <h3 className="text-3xl font-bold mb-6 text-white">
-                  🎯 Lucros com IA.<br/>
-                  Crescimento com rede.<br/>
-                  Controle com Web3.
-                </h3>
-                
-                <div className="space-y-4 text-slate-300">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span>Trading 24/7 automatizado</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                    <span>Comissões de rede V1 → V8</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                    <span>Contratos verificáveis on-chain</span>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Seção Por que usar */}
-          <div className="mb-20">
-            <h3 className="text-4xl font-bold text-center mb-4 text-white">
-              🔥 Por que usar o MemeMoon Flow?
-            </h3>
-            <p className="text-center text-slate-400 mb-12 max-w-2xl mx-auto">
-              Tecnologia de ponta combinada com um modelo de negócios inovador
-            </p>
+        {/* Video Demo Section */}
+        <section className="py-20 bg-slate-50">
+          <div className="max-w-5xl mx-auto px-8">
+            <div className="relative bg-slate-900 rounded-3xl overflow-hidden aspect-video flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20"></div>
+              <Button className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-white/30 w-20 h-20 rounded-full">
+                <Play className="w-8 h-8 ml-1" />
+              </Button>
+              <div className="absolute bottom-6 left-6 text-white">
+                <p className="text-sm opacity-80">Veja como funciona</p>
+                <h3 className="text-xl font-medium">Trading automatizado em ação</h3>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-32">
+          <div className="max-w-6xl mx-auto px-8">
+            <div className="text-center mb-20">
+              <h2 className="text-5xl font-light text-slate-900 mb-6">
+                Tecnologia que<br />
+                <span className="font-medium">funciona para você</span>
+              </h2>
+              <p className="text-xl text-slate-600 font-light max-w-2xl mx-auto">
+                Combine inteligência artificial com transparência blockchain
+              </p>
+            </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 gap-8">
               {features.map((feature, index) => (
-                <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 rounded-2xl hover:bg-white/15 transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-3 rounded-xl">
-                        <feature.icon className="w-6 h-6 text-white" />
+                <Card key={index} className="border-0 shadow-none bg-slate-50/50 rounded-3xl hover:bg-slate-100/50 transition-all duration-500 group">
+                  <CardContent className="p-12">
+                    <div className="mb-8">
+                      <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-500">
+                        <feature.icon className="w-8 h-8 text-white" />
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-white mb-2">{feature.title}</h4>
-                        <p className="text-slate-400 text-sm leading-relaxed">{feature.description}</p>
-                      </div>
+                      <h3 className="text-2xl font-medium text-slate-900 mb-4">{feature.title}</h3>
+                      <p className="text-slate-600 text-lg font-light leading-relaxed">{feature.description}</p>
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* Seção Como começar */}
-          <div className="text-center">
-            <h3 className="text-4xl font-bold mb-4 text-white">
-              🌐 Comece em 3 passos simples
-            </h3>
-            <p className="text-slate-400 mb-12 max-w-2xl mx-auto">
-              Do zero ao lucro em poucos minutos
-            </p>
+        {/* How it Works */}
+        <section className="py-32 bg-slate-50">
+          <div className="max-w-6xl mx-auto px-8">
+            <div className="text-center mb-20">
+              <h2 className="text-5xl font-light text-slate-900 mb-6">
+                Simples.<br />
+                <span className="font-medium">Poderoso.</span>
+              </h2>
+              <p className="text-xl text-slate-600 font-light max-w-2xl mx-auto">
+                Três passos para começar a ganhar com IA
+              </p>
+            </div>
             
-            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-16">
               {steps.map((step, index) => (
-                <div key={index} className="relative">
-                  <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:border-white/30 transition-all duration-300">
-                    <div className="bg-gradient-to-r from-green-500 to-emerald-600 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">
+                <div key={index} className="text-center group">
+                  <div className="mb-8">
+                    <div className="text-6xl font-light text-slate-300 mb-6 group-hover:text-slate-400 transition-colors duration-500">
                       {step.number}
                     </div>
-                    <h4 className="font-semibold text-white mb-3 text-lg">{step.title}</h4>
-                    <p className="text-slate-400 text-sm">{step.description}</p>
+                    <h3 className="text-2xl font-medium text-slate-900 mb-4">{step.title}</h3>
+                    <p className="text-slate-600 text-lg font-light">{step.description}</p>
                   </div>
                   
                   {index < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                      <ArrowRight className="w-6 h-6 text-slate-600" />
+                    <div className="hidden md:block absolute top-12 right-0 transform translate-x-8">
+                      <ArrowRight className="w-6 h-6 text-slate-300" />
                     </div>
                   )}
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-32">
+          <div className="max-w-4xl mx-auto px-8 text-center">
+            <h2 className="text-5xl font-light text-slate-900 mb-6">
+              Pronto para<br />
+              <span className="font-medium">revolucionar</span><br />
+              seu trading?
+            </h2>
+            <p className="text-xl text-slate-600 font-light mb-12 max-w-2xl mx-auto">
+              Junte-se aos traders que escolheram a descentralização e a inteligência artificial
+            </p>
+            
+            <div className="inline-flex flex-col sm:flex-row gap-6">
+              <WalletConnect />
+              <Button variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 px-8 py-6 rounded-2xl font-medium text-lg">
+                Saiba mais
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="py-16 border-t border-slate-200">
+          <div className="max-w-6xl mx-auto px-8">
+            <div className="flex flex-col sm:flex-row justify-between items-center">
+              <div className="flex items-center space-x-3 mb-6 sm:mb-0">
+                <div className="w-8 h-8 bg-slate-900 rounded-2xl flex items-center justify-center">
+                  <Infinity className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-xl font-light text-slate-900">MemeMoon Flow</span>
+              </div>
+              
+              <p className="text-slate-500 text-sm">
+                © 2024 MemeMoon Flow. Powered by Solana blockchain.
+              </p>
+            </div>
+          </div>
+        </footer>
       </div>
     </Layout>
   );
