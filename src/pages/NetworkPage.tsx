@@ -4,8 +4,7 @@ import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, TrendingUp, Network, Eye } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Users, TrendingUp, Network, Download, UserPlus } from "lucide-react";
 
 const NetworkPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -29,17 +28,9 @@ const NetworkPage = () => {
         <div className="max-w-7xl mx-auto px-8">
           {/* Header */}
           <div className="mb-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Network</h1>
-                <p className="text-slate-600 font-light">Gerencie sua rede e acompanhe o crescimento</p>
-              </div>
-              <Link to="/mlm">
-                <Button className="bg-slate-900 hover:bg-slate-800 text-white rounded-2xl px-6 py-2.5 font-medium shadow-lg shadow-slate-900/25">
-                  <Eye className="w-4 h-4 mr-2" />
-                  Ver Matriz MLM
-                </Button>
-              </Link>
+            <div>
+              <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Network</h1>
+              <p className="text-slate-600 font-light">Gerencie sua rede e acompanhe o crescimento</p>
             </div>
           </div>
 
@@ -157,18 +148,15 @@ const NetworkPage = () => {
                     </div>
                     
                     <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-slate-900 tracking-tight">Ações Rápidas</h3>
+                      <h3 className="text-lg font-medium text-slate-900 tracking-tight">Ações</h3>
                       <div className="space-y-3">
-                        <Link to="/mlm">
-                          <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-2xl py-3 font-medium">
-                            Ver Matriz Unilevel
-                          </Button>
-                        </Link>
-                        <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 rounded-2xl py-3 font-medium">
-                          Exportar Relatório
+                        <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-2xl py-3 font-medium">
+                          <UserPlus className="w-4 h-4 mr-2" />
+                          Convidar Membro
                         </Button>
                         <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 rounded-2xl py-3 font-medium">
-                          Convidar Membro
+                          <Download className="w-4 h-4 mr-2" />
+                          Exportar Relatório
                         </Button>
                       </div>
                     </div>
