@@ -86,7 +86,7 @@ const MLM = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-8">
         <div className="max-w-7xl mx-auto px-8">
           {/* Header */}
           <div className="mb-8">
@@ -98,12 +98,12 @@ const MLM = () => {
                 </div>
               </div>
               <div>
-                <h1 className="text-4xl font-light text-slate-900 mb-2 tracking-tight">Matriz Unilevel</h1>
-                <p className="text-slate-600 font-light">Sistema avançado de comissões VastCopy</p>
+                <h1 className="text-4xl font-light text-white mb-2 tracking-tight">Matriz Unilevel</h1>
+                <p className="text-slate-300 font-light">Sistema avançado de comissões VastCopy</p>
               </div>
               <Badge 
                 variant="outline" 
-                className="border-emerald-400/50 text-emerald-600 bg-emerald-50 backdrop-blur-sm rounded-2xl px-4 py-2 font-medium ml-auto"
+                className="border-emerald-400/50 text-emerald-400 bg-emerald-950/50 backdrop-blur-sm rounded-2xl px-4 py-2 font-medium ml-auto"
               >
                 Sistema VastCopy
               </Badge>
@@ -114,24 +114,24 @@ const MLM = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
             <div className="lg:col-span-2 space-y-8">
-              <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/50 p-8 shadow-sm">
+              <div className="bg-slate-800/90 backdrop-blur-xl rounded-3xl border border-slate-700/50 p-8 shadow-xl">
                 <Tabs value={tab} onValueChange={handleTabChange}>
-                  <TabsList className="bg-slate-100/80 backdrop-blur-sm border border-slate-200/50 rounded-2xl p-1">
+                  <TabsList className="bg-slate-700/80 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-1">
                     <TabsTrigger 
                       value="overview" 
-                      className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                      className="rounded-xl font-medium data-[state=active]:bg-slate-600 data-[state=active]:text-white data-[state=active]:shadow-sm text-slate-300"
                     >
                       Visão Geral
                     </TabsTrigger>
                     <TabsTrigger 
                       value="commission" 
-                      className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                      className="rounded-xl font-medium data-[state=active]:bg-slate-600 data-[state=active]:text-white data-[state=active]:shadow-sm text-slate-300"
                     >
                       Comissões
                     </TabsTrigger>
                     <TabsTrigger 
                       value="compression" 
-                      className="rounded-xl font-medium data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm text-slate-600"
+                      className="rounded-xl font-medium data-[state=active]:bg-slate-600 data-[state=active]:text-white data-[state=active]:shadow-sm text-slate-300"
                     >
                       Compressão
                     </TabsTrigger>
