@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Rank, Upline } from './CommissionTypes';
 
@@ -52,7 +51,18 @@ export async function processTradeCommission(
       throw new Error(`Falha ao processar comissões: ${error.message}`);
     }
 
-    return data as TradeCommissionResult;
+    // Safely convert the JSON response to our expected type
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      return {
+        success: Boolean(data.success),
+        master_fee: Number(data.master_fee || 0),
+        network_fee: Number(data.network_fee || 0),
+        total_distributed_percentage: Number(data.total_distributed_percentage || 0),
+        remaining_percentage: Number(data.remaining_percentage || 0)
+      };
+    }
+
+    throw new Error('Resposta inválida do servidor');
   } catch (error) {
     console.error('Erro inesperado ao processar comissões:', error);
     throw error;
@@ -200,7 +210,7 @@ export const MEMEMOON_RANK_REQUIREMENTS: Record<Rank, { volume: number, structur
   'V1': { volume: 10, structure: '—' },
   'V2': { volume: 30, structure: '2 linhas com V1' },
   'V3': { volume: 100, structure: '2 linhas com V2' },
-  'V4': { volume: 300, structure: '2 linhas com V3' },
+  'V4': { volume: 300, structure: '2 linas com V3' },
   'V5': { volume: 1000, structure: '2 linhas com V4' },
   'V6': { volume: 3000, structure: '2 linhas com V5' },
   'V7': { volume: 10000, structure: '2 linhas com V6' },
