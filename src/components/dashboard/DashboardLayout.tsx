@@ -5,13 +5,11 @@ import DashboardBalance from "./DashboardBalance";
 import DashboardContent from "./DashboardContent";
 
 interface DashboardLayoutProps {
-  balance: number;
   isActive: boolean;
   isLoading: boolean;
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ 
-  balance, 
   isActive,
   isLoading
 }) => {
@@ -43,7 +41,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </div>
 
           {/* Saldo e métricas */}
-          <DashboardBalance balance={balance} />
+          <DashboardBalance />
 
           {/* Dashboard Content */}
           <DashboardContent isActive={isActive} />

@@ -8,7 +8,7 @@ import { useUserData } from "@/hooks/useUserData";
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
-  const { walletBalance, loading: dataLoading } = useUserData();
+  const { loading: dataLoading } = useUserData();
   const { toast } = useToast();
   
   useEffect(() => {
@@ -90,7 +90,6 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout 
-      balance={walletBalance?.total_profit || 0}
       isActive={true}
       isLoading={dataLoading}
     />
