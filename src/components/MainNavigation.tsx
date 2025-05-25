@@ -41,9 +41,9 @@ export function MainNavigation() {
               : 'text-muted-foreground hover:text-primary'
           }`}
         >
-          Copy Trading
+          Bot Trading
         </Link>
       </div>
     </nav>
   );
-}
+};

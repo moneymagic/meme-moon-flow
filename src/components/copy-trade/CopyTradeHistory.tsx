@@ -41,7 +41,7 @@ const CopyTradeHistory = ({ isLoading }: CopyTradeHistoryProps) => {
       try {
         setLoadingTrades(true);
         
-        // Get copy trades
+        // Get bot trades
         const { data, error } = await supabase
           .from('copy_trades')
           .select('*')
@@ -130,7 +130,7 @@ const CopyTradeHistory = ({ isLoading }: CopyTradeHistoryProps) => {
         <CardHeader>
           <CardTitle className="text-white">Trade History</CardTitle>
           <CardDescription className="text-gray-400">
-            Your recent copy trading activities
+            Your recent bot trading activities
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -186,7 +186,7 @@ const CopyTradeHistory = ({ isLoading }: CopyTradeHistoryProps) => {
           ) : (
             <div className="text-center py-8 text-gray-400">
               <p>No trading history available</p>
-              <p className="text-sm mt-2">Your copy trading activities will appear here</p>
+              <p className="text-sm mt-2">Your bot trading activities will appear here</p>
             </div>
           )}
         </CardContent>

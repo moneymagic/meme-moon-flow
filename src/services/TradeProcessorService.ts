@@ -172,7 +172,7 @@ export async function processFollowerTrade(
     // In a real implementation, we would distribute the commissions to the uplines
     // This would involve updating their wallet balances
   
-    console.log(`Processed trade copy for user ${follower.user_id} successfully`);
+    console.log(`Processed bot trade for user ${follower.user_id} successfully`);
     return { success: true, tradeId };
   } catch (error) {
     console.error(`Error processing trade for user ${follower.user_id}:`, error);

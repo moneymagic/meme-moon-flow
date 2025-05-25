@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 /**
- * Records a copy trade in the database
+ * Records a bot trade in the database
  */
 export async function recordCopyTrade(
   userId: string, 
@@ -38,7 +38,7 @@ export async function recordCopyTrade(
       .single();
       
     if (error) {
-      console.error("Error recording copy trade:", error);
+      console.error("Error recording bot trade:", error);
       return null;
     }
     

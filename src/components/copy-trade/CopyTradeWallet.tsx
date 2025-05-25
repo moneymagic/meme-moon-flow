@@ -45,7 +45,7 @@ const CopyTradeWallet = ({ walletData, isLoading }: CopyTradeWalletProps) => {
         <CardHeader>
           <CardTitle className="text-white">SOL Wallet</CardTitle>
           <CardDescription className="text-gray-400">
-            Your pre-paid gas fee wallet for copy trading
+            Your pre-paid gas fee wallet for bot trading
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -60,8 +60,8 @@ const CopyTradeWallet = ({ walletData, isLoading }: CopyTradeWalletProps) => {
                 walletData.balance > 0.05 ? 'text-green-500' : 'text-red-500'
               }`}>
                 {walletData.balance > 0.05 
-                  ? 'Sufficient balance for copy trading' 
-                  : 'Low balance! Add funds to continue copy trading'}
+                  ? 'Sufficient balance for bot trading' 
+                  : 'Low balance! Add funds to continue bot trading'}
               </p>
             </div>
           </div>

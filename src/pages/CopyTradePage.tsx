@@ -34,7 +34,7 @@ const CopyTradePage = () => {
             </div>
             
             <h1 className="text-5xl font-thin text-gray-900 mb-4 tracking-tight">
-              Copy Trading
+              Bot Trading
             </h1>
             <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto mb-8">
               Automatize seus investimentos seguindo os melhores traders do mercado

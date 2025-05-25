@@ -20,21 +20,21 @@ export async function replicateTrade(masterTrade: {
     const profitPerUnit = masterTrade.exitPrice - masterTrade.entryPrice;
     console.log(`Profit per unit: ${profitPerUnit.toFixed(4)}`);
     
-    // Get all active copy trade settings
-    const { data: copySettings, error: settingsError } = await supabase
+    // Get all active bot trading settings
+    const { data: botSettings, error: settingsError } = await supabase
       .from('copy_settings')
       .select('user_id, trader_address, allocated_capital_sol')
       .eq('is_active', true);
       
     if (settingsError) {
-      console.error("Error fetching copy settings:", settingsError);
+      console.error("Error fetching bot trading settings:", settingsError);
       return;
     }
     
-    console.log(`Found ${copySettings?.length || 0} active copy settings`);
+    console.log(`Found ${botSettings?.length || 0} active bot trading settings`);
     
-    if (!copySettings || copySettings.length === 0) {
-      console.log("No active copy settings found. Creating a test follower for demonstration.");
+    if (!botSettings || botSettings.length === 0) {
+      console.log("No active bot trading settings found. Creating a test follower for demonstration.");
       
       // Create a test follower for demonstration purposes
       const testFollowers = [
@@ -53,7 +53,7 @@ export async function replicateTrade(masterTrade: {
     }
     
     // Process each follower
-    for (const settings of copySettings) {
+    for (const settings of botSettings) {
       await processFollowerTrade(settings, masterTrade, profitPerUnit);
     }
     

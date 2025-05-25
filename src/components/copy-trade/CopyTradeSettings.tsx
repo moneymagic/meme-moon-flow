@@ -31,7 +31,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        // Get copy settings
+        // Get bot trading settings
         const { data, error } = await supabase
           .from('copy_settings')
           .select('*')
@@ -47,7 +47,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
           });
         }
       } catch (error) {
-        console.error("Error fetching copy settings:", error);
+        console.error("Error fetching bot trading settings:", error);
       }
     };
     
@@ -80,7 +80,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
         return;
       }
       
-      // Update or insert copy settings
+      // Update or insert bot trading settings
       const { data: existingSettings } = await supabase
         .from('copy_settings')
         .select('id')
@@ -116,8 +116,8 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
       toast({
         title: "Settings saved!",
         description: settings.isActive 
-          ? "Your copy trading is now active" 
-          : "Copy trading has been paused"
+          ? "Your bot trading is now active" 
+          : "Bot trading has been paused"
       });
       
     } catch (error) {
@@ -149,9 +149,9 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
   return (
     <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle className="text-white">Copy Trading Settings</CardTitle>
+        <CardTitle className="text-white">Bot Trading Settings</CardTitle>
         <CardDescription className="text-gray-400">
-          Configure your copy trading parameters
+          Configure your bot trading parameters
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -159,7 +159,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="copy-active" className="text-white text-lg">Trading Status</Label>
-              <p className="text-gray-400 text-sm">Enable or disable copy trading</p>
+              <p className="text-gray-400 text-sm">Enable or disable bot trading</p>
             </div>
             <Switch 
               id="copy-active"
@@ -173,7 +173,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
           {lowBalanceWarning && (
             <div className="bg-red-900/30 border border-red-500/20 rounded-lg p-3 mt-2">
               <p className="text-red-300 text-sm">
-                Insufficient balance! Add at least 0.05 SOL to enable copy trading.
+                Insufficient balance! Add at least 0.05 SOL to enable bot trading.
               </p>
             </div>
           )}
@@ -207,7 +207,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
             className="py-4"
           />
           <p className="text-gray-400 text-xs">
-            This determines the size of your copy trades relative to the Master Trader
+            This determines the size of your bot trades relative to the Master Trader
           </p>
         </div>
         
