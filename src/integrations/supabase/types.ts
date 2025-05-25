@@ -59,6 +59,7 @@ export type Database = {
       affiliates: {
         Row: {
           created_at: string
+          current_ranking: number | null
           direct_referrals_count: number | null
           id: string
           max_rank_available: number | null
@@ -68,6 +69,7 @@ export type Database = {
           referral_code: string
           sponsor_id: string | null
           total_earnings: number | null
+          total_network_profit: number | null
           total_referrals: number | null
           updated_at: string
           user_id: string
@@ -76,6 +78,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          current_ranking?: number | null
           direct_referrals_count?: number | null
           id?: string
           max_rank_available?: number | null
@@ -85,6 +88,7 @@ export type Database = {
           referral_code: string
           sponsor_id?: string | null
           total_earnings?: number | null
+          total_network_profit?: number | null
           total_referrals?: number | null
           updated_at?: string
           user_id: string
@@ -93,6 +97,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          current_ranking?: number | null
           direct_referrals_count?: number | null
           id?: string
           max_rank_available?: number | null
@@ -102,6 +107,7 @@ export type Database = {
           referral_code?: string
           sponsor_id?: string | null
           total_earnings?: number | null
+          total_network_profit?: number | null
           total_referrals?: number | null
           updated_at?: string
           user_id?: string
@@ -109,6 +115,44 @@ export type Database = {
           volume_personal?: number | null
         }
         Relationships: []
+      }
+      commission_distributions: {
+        Row: {
+          amount_sol: number
+          copy_trade_id: string
+          created_at: string | null
+          id: string
+          percentage: number
+          rank_differential: number
+          recipient_user_id: string
+        }
+        Insert: {
+          amount_sol: number
+          copy_trade_id: string
+          created_at?: string | null
+          id?: string
+          percentage: number
+          rank_differential: number
+          recipient_user_id: string
+        }
+        Update: {
+          amount_sol?: number
+          copy_trade_id?: string
+          created_at?: string | null
+          id?: string
+          percentage?: number
+          rank_differential?: number
+          recipient_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_distributions_copy_trade_id_fkey"
+            columns: ["copy_trade_id"]
+            isOneToOne: false
+            referencedRelation: "copy_trades"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       copy_settings: {
         Row: {
@@ -245,6 +289,33 @@ export type Database = {
         }
         Relationships: []
       }
+      ranking_progress: {
+        Row: {
+          created_at: string | null
+          from_rank: number
+          id: string
+          timestamp: string | null
+          to_rank: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          from_rank: number
+          id?: string
+          timestamp?: string | null
+          to_rank: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          from_rank?: number
+          id?: string
+          timestamp?: string | null
+          to_rank?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       system_settings: {
         Row: {
           admin_wallet_address: string
@@ -336,25 +407,25 @@ export type Database = {
         Row: {
           created_at: string | null
           id: number
-          level: number
           updated_at: string | null
           upline_id: string | null
+          upline_position: number
           user_id: string
         }
         Insert: {
           created_at?: string | null
           id?: number
-          level: number
           updated_at?: string | null
           upline_id?: string | null
+          upline_position?: number
           user_id: string
         }
         Update: {
           created_at?: string | null
           id?: number
-          level?: number
           updated_at?: string | null
           upline_id?: string | null
+          upline_position?: number
           user_id?: string
         }
         Relationships: []
@@ -388,11 +459,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_commission_distribution: {
+        Args: { profit_amount_param: number; follower_user_id_param: string }
+        Returns: {
+          upline_id: string
+          commission_amount: number
+          percentage_earned: number
+        }[]
+      }
       calculate_qualified_referrals: {
         Args: { user_id_param: string; target_rank: number }
         Returns: number
       }
       calculate_user_rank: {
+        Args: { user_id_param: string }
+        Returns: number
+      }
+      check_rank_upgrade: {
         Args: { user_id_param: string }
         Returns: number
       }
@@ -407,6 +490,22 @@ export type Database = {
           follower_user_id_param: string
         }
         Returns: undefined
+      }
+      distribute_trade_commissions: {
+        Args: {
+          copy_trade_id_param: string
+          profit_amount_param: number
+          follower_user_id_param: string
+        }
+        Returns: Json
+      }
+      get_upline_chain: {
+        Args: { user_id_param: string }
+        Returns: {
+          upline_id: string
+          rank: number
+          upline_position: number
+        }[]
       }
       is_user_active: {
         Args: { user_id_param: string }

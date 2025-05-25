@@ -1,19 +1,16 @@
 
 import { Rank } from './CommissionTypes';
+import { MEMEMOON_RANK_PERCENTAGES, MEMEMOON_RANK_REQUIREMENTS } from './MLMCommissionService';
 
 /**
  * Maps rank to maximum commission percentage based on the MemeMoon Flow system
  */
-export const rankCommissionPercentages: Record<Rank, number> = {
-  'V1': 2,
-  'V2': 4,
-  'V3': 6,
-  'V4': 8,
-  'V5': 12,
-  'V6': 14,
-  'V7': 16,
-  'V8': 20,
-};
+export const rankCommissionPercentages: Record<Rank, number> = MEMEMOON_RANK_PERCENTAGES;
+
+/**
+ * Maps rank to volume and structure requirements
+ */
+export const rankRequirements = MEMEMOON_RANK_REQUIREMENTS;
 
 /**
  * Returns the minimum rank required to receive a specific rank's commission
@@ -44,4 +41,18 @@ export function isRankQualified(userRank: Rank | null, requiredRank: Rank): bool
 export function getMaxPercentageForRank(rank: Rank | null): number {
   if (!rank) return 0;
   return rankCommissionPercentages[rank];
+}
+
+/**
+ * Get volume requirement for a specific rank
+ */
+export function getVolumeRequirement(rank: Rank): number {
+  return rankRequirements[rank].volume;
+}
+
+/**
+ * Get structure requirement description for a specific rank
+ */
+export function getStructureRequirement(rank: Rank): string {
+  return rankRequirements[rank].structure;
 }

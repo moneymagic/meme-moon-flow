@@ -4,7 +4,7 @@ import {
   distributeCommission, 
   calculateCommissionAmounts 
 } from './CommissionDistributionService';
-import { rankCommissionPercentages } from './RankService';
+import { MEMEMOON_RANK_PERCENTAGES } from './MLMCommissionService';
 
 /**
  * Process commission distribution for a specific trade profit using MemeMoon Flow logic
@@ -48,6 +48,6 @@ export function processTradeCommission(uplines: Upline[], profitAmount: number):
 }
 
 // Re-export everything needed from the service
-export { rankCommissionPercentages } from './RankService';
+export { MEMEMOON_RANK_PERCENTAGES as rankCommissionPercentages } from './MLMCommissionService';
 export { distributeCommission, calculateCommissionAmounts } from './CommissionDistributionService';
 export type { Rank, Upline, CommissionDistribution, CommissionResult } from './CommissionTypes';

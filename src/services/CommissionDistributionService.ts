@@ -1,6 +1,6 @@
 
 import { Upline, CommissionDistribution } from './CommissionTypes';
-import { getMaxPercentageForRank } from './RankService';
+import { MEMEMOON_RANK_PERCENTAGES } from './MLMCommissionService';
 
 /**
  * Distributes commission across a chain of uplines based on rank difference logic
@@ -57,6 +57,14 @@ export function distributeCommission(uplines: Upline[]): CommissionDistribution 
   }
 
   return distribution;
+}
+
+/**
+ * Get the maximum percentage for a given rank using MemeMoon Flow rules
+ */
+function getMaxPercentageForRank(rank: string | null): number {
+  if (!rank) return 0;
+  return MEMEMOON_RANK_PERCENTAGES[rank as keyof typeof MEMEMOON_RANK_PERCENTAGES] || 0;
 }
 
 /**
