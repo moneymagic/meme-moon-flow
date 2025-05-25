@@ -2,17 +2,17 @@
 import { Rank } from './CommissionTypes';
 
 /**
- * Maps rank to commission percentage based on the system configuration
+ * Maps rank to maximum commission percentage based on the MemeMoon Flow system
  */
 export const rankCommissionPercentages: Record<Rank, number> = {
   'V1': 2,
-  'V2': 2,
-  'V3': 2,
-  'V4': 2,
-  'V5': 2,
-  'V6': 2,
-  'V7': 4,
-  'V8': 4,
+  'V2': 4,
+  'V3': 6,
+  'V4': 8,
+  'V5': 12,
+  'V6': 14,
+  'V7': 16,
+  'V8': 20,
 };
 
 /**
@@ -36,4 +36,12 @@ export function rankToNumber(rank: Rank | null): number {
 export function isRankQualified(userRank: Rank | null, requiredRank: Rank): boolean {
   if (!userRank) return false;
   return rankToNumber(userRank) >= rankToNumber(requiredRank);
+}
+
+/**
+ * Get the maximum percentage for a given rank
+ */
+export function getMaxPercentageForRank(rank: Rank | null): number {
+  if (!rank) return 0;
+  return rankCommissionPercentages[rank];
 }
