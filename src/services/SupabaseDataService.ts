@@ -15,8 +15,7 @@ export interface WalletBalance {
 }
 
 export interface NetworkMember {
-  user_id: string;
-  wallet: string;
+  wallet_address: string;
   current_ranking: number;
   total_profit: number;
   linha: number;
@@ -25,7 +24,7 @@ export interface NetworkMember {
 
 export interface CommissionHistory {
   id: string;
-  from_user_wallet: string;
+  from_wallet_address: string;
   amount: number;
   type: string;
   created_at: string;
@@ -37,10 +36,10 @@ export interface RankingUpgrade {
   requirements_met: boolean;
 }
 
-export const getUserRankingStats = async (userId: string): Promise<UserRankingStats | null> => {
+export const getUserRankingStats = async (walletAddress: string): Promise<UserRankingStats | null> => {
   try {
     const { data, error } = await supabase.rpc('getuserrankingstats', { 
-      user_id_param: userId 
+      wallet_address_param: walletAddress 
     });
     
     if (error) {
@@ -55,10 +54,10 @@ export const getUserRankingStats = async (userId: string): Promise<UserRankingSt
   }
 };
 
-export const getWalletBalance = async (userId: string): Promise<WalletBalance | null> => {
+export const getWalletBalance = async (walletAddress: string): Promise<WalletBalance | null> => {
   try {
     const { data, error } = await supabase.rpc('getwalletbalance', { 
-      user_id_param: userId 
+      wallet_address_param: walletAddress 
     });
     
     if (error) {
@@ -73,10 +72,10 @@ export const getWalletBalance = async (userId: string): Promise<WalletBalance | 
   }
 };
 
-export const getNetworkTree = async (userId: string): Promise<NetworkMember[]> => {
+export const getNetworkTree = async (walletAddress: string): Promise<NetworkMember[]> => {
   try {
     const { data, error } = await supabase.rpc('getnetworktree', { 
-      user_id_param: userId 
+      wallet_address_param: walletAddress 
     });
     
     if (error) {
@@ -91,10 +90,10 @@ export const getNetworkTree = async (userId: string): Promise<NetworkMember[]> =
   }
 };
 
-export const getCommissionsHistory = async (userId: string): Promise<CommissionHistory[]> => {
+export const getCommissionsHistory = async (walletAddress: string): Promise<CommissionHistory[]> => {
   try {
     const { data, error } = await supabase.rpc('getcommissionshistory', { 
-      user_id_param: userId 
+      wallet_address_param: walletAddress 
     });
     
     if (error) {
@@ -109,10 +108,10 @@ export const getCommissionsHistory = async (userId: string): Promise<CommissionH
   }
 };
 
-export const checkRankingUpgrade = async (userId: string): Promise<RankingUpgrade | null> => {
+export const checkRankingUpgrade = async (walletAddress: string): Promise<RankingUpgrade | null> => {
   try {
     const { data, error } = await supabase.rpc('checkrankingupgrade', { 
-      user_id_param: userId 
+      wallet_address_param: walletAddress 
     });
     
     if (error) {

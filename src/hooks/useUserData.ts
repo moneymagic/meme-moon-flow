@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from 'react';
-import { supabase } from "@/integrations/supabase/client";
 import { 
   getUserRankingStats, 
   getWalletBalance, 
@@ -13,9 +12,10 @@ import {
   type CommissionHistory,
   type RankingUpgrade
 } from '@/services/SupabaseDataService';
+import { useWallet } from '@/contexts/WalletContext';
 
 export const useUserData = () => {
-  const [userId, setUserId] = useState<string | null>(null);
+  const { walletAddress, isConnected } = useWallet();
   const [rankingStats, setRankingStats] = useState<UserRankingStats | null>(null);
   const [walletBalance, setWalletBalance] = useState<WalletBalance | null>(null);
   const [networkMembers, setNetworkMembers] = useState<NetworkMember[]>([]);
@@ -24,35 +24,10 @@ export const useUserData = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar se há usuário logado
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUserId(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    };
-
-    checkUser();
-
-    // Escutar mudanças na autenticação
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          setUserId(session.user.id);
-        } else {
-          setUserId(null);
-          setLoading(false);
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (!userId) return;
+    if (!walletAddress || !isConnected) {
+      setLoading(false);
+      return;
+    }
 
     const fetchUserData = async () => {
       setLoading(true);
@@ -65,11 +40,11 @@ export const useUserData = () => {
           commissionsData,
           upgradeData
         ] = await Promise.all([
-          getUserRankingStats(userId),
-          getWalletBalance(userId),
-          getNetworkTree(userId),
-          getCommissionsHistory(userId),
-          checkRankingUpgrade(userId)
+          getUserRankingStats(walletAddress),
+          getWalletBalance(walletAddress),
+          getNetworkTree(walletAddress),
+          getCommissionsHistory(walletAddress),
+          checkRankingUpgrade(walletAddress)
         ]);
 
         setRankingStats(rankingData);
@@ -85,10 +60,10 @@ export const useUserData = () => {
     };
 
     fetchUserData();
-  }, [userId]);
+  }, [walletAddress, isConnected]);
 
   const refreshData = async () => {
-    if (!userId) return;
+    if (!walletAddress || !isConnected) return;
     
     setLoading(true);
     try {
@@ -99,11 +74,11 @@ export const useUserData = () => {
         commissionsData,
         upgradeData
       ] = await Promise.all([
-        getUserRankingStats(userId),
-        getWalletBalance(userId),
-        getNetworkTree(userId),
-        getCommissionsHistory(userId),
-        checkRankingUpgrade(userId)
+        getUserRankingStats(walletAddress),
+        getWalletBalance(walletAddress),
+        getNetworkTree(walletAddress),
+        getCommissionsHistory(walletAddress),
+        checkRankingUpgrade(walletAddress)
       ]);
 
       setRankingStats(rankingData);
@@ -119,7 +94,7 @@ export const useUserData = () => {
   };
 
   return {
-    userId,
+    walletAddress,
     rankingStats,
     walletBalance,
     networkMembers,

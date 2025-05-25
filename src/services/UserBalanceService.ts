@@ -2,24 +2,24 @@
 import { supabase } from "@/integrations/supabase/client";
 
 /**
- * Gets the wallet balance for a user
+ * Gets the wallet balance for a user by wallet address
  */
-export async function getUserBalance(userId: string): Promise<number> {
+export async function getUserBalance(walletAddress: string): Promise<number> {
   try {
-    console.log(`Fetching wallet balance for user: ${userId}`);
+    console.log(`Fetching wallet balance for wallet: ${walletAddress}`);
     
-    const { data: wallet, error: walletError } = await supabase
-      .from('wallets')
-      .select('balance_sol')
-      .eq('user_id', userId)
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('total_profit')
+      .eq('wallet_address', walletAddress)
       .single();
       
-    if (walletError) {
-      console.error("Error fetching wallet:", walletError);
-      throw new Error("Failed to fetch wallet data");
+    if (userError) {
+      console.error("Error fetching user data:", userError);
+      return 0;
     }
 
-    const balance = wallet?.balance_sol || 0;
+    const balance = user?.total_profit || 0;
     console.log(`User balance: ${balance} SOL`);
     
     return balance;
@@ -30,13 +30,13 @@ export async function getUserBalance(userId: string): Promise<number> {
 }
 
 /**
- * Checks if a user is active based on their balance
+ * Checks if a user is active based on their wallet address
  */
-export async function isUserActive(userId: string): Promise<boolean> {
+export async function isUserActive(walletAddress: string): Promise<boolean> {
   try {
-    const { data, error } = await supabase.rpc('is_user_active', { user_id_param: userId });
-    if (error) throw error;
-    return data || false;
+    // Para Web3, consideramos que qualquer carteira conectada está ativa
+    // Pode ser expandido com lógica de saldo mínimo se necessário
+    return !!walletAddress;
   } catch (error) {
     console.error("Error checking user active status:", error);
     return false;

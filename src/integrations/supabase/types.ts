@@ -158,41 +158,41 @@ export type Database = {
         Row: {
           amount: number
           created_at: string | null
-          from_user: string | null
+          from_wallet_address: string | null
           id: string
           type: string | null
-          user_id: string | null
+          wallet_address: string | null
         }
         Insert: {
           amount: number
           created_at?: string | null
-          from_user?: string | null
+          from_wallet_address?: string | null
           id?: string
           type?: string | null
-          user_id?: string | null
+          wallet_address?: string | null
         }
         Update: {
           amount?: number
           created_at?: string | null
-          from_user?: string | null
+          from_wallet_address?: string | null
           id?: string
           type?: string | null
-          user_id?: string | null
+          wallet_address?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "commissions_from_user_fkey"
-            columns: ["from_user"]
+            foreignKeyName: "commissions_from_wallet_address_fkey"
+            columns: ["from_wallet_address"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedColumns: ["wallet_address"]
           },
           {
-            foreignKeyName: "commissions_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "commissions_wallet_address_fkey"
+            columns: ["wallet_address"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedColumns: ["wallet_address"]
           },
         ]
       }
@@ -270,37 +270,37 @@ export type Database = {
           created_at: string | null
           id: string
           linha: number | null
-          upline_id: string | null
-          user_id: string | null
+          upline_wallet_address: string | null
+          wallet_address: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
           linha?: number | null
-          upline_id?: string | null
-          user_id?: string | null
+          upline_wallet_address?: string | null
+          wallet_address?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
           linha?: number | null
-          upline_id?: string | null
-          user_id?: string | null
+          upline_wallet_address?: string | null
+          wallet_address?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "network_upline_id_fkey"
-            columns: ["upline_id"]
+            foreignKeyName: "network_upline_wallet_address_fkey"
+            columns: ["upline_wallet_address"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedColumns: ["wallet_address"]
           },
           {
-            foreignKeyName: "network_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "network_wallet_address_fkey"
+            columns: ["wallet_address"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedColumns: ["wallet_address"]
           },
         ]
       }
@@ -465,7 +465,7 @@ export type Database = {
           profit: number
           timestamp: string | null
           token_symbol: string | null
-          user_id: string | null
+          wallet_address: string | null
         }
         Insert: {
           entry_price?: number | null
@@ -474,7 +474,7 @@ export type Database = {
           profit: number
           timestamp?: string | null
           token_symbol?: string | null
-          user_id?: string | null
+          wallet_address?: string | null
         }
         Update: {
           entry_price?: number | null
@@ -483,15 +483,15 @@ export type Database = {
           profit?: number
           timestamp?: string | null
           token_symbol?: string | null
-          user_id?: string | null
+          wallet_address?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "trades_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "trades_wallet_address_fkey"
+            columns: ["wallet_address"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedColumns: ["wallet_address"]
           },
         ]
       }
@@ -553,26 +553,23 @@ export type Database = {
         Row: {
           created_at: string | null
           current_ranking: number | null
-          id: string
           total_profit: number | null
           updated_at: string | null
-          wallet: string | null
+          wallet_address: string
         }
         Insert: {
           created_at?: string | null
           current_ranking?: number | null
-          id: string
           total_profit?: number | null
           updated_at?: string | null
-          wallet?: string | null
+          wallet_address: string
         }
         Update: {
           created_at?: string | null
           current_ranking?: number | null
-          id?: string
           total_profit?: number | null
           updated_at?: string | null
-          wallet?: string | null
+          wallet_address?: string
         }
         Relationships: []
       }
@@ -626,7 +623,7 @@ export type Database = {
         Returns: number
       }
       checkrankingupgrade: {
-        Args: { user_id_param: string }
+        Args: { user_id_param: string } | { wallet_address_param: string }
         Returns: {
           can_upgrade: boolean
           next_rank: number
@@ -662,20 +659,19 @@ export type Database = {
         }[]
       }
       getcommissionshistory: {
-        Args: { user_id_param: string }
+        Args: { user_id_param: string } | { wallet_address_param: string }
         Returns: {
           id: string
-          from_user_wallet: string
+          from_wallet_address: string
           amount: number
           type: string
           created_at: string
         }[]
       }
       getnetworktree: {
-        Args: { user_id_param: string }
+        Args: { user_id_param: string } | { wallet_address_param: string }
         Returns: {
-          user_id: string
-          wallet: string
+          wallet_address: string
           current_ranking: number
           total_profit: number
           linha: number
@@ -683,7 +679,7 @@ export type Database = {
         }[]
       }
       getuserrankingstats: {
-        Args: { user_id_param: string }
+        Args: { user_id_param: string } | { wallet_address_param: string }
         Returns: {
           current_rank: number
           total_profit: number
@@ -692,7 +688,7 @@ export type Database = {
         }[]
       }
       getwalletbalance: {
-        Args: { user_id_param: string }
+        Args: { user_id_param: string } | { wallet_address_param: string }
         Returns: {
           total_profit: number
           today_profit: number
