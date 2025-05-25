@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Network, TrendingUp, Users } from 'lucide-react';
@@ -19,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { path: '/dashboard', label: 'Dashboard', icon: TrendingUp },
     { path: '/network', label: 'Network', icon: Network },
     { path: '/mlm', label: 'MLM', icon: Users },
-    { path: '/copy-trade', label: 'Copy Trading', icon: TrendingUp },
+    { path: '/copy-trade', label: 'Trading', icon: TrendingUp },
   ];
 
   return (
