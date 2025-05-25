@@ -30,39 +30,45 @@ interface GrowthChartProps {
 
 const GrowthChart = ({ className }: GrowthChartProps) => {
   return (
-    <Card className={`${className} bg-black/30 border-white/10 backdrop-blur-sm`}>
+    <Card className={`${className} bg-white/95 backdrop-blur-sm border border-slate-200/60 rounded-3xl shadow-sm`}>
       <CardHeader>
-        <CardTitle className="text-white">Crescimento do Capital</CardTitle>
+        <CardTitle className="text-slate-900 font-medium tracking-tight">Crescimento do Capital</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={growthData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis 
                 dataKey="date" 
-                stroke="#94a3b8" 
-                tick={{ fill: "#94a3b8" }}
-                axisLine={{ stroke: "#334155" }}
+                stroke="#64748b" 
+                tick={{ fill: "#64748b" }}
+                axisLine={{ stroke: "#cbd5e1" }}
               />
               <YAxis 
-                stroke="#94a3b8" 
-                tick={{ fill: "#94a3b8" }} 
-                axisLine={{ stroke: "#334155" }}
+                stroke="#64748b" 
+                tick={{ fill: "#64748b" }} 
+                axisLine={{ stroke: "#cbd5e1" }}
                 tickFormatter={(value) => `${value} SOL`}
               />
               <Tooltip 
-                contentStyle={{ backgroundColor: "#1e293b", borderColor: "#475569", color: "#f8fafc" }} 
+                contentStyle={{ 
+                  backgroundColor: "white", 
+                  borderColor: "#e2e8f0", 
+                  color: "#0f172a",
+                  borderRadius: "12px",
+                  boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)"
+                }} 
                 formatter={(value) => [`${value} SOL`, "Capital"]}
-                labelStyle={{ color: "#94a3b8" }}
+                labelStyle={{ color: "#475569" }}
               />
               <Line 
                 type="monotone" 
                 dataKey="value" 
                 stroke="#10b981" 
-                strokeWidth={2}
-                dot={{ fill: "#10b981", strokeWidth: 2, r: 4, stroke: "#064e3b" }}
-                activeDot={{ fill: "#10b981", stroke: "#064e3b", strokeWidth: 2, r: 6 }}
+                strokeWidth={3}
+                dot={{ fill: "#10b981", strokeWidth: 2, r: 5, stroke: "white" }}
+                activeDot={{ fill: "#10b981", stroke: "white", strokeWidth: 3, r: 7 }}
               />
             </LineChart>
           </ResponsiveContainer>
