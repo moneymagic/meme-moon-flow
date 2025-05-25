@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -11,7 +10,7 @@ const Index = () => {
     {
       icon: TrendingUp,
       title: 'IA Trading',
-      description: 'Automatize seus investimentos seguindo traders experientes',
+      description: 'Algoritmos inteligentes que operam automaticamente no mercado',
     },
     {
       icon: Users,
