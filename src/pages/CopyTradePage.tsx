@@ -12,6 +12,15 @@ import { Bot, Zap, TrendingUp, Settings } from "lucide-react";
 const CopyTradePage = () => {
   const { isConnected } = useWallet();
 
+  // Mock data for the components
+  const walletData = {
+    balance: 3.2,
+    allocatedCapital: 2.8,
+    availableBalance: 0.4,
+    totalProfit: 0.45,
+    profitPercentage: 15.6
+  };
+
   if (!isConnected) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black p-8 relative overflow-hidden">
@@ -139,15 +148,15 @@ const CopyTradePage = () => {
               
               <div className="p-8">
                 <TabsContent value="wallet" className="mt-0">
-                  <CopyTradeWallet />
+                  <CopyTradeWallet walletData={walletData} isLoading={false} />
                 </TabsContent>
                 
                 <TabsContent value="settings" className="mt-0">
-                  <CopyTradeSettings />
+                  <CopyTradeSettings walletData={walletData} isLoading={false} />
                 </TabsContent>
                 
                 <TabsContent value="history" className="mt-0">
-                  <CopyTradeHistory />
+                  <CopyTradeHistory isLoading={false} />
                 </TabsContent>
               </div>
             </Tabs>

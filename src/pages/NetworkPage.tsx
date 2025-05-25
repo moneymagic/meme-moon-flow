@@ -13,6 +13,83 @@ import { Network, Users, TrendingUp, Target } from "lucide-react";
 const NetworkPage = () => {
   const { isConnected } = useWallet();
 
+  // Mock data for the components
+  const networkStats = {
+    totalMembers: 1247,
+    totalVolume: 25800,
+    averageRank: 2.5,
+    directReferrals: 15,
+    totalCommissions: 5.4,
+    monthlyCommissions: 1.2,
+    networkDepth: "8",
+    activeMembers: 892
+  };
+
+  const networkMembers = [
+    { user: "Alex M.", level: 1, volume: 32, rank: "V2", referrals: 3 },
+    { user: "Sarah K.", level: 1, volume: 105, rank: "V3", referrals: 4 },
+    { user: "Marcus T.", level: 2, volume: 25, rank: "V2", referrals: 1 },
+    { user: "Lisa P.", level: 2, volume: 46, rank: "V2", referrals: 2 },
+    { user: "John D.", level: 3, volume: 12, rank: "V1", referrals: 0 }
+  ];
+
+  const downlineStats = {
+    totalMembers: 1247,
+    activeMembers: 892,
+    inactiveMembers: 355,
+    beginnerTeam: 583,
+    intermediateTeam: 20,
+    directDownlines: 15,
+    maxTeamRequirement: 20,
+    currentTeam: 2,
+    maxDownlinesRequirement: 1500,
+    currentDownlines: 621,
+    maxDirectRequirement: 20,
+    currentDirect: 15
+  };
+
+  const teamMembers = [
+    { id: '1', username: 'Alex***23', joinDate: '2024-01-15', teamSize: 45, rank: 2 },
+    { id: '2', username: 'Sarah***89', joinDate: '2024-02-20', teamSize: 32, rank: 3 },
+    { id: '3', username: 'Marcus***56', joinDate: '2024-03-10', teamSize: 18, rank: 1 },
+    { id: '4', username: 'Lisa***34', joinDate: '2024-03-25', teamSize: 27, rank: 2 }
+  ];
+
+  const rankPercents = {
+    V1: 15,
+    V2: 10,
+    V3: 8,
+    V4: 6,
+    V5: 5,
+    V6: 4,
+    V7: 3,
+    V8: 2
+  };
+
+  const rankRequirements = {
+    V1: { sol: 100, linesWithRank: null },
+    V2: { sol: 500, linesWithRank: 'V1' as const },
+    V3: { sol: 1000, linesWithRank: 'V2' as const },
+    V4: { sol: 2500, linesWithRank: 'V3' as const },
+    V5: { sol: 5000, linesWithRank: 'V4' as const },
+    V6: { sol: 10000, linesWithRank: 'V5' as const },
+    V7: { sol: 25000, linesWithRank: 'V6' as const },
+    V8: { sol: 50000, linesWithRank: 'V7' as const }
+  };
+
+  const topPerformers = [
+    { name: "Alex M.", level: 1, earnings: "2.4 SOL", referrals: 12 },
+    { name: "Sarah K.", level: 2, earnings: "1.8 SOL", referrals: 8 },
+    { name: "Marcus T.", level: 1, earnings: "1.2 SOL", referrals: 6 }
+  ];
+
+  const levels = [
+    { level: 1, members: 15, commission: "2%", earnings: "0.8 SOL" },
+    { level: 2, members: 45, commission: "2%", earnings: "1.2 SOL" },
+    { level: 3, members: 89, commission: "2%", earnings: "1.8 SOL" },
+    { level: 4, members: 156, commission: "2%", earnings: "2.1 SOL" }
+  ];
+
   if (!isConnected) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black p-8 relative overflow-hidden">
@@ -140,16 +217,29 @@ const NetworkPage = () => {
               
               <div className="p-8">
                 <TabsContent value="overview" className="mt-0 space-y-8">
-                  <NetworkStats />
-                  <DownlineStats />
+                  <NetworkStats 
+                    totalMembers={networkStats.totalMembers}
+                    totalVolume={networkStats.totalVolume}
+                    averageRank={networkStats.averageRank}
+                  />
+                  <DownlineStats 
+                    stats={downlineStats}
+                    teamMembers={teamMembers}
+                  />
                 </TabsContent>
                 
                 <TabsContent value="members" className="mt-0">
-                  <NetworkMembersTable />
+                  <NetworkMembersTable members={networkMembers} />
                 </TabsContent>
                 
                 <TabsContent value="mlm" className="mt-0">
-                  <MLMContent />
+                  <MLMContent 
+                    networkStats={networkStats}
+                    rankPercents={rankPercents}
+                    rankRequirements={rankRequirements}
+                    topPerformers={topPerformers}
+                    levels={levels}
+                  />
                 </TabsContent>
               </div>
             </Tabs>
