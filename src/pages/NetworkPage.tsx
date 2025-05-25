@@ -38,14 +38,14 @@ const NetworkPage = () => {
   ];
 
   const rankRequirements = [
-    { rank: "V1", profitRequired: 100, directsRequired: 0, description: "Rank inicial" },
-    { rank: "V2", profitRequired: 500, directsRequired: 2, description: "2 diretos V1" },
-    { rank: "V3", profitRequired: 2000, directsRequired: 3, description: "3 diretos V2" },
-    { rank: "V4", profitRequired: 10000, directsRequired: 4, description: "4 diretos V3" },
-    { rank: "V5", profitRequired: 50000, directsRequired: 5, description: "5 diretos V4" },
-    { rank: "V6", profitRequired: 100000, directsRequired: 6, description: "6 diretos V5" },
-    { rank: "V7", profitRequired: 250000, directsRequired: 7, description: "7 diretos V6" },
-    { rank: "V8", profitRequired: 500000, directsRequired: 8, description: "8 diretos V7" },
+    { rank: "V1", profitRequired: 10, directsRequired: 0, description: "Rank inicial" },
+    { rank: "V2", profitRequired: 30, directsRequired: 2, description: "2 diretos V1" },
+    { rank: "V3", profitRequired: 100, directsRequired: 2, description: "2 diretos V2" },
+    { rank: "V4", profitRequired: 300, directsRequired: 2, description: "2 diretos V3" },
+    { rank: "V5", profitRequired: 1000, directsRequired: 2, description: "2 diretos V4" },
+    { rank: "V6", profitRequired: 3000, directsRequired: 2, description: "2 diretos V5" },
+    { rank: "V7", profitRequired: 10000, directsRequired: 2, description: "2 diretos V6" },
+    { rank: "V8", profitRequired: 30000, directsRequired: 2, description: "2 diretos V7" },
   ];
 
   const copyReferralLink = () => {
@@ -100,7 +100,7 @@ const NetworkPage = () => {
                   <div>
                     <p className="text-emerald-600 font-medium text-sm mb-1">Lucro cumulativo</p>
                     <p className="text-3xl font-light text-emerald-900 tracking-tight">{networkStats.cumulativeProfit.toLocaleString()}</p>
-                    <p className="text-emerald-600 text-sm font-light">RB</p>
+                    <p className="text-emerald-600 text-sm font-light">SOL</p>
                   </div>
                   <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center">
                     <TrendingUp className="w-6 h-6 text-white" />
@@ -130,7 +130,7 @@ const NetworkPage = () => {
                   <div>
                     <p className="text-amber-600 font-medium text-sm mb-1">Lucro para hoje</p>
                     <p className="text-3xl font-light text-amber-900 tracking-tight">{networkStats.todayProfit}</p>
-                    <p className="text-amber-600 text-sm font-light">RB</p>
+                    <p className="text-amber-600 text-sm font-light">SOL</p>
                   </div>
                   <div className="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center">
                     <Star className="w-6 h-6 text-white" />
@@ -303,7 +303,7 @@ const NetworkPage = () => {
                               </div>
                             </div>
                             <div className="text-right">
-                              <p className="text-slate-600 text-sm">Lucro necessário</p>
+                              <p className="text-slate-600 text-sm">Lucro da rede necessário</p>
                               <p className="font-medium">{rank.profitRequired.toLocaleString()} SOL</p>
                             </div>
                           </div>
@@ -326,6 +326,21 @@ const NetworkPage = () => {
                       </CardContent>
                     </Card>
                     
+                    <Card className="bg-slate-50/80 border-slate-200/50 rounded-2xl">
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-medium text-slate-900 mb-4">Lógica de Funcionamento</h3>
+                        <div className="space-y-3 text-slate-700">
+                          <p>• Carteira Master é seguida pelas Carteiras Seguidoras</p>
+                          <p>• Toda vez que o Master encerra um trade positivo:</p>
+                          <p className="ml-4">- Sistema calcula 30% do lucro da seguidora</p>
+                          <p className="ml-4">- Valor é descontado automaticamente do saldo pré-pago em SOL</p>
+                          <p>• A taxa de performance é dividida assim:</p>
+                          <p className="ml-4">- 10% para a carteira do Master Trader</p>
+                          <p className="ml-4">- 20% distribuídos na rede Unilevel, com compressão por ranking</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+
                     <Card className="bg-slate-50/80 border-slate-200/50 rounded-2xl">
                       <CardContent className="p-6">
                         <h3 className="text-lg font-medium text-slate-900 mb-4">Como Funciona o Corte</h3>
