@@ -154,6 +154,48 @@ export type Database = {
           },
         ]
       }
+      commissions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          from_user: string | null
+          id: string
+          type: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          from_user?: string | null
+          id?: string
+          type?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          from_user?: string | null
+          id?: string
+          type?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commissions_from_user_fkey"
+            columns: ["from_user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       copy_settings: {
         Row: {
           allocated_capital_sol: number
@@ -222,6 +264,45 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      network: {
+        Row: {
+          created_at: string | null
+          id: string
+          linha: number | null
+          upline_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          linha?: number | null
+          upline_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          linha?: number | null
+          upline_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "network_upline_id_fkey"
+            columns: ["upline_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "network_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -376,6 +457,44 @@ export type Database = {
         }
         Relationships: []
       }
+      trades: {
+        Row: {
+          entry_price: number | null
+          exit_price: number | null
+          id: string
+          profit: number
+          timestamp: string | null
+          token_symbol: string | null
+          user_id: string | null
+        }
+        Insert: {
+          entry_price?: number | null
+          exit_price?: number | null
+          id?: string
+          profit: number
+          timestamp?: string | null
+          token_symbol?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          entry_price?: number | null
+          exit_price?: number | null
+          id?: string
+          profit?: number
+          timestamp?: string | null
+          token_symbol?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trades_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transactions: {
         Row: {
           amount_sol: number
@@ -430,6 +549,33 @@ export type Database = {
         }
         Relationships: []
       }
+      users: {
+        Row: {
+          created_at: string | null
+          current_ranking: number | null
+          id: string
+          total_profit: number | null
+          updated_at: string | null
+          wallet: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_ranking?: number | null
+          id: string
+          total_profit?: number | null
+          updated_at?: string | null
+          wallet?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_ranking?: number | null
+          id?: string
+          total_profit?: number | null
+          updated_at?: string | null
+          wallet?: string | null
+        }
+        Relationships: []
+      }
       wallets: {
         Row: {
           balance_sol: number
@@ -479,6 +625,14 @@ export type Database = {
         Args: { user_id_param: string }
         Returns: number
       }
+      checkrankingupgrade: {
+        Args: { user_id_param: string }
+        Returns: {
+          can_upgrade: boolean
+          next_rank: number
+          requirements_met: boolean
+        }[]
+      }
       deposit_sol: {
         Args: { p_user_id: string; p_amount: number; p_description?: string }
         Returns: boolean
@@ -505,6 +659,44 @@ export type Database = {
           upline_id: string
           rank: number
           upline_position: number
+        }[]
+      }
+      getcommissionshistory: {
+        Args: { user_id_param: string }
+        Returns: {
+          id: string
+          from_user_wallet: string
+          amount: number
+          type: string
+          created_at: string
+        }[]
+      }
+      getnetworktree: {
+        Args: { user_id_param: string }
+        Returns: {
+          user_id: string
+          wallet: string
+          current_ranking: number
+          total_profit: number
+          linha: number
+          join_date: string
+        }[]
+      }
+      getuserrankingstats: {
+        Args: { user_id_param: string }
+        Returns: {
+          current_rank: number
+          total_profit: number
+          network_size: number
+          direct_referrals: number
+        }[]
+      }
+      getwalletbalance: {
+        Args: { user_id_param: string }
+        Returns: {
+          total_profit: number
+          today_profit: number
+          commission_earnings: number
         }[]
       }
       is_user_active: {
