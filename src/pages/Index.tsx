@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowRight, Sparkles, TrendingUp, Users, Shield } from 'lucide-react';
+import { ArrowRight, Sparkles, TrendingUp, Users, Shield, Wallet } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Index = () => {
@@ -49,16 +49,12 @@ const Index = () => {
                 Ganhe enquanto outros ganham, tudo transparente na blockchain Solana.
               </p>
               
-              <div className="flex items-center justify-center space-x-4">
+              <div className="flex items-center justify-center">
                 <Link to="/dashboard">
                   <Button className="bg-slate-900 hover:bg-slate-800 text-white rounded-2xl px-8 py-3 text-base font-medium shadow-lg shadow-slate-900/25 transition-all duration-200">
-                    Começar Agora
+                    <Wallet className="w-4 h-4 mr-2" />
+                    Conectar Carteira
                     <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
-                <Link to="/network">
-                  <Button variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 rounded-2xl px-8 py-3 text-base font-medium">
-                    Explorar Rede
                   </Button>
                 </Link>
               </div>
@@ -114,7 +110,8 @@ const Index = () => {
                 </p>
                 <Link to="/dashboard">
                   <Button className="bg-white text-slate-900 hover:bg-slate-100 rounded-2xl px-8 py-3 text-base font-medium shadow-lg transition-all duration-200">
-                    Acessar Dashboard
+                    <Wallet className="w-4 h-4 mr-2" />
+                    Conectar Carteira
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
