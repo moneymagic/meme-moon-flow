@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,11 +22,7 @@ const NetworkPage = () => {
     currentRank: "V3",
     directReferrals: 4,
     teamSize: 621,
-    maxTeam: 1500,
-    directDownlines: 4,
-    maxDirectDownlines: 20,
-    teamProgress: 2,
-    maxTeamProgress: 3
+    teamProgress: 2
   };
 
   const teamMembers = [
@@ -197,20 +194,23 @@ const NetworkPage = () => {
                     {/* Team Progress */}
                     <Card className="bg-slate-50/80 border-slate-200/50 rounded-2xl">
                       <CardHeader>
-                        <CardTitle className="text-lg font-medium text-slate-900">Equipe-Global</CardTitle>
+                        <CardTitle className="text-lg font-medium text-slate-900">Equipe Global</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-600">Número de downlines diretos</span>
-                          <span className="font-medium">({networkStats.directDownlines}/{networkStats.maxDirectDownlines})</span>
+                          <span className="text-slate-600">Indicados diretos</span>
+                          <span className="font-medium text-slate-900">{networkStats.directReferrals} pessoas</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-600">Número de equipe</span>
-                          <span className="font-medium">({networkStats.teamSize}/{networkStats.maxTeam})</span>
+                          <span className="text-slate-600">Total da equipe</span>
+                          <span className="font-medium text-slate-900">{networkStats.teamSize.toLocaleString()} pessoas</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-600">Equipe</span>
-                          <span className="font-medium">({networkStats.teamProgress}/{networkStats.maxTeamProgress})</span>
+                          <span className="text-slate-600">Profundidade</span>
+                          <span className="font-medium text-slate-900 flex items-center">
+                            <Infinity className="w-4 h-4 mr-1" />
+                            Ilimitada
+                          </span>
                         </div>
                       </CardContent>
                     </Card>
@@ -223,13 +223,18 @@ const NetworkPage = () => {
                       <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4 text-center">
                           <div>
-                            <p className="text-2xl font-light text-slate-900">{networkStats.activeMembers}</p>
-                            <p className="text-sm text-slate-600">Ativado</p>
+                            <p className="text-2xl font-light text-emerald-600">{networkStats.activeMembers}</p>
+                            <p className="text-sm text-slate-600">Ativos</p>
                           </div>
                           <div>
-                            <p className="text-2xl font-light text-slate-900">{networkStats.inactiveMembers}</p>
-                            <p className="text-sm text-slate-600">Desativado</p>
+                            <p className="text-2xl font-light text-slate-500">{networkStats.inactiveMembers}</p>
+                            <p className="text-sm text-slate-600">Inativos</p>
                           </div>
+                        </div>
+                        <div className="pt-2 border-t border-slate-200">
+                          <p className="text-center text-slate-600 text-sm">
+                            Total: {networkStats.activeMembers + networkStats.inactiveMembers} indicados diretos
+                          </p>
                         </div>
                       </CardContent>
                     </Card>
@@ -238,7 +243,12 @@ const NetworkPage = () => {
 
                 <TabsContent value="team" className="space-y-6">
                   <div className="space-y-4">
-                    <h3 className="text-lg font-medium text-slate-900">Detalhe direto da linha descendente</h3>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-medium text-slate-900">Detalhe direto da linha descendente</h3>
+                      <div className="text-sm text-slate-600">
+                        {teamMembers.length} de {networkStats.activeMembers + networkStats.inactiveMembers} indicados
+                      </div>
+                    </div>
                     <div className="space-y-3">
                       {teamMembers.map((member) => (
                         <div key={member.id} className="flex items-center justify-between p-4 bg-slate-50/80 rounded-2xl border border-slate-200/50">
@@ -255,19 +265,22 @@ const NetworkPage = () => {
                           </div>
                           <div className="flex items-center space-x-4">
                             <div className="text-right">
-                              <p className="text-sm text-slate-600">Número de equipe</p>
-                              <p className="font-medium">{member.teamSize}</p>
+                              <p className="text-sm text-slate-600">Equipe</p>
+                              <p className="font-medium">{member.teamSize} pessoas</p>
                             </div>
-                            <Badge 
-                              variant={member.isActive ? "default" : "secondary"}
-                              className={`${
-                                member.isActive 
-                                  ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' 
-                                  : 'bg-slate-100 text-slate-600'
-                              } rounded-full px-3 py-1`}
-                            >
-                              {member.rank}
-                            </Badge>
+                            <div className="flex items-center space-x-2">
+                              <Badge 
+                                variant={member.isActive ? "default" : "secondary"}
+                                className={`${
+                                  member.isActive 
+                                    ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' 
+                                    : 'bg-slate-100 text-slate-600'
+                                } rounded-full px-3 py-1`}
+                              >
+                                {member.rank}
+                              </Badge>
+                              <div className={`w-2 h-2 rounded-full ${member.isActive ? 'bg-emerald-500' : 'bg-slate-400'}`}></div>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -342,6 +355,7 @@ const NetworkPage = () => {
                           <p>• Quando encontra alguém com rank igual ou superior, o pagamento para</p>
                           <p>• Isso incentiva o crescimento de rank de toda a equipe</p>
                           <p>• A profundidade é infinita até encontrar o corte</p>
+                          <p>• <strong>Não há limite</strong> para o número de indicados diretos</p>
                         </div>
                       </CardContent>
                     </Card>
