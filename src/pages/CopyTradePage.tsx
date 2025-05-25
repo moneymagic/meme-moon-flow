@@ -1,201 +1,156 @@
 
-import React, { useState } from "react";
+import React from "react";
 import Layout from "@/components/Layout";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Wallet, Activity, Shield, Play, Pause, ArrowUpRight, Zap } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CopyTradeWallet from "@/components/copy-trade/CopyTradeWallet";
+import CopyTradeSettings from "@/components/copy-trade/CopyTradeSettings";
+import CopyTradeHistory from "@/components/copy-trade/CopyTradeHistory";
+import { useWallet } from "@/contexts/WalletContext";
+import WalletConnect from "@/components/WalletConnect";
+import { Bot, Zap, TrendingUp, Settings } from "lucide-react";
 
 const CopyTradePage = () => {
-  const [isActive, setIsActive] = useState(true);
+  const { isConnected } = useWallet();
 
-  const stats = {
-    totalProfit: 45.67,
-    monthlyReturn: 12.3,
-    totalTrades: 156,
-    winRate: 68.2
-  };
-
-  const recentTrades = [
-    { id: 1, pair: "SOL/USDC", type: "buy", amount: "2.5 SOL", profit: "+1.23 SOL", time: "2h ago", status: "completed" },
-    { id: 2, pair: "ETH/USDC", type: "sell", amount: "0.1 ETH", profit: "+0.45 SOL", time: "4h ago", status: "completed" },
-    { id: 3, pair: "BTC/USDC", type: "buy", amount: "0.01 BTC", profit: "-0.12 SOL", time: "6h ago", status: "completed" },
-  ];
+  if (!isConnected) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black p-8 relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-800/30 via-transparent to-gray-900/30"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-600/10 via-transparent to-transparent"></div>
+        
+        {/* Animated Background Elements */}
+        <div className="absolute top-20 left-20 w-72 h-72 bg-gray-600/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gray-700/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        
+        <div className="relative w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="relative group mb-6">
+              <div className="absolute -inset-1 bg-gradient-to-r from-gray-500 to-gray-700 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+              <div className="relative bg-gradient-to-r from-gray-500 to-gray-700 p-3 rounded-2xl shadow-lg mx-auto w-fit">
+                <Bot className="h-8 w-8 text-white" />
+              </div>
+            </div>
+            <h2 className="text-3xl font-light text-white mb-4">
+              Acesse o Copy Trading
+            </h2>
+            <p className="text-gray-300 font-extralight">
+              Para configurar o trading automatizado, conecte sua Phantom Wallet
+            </p>
+          </div>
+          <WalletConnect />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-b from-white via-slate-50/30 to-white">
-        <div className="max-w-6xl mx-auto px-6 py-12">
-          {/* Hero Section */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-full px-4 py-2 mb-6">
-              <Zap className="w-4 h-4 text-blue-600" />
-              <span className="text-sm font-medium text-blue-700">AI-Powered Trading</span>
-            </div>
-            
-            <h1 className="text-5xl font-thin text-gray-900 mb-4 tracking-tight">
-              Bot Trading
-            </h1>
-            <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto mb-8">
-              Automatize seus investimentos seguindo os melhores traders do mercado
-            </p>
-            
-            <div className="flex items-center justify-center space-x-4">
-              <div className={`flex items-center space-x-2 px-4 py-2 rounded-full ${
-                isActive ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
-              }`}>
-                <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                <span className={`text-sm font-medium ${isActive ? 'text-green-700' : 'text-red-700'}`}>
-                  {isActive ? 'Ativo' : 'Pausado'}
-                </span>
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black py-8">
+        <div className="max-w-7xl mx-auto px-8">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-gray-500 to-gray-700 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                <div className="relative bg-gradient-to-r from-gray-500 to-gray-700 p-3 rounded-2xl shadow-lg">
+                  <Bot className="h-6 w-6 text-white" />
+                </div>
               </div>
-              
-              <Button
-                onClick={() => setIsActive(!isActive)}
-                className={`rounded-full px-6 py-2 font-medium transition-all duration-300 ${
-                  isActive 
-                    ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/25' 
-                    : 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/25'
-                }`}
-              >
-                {isActive ? (
-                  <>
-                    <Pause className="w-4 h-4 mr-2" />
-                    Pausar
-                  </>
-                ) : (
-                  <>
-                    <Play className="w-4 h-4 mr-2" />
-                    Ativar
-                  </>
-                )}
-              </Button>
+              <div>
+                <h1 className="text-4xl font-light text-white mb-2 tracking-tight">Copy Trading</h1>
+                <p className="text-gray-300 font-light">Trading automatizado com inteligência artificial</p>
+              </div>
             </div>
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="w-6 h-6 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500/20 to-green-700/20 rounded-xl flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-green-400" />
                 </div>
-                <p className="text-sm text-gray-500 font-medium mb-1">Lucro Total</p>
-                <p className="text-2xl font-light text-gray-900">{stats.totalProfit} SOL</p>
-              </CardContent>
-            </Card>
+                <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">24h</span>
+              </div>
+              <h3 className="text-2xl font-light text-white mb-1">+12.5%</h3>
+              <p className="text-gray-400 text-sm font-light">Retorno Hoje</p>
+            </div>
 
-            <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="w-6 h-6 text-white" />
+            <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-700/20 rounded-xl flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-blue-400" />
                 </div>
-                <p className="text-sm text-gray-500 font-medium mb-1">Retorno Mensal</p>
-                <p className="text-2xl font-light text-gray-900">{stats.monthlyReturn}%</p>
-              </CardContent>
-            </Card>
+                <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">Ativo</span>
+              </div>
+              <h3 className="text-2xl font-light text-white mb-1">47</h3>
+              <p className="text-gray-400 text-sm font-light">Trades Executados</p>
+            </div>
 
-            <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Activity className="w-6 h-6 text-white" />
+            <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-yellow-500/20 to-yellow-700/20 rounded-xl flex items-center justify-center">
+                  <Bot className="w-6 h-6 text-yellow-400" />
                 </div>
-                <p className="text-sm text-gray-500 font-medium mb-1">Total Trades</p>
-                <p className="text-2xl font-light text-gray-900">{stats.totalTrades}</p>
-              </CardContent>
-            </Card>
+                <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">IA</span>
+              </div>
+              <h3 className="text-2xl font-light text-white mb-1">98.2%</h3>
+              <p className="text-gray-400 text-sm font-light">Taxa de Sucesso</p>
+            </div>
 
-            <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-6 h-6 text-white" />
+            <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-700/20 rounded-xl flex items-center justify-center">
+                  <Settings className="w-6 h-6 text-purple-400" />
                 </div>
-                <p className="text-sm text-gray-500 font-medium mb-1">Win Rate</p>
-                <p className="text-2xl font-light text-gray-900">{stats.winRate}%</p>
-              </CardContent>
-            </Card>
+                <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">Config</span>
+              </div>
+              <h3 className="text-2xl font-light text-white mb-1">3.2 SOL</h3>
+              <p className="text-gray-400 text-sm font-light">Capital Alocado</p>
+            </div>
           </div>
 
-          {/* Main Content Grid */}
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Trades Section */}
-            <div className="lg:col-span-2">
-              <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm">
-                <CardContent className="p-8">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-light text-gray-900">Atividade Recente</h2>
-                    <Button variant="ghost" className="text-gray-500 hover:text-gray-700">
-                      Ver Todos
-                      <ArrowUpRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    {recentTrades.map((trade) => (
-                      <div key={trade.id} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 hover:bg-gray-50 transition-colors duration-200">
-                        <div className="flex items-center space-x-4">
-                          <div className={`w-3 h-3 rounded-full ${
-                            trade.type === 'buy' ? 'bg-green-500' : 'bg-blue-500'
-                          }`}></div>
-                          <div>
-                            <p className="font-medium text-gray-900">{trade.pair}</p>
-                            <p className="text-sm text-gray-500">{trade.amount} • {trade.time}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200">
-                            {trade.status}
-                          </Badge>
-                          <span className={`font-medium ${
-                            trade.profit.startsWith('+') ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {trade.profit}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Actions Sidebar */}
-            <div className="space-y-6">
-              <Card className="border-0 bg-white/70 backdrop-blur-xl shadow-sm">
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Ações Rápidas</h3>
-                  <div className="space-y-3">
-                    <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white rounded-xl py-3 font-medium">
-                      <Wallet className="w-4 h-4 mr-2" />
-                      Conectar Wallet
-                    </Button>
-                    <Button variant="outline" className="w-full border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl py-3 font-medium">
-                      Configurar Limites
-                    </Button>
-                    <Button variant="outline" className="w-full border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl py-3 font-medium">
-                      Ver Relatórios
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-0 bg-gradient-to-br from-blue-50 to-purple-50 shadow-sm">
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                      <Shield className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">Segurança</h3>
-                      <p className="text-sm text-gray-600">Protegido por Solana</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    Seus fundos estão seguros na blockchain Solana com contratos inteligentes auditados.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+          {/* Main Content */}
+          <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden">
+            <Tabs defaultValue="wallet" className="w-full">
+              <div className="border-b border-white/10 px-8 pt-6 pb-0">
+                <TabsList className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-1">
+                  <TabsTrigger 
+                    value="wallet" 
+                    className="rounded-xl font-medium data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-300"
+                  >
+                    Carteira
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="settings" 
+                    className="rounded-xl font-medium data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-300"
+                  >
+                    Configurações
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="history" 
+                    className="rounded-xl font-medium data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-300"
+                  >
+                    Histórico
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+              
+              <div className="p-8">
+                <TabsContent value="wallet" className="mt-0">
+                  <CopyTradeWallet />
+                </TabsContent>
+                
+                <TabsContent value="settings" className="mt-0">
+                  <CopyTradeSettings />
+                </TabsContent>
+                
+                <TabsContent value="history" className="mt-0">
+                  <CopyTradeHistory />
+                </TabsContent>
+              </div>
+            </Tabs>
           </div>
         </div>
       </div>
