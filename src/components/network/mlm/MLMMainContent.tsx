@@ -40,6 +40,13 @@ const MLMMainContent: React.FC<MLMMainContentProps> = ({ tab, rankPercentages, l
     })
     .join(", ");
 
+  // Example values for CommissionExample
+  const profitExample = 100;
+  const performanceFee = profitExample * 0.3;
+  const masterTraderFee = profitExample * 0.1;
+  const networkFee = profitExample * 0.2;
+  const distributionExample = formattedDistribution.split(", ");
+
   return (
     <>
       <TabsContent value="overview">
@@ -97,7 +104,13 @@ const MLMMainContent: React.FC<MLMMainContentProps> = ({ tab, rankPercentages, l
       </TabsContent>
       
       <TabsContent value="commission">
-        <CommissionExample rankPercentages={rankPercentages} />
+        <CommissionExample 
+          profitExample={profitExample}
+          performanceFee={performanceFee}
+          masterTraderFee={masterTraderFee}
+          networkFee={networkFee}
+          distributionExample={distributionExample}
+        />
       </TabsContent>
       
       <TabsContent value="compression">
