@@ -10,7 +10,7 @@ const Index = () => {
   const features = [
     {
       icon: TrendingUp,
-      title: 'Copy Trading',
+      title: 'IA Trading',
       description: 'Automatize seus investimentos seguindo traders experientes',
     },
     {
