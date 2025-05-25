@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Network, TrendingUp } from 'lucide-react';
+import { Home, Network, TrendingUp, Zap } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -29,10 +29,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                <span className="text-white font-bold text-sm">V</span>
+              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center">
+                <Zap className="w-4 h-4 text-white" />
               </div>
-              <span className="text-xl font-light text-slate-900 tracking-tight">VastCopy</span>
+              <span className="text-xl font-light text-slate-900 tracking-tight">memeflow</span>
             </div>
 
             {/* Navigation Items */}

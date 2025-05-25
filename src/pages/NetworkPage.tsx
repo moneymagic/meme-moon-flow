@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 const NetworkPage = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
-  const [referralCode] = useState("ROYAL2024VQ");
+  const [referralCode] = useState("MEME2024VQ");
   
   const networkStats = {
     totalMembers: 121965,
@@ -49,7 +48,7 @@ const NetworkPage = () => {
   ];
 
   const copyReferralLink = () => {
-    const link = `https://vastcopy.com/ref/${referralCode}`;
+    const link = `https://memeflow.com/ref/${referralCode}`;
     navigator.clipboard.writeText(link);
     toast({
       title: "Link copiado!",
@@ -142,7 +141,7 @@ const NetworkPage = () => {
                   <h3 className="text-xl font-medium mb-2">Seu Link de Indicação</h3>
                   <p className="text-blue-100 mb-4">Compartilhe e ganhe comissões por cada pessoa que entrar</p>
                   <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 font-mono text-white">
-                    https://vastcopy.com/ref/{referralCode}
+                    https://memeflow.com/ref/{referralCode}
                   </div>
                 </div>
                 <Button 
