@@ -41,7 +41,7 @@ export function MainNavigation() {
               : 'text-muted-foreground hover:text-primary'
           }`}
         >
-          Bot Trading
+          Trading
         </Link>
       </div>
     </nav>
