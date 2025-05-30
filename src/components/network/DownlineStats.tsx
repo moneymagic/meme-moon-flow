@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Progress } from '@/components/ui/progress';
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Users } from 'lucide-react';
 
@@ -91,36 +90,30 @@ const DownlineStats: React.FC<DownlineStatsProps> = ({ stats, teamMembers }) => 
             <span>Global Team</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Direct downline count</span>
-                <span className="text-gray-300">{stats.currentDirect}</span>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white/5 p-4 rounded-lg text-center">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-300 text-sm">Direct downlines</span>
               </div>
-              <div className="h-2 w-full bg-gray-700 rounded-full">
-                <div className="h-2 bg-blue-500 rounded-full" style={{ width: '75%' }}></div>
-              </div>
+              <p className="text-2xl font-bold text-white">{stats.currentDirect}</p>
+              <p className="text-gray-400 text-xs">pessoas conectadas diretamente</p>
             </div>
             
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Team count</span>
-                <span className="text-gray-300">{formatNumber(stats.currentDownlines)}</span>
+            <div className="bg-white/5 p-4 rounded-lg text-center">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-300 text-sm">Team count</span>
               </div>
-              <div className="h-2 w-full bg-gray-700 rounded-full">
-                <div className="h-2 bg-green-500 rounded-full" style={{ width: '41%' }}></div>
-              </div>
+              <p className="text-2xl font-bold text-white">{formatNumber(stats.currentDownlines)}</p>
+              <p className="text-gray-400 text-xs">total da rede</p>
             </div>
             
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Team</span>
-                <span className="text-gray-300">{stats.currentTeam}</span>
+            <div className="bg-white/5 p-4 rounded-lg text-center">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-300 text-sm">Active Team</span>
               </div>
-              <div className="h-2 w-full bg-gray-700 rounded-full">
-                <div className="h-2 bg-purple-500 rounded-full" style={{ width: '10%' }}></div>
-              </div>
+              <p className="text-2xl font-bold text-white">{stats.currentTeam}</p>
+              <p className="text-gray-400 text-xs">membros ativos</p>
             </div>
           </div>
         </CardContent>
