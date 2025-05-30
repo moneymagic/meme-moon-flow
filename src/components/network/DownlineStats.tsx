@@ -9,14 +9,8 @@ interface DownlineStatsProps {
     totalMembers: number;
     activeMembers: number;
     inactiveMembers: number;
-    beginnerTeam: number;
-    intermediateTeam: number;
     directDownlines: number;
-    maxTeamRequirement: number;
-    currentTeam: number;
-    maxDownlinesRequirement: number;
     currentDownlines: number;
-    maxDirectRequirement: number;
     currentDirect: number;
   };
   teamMembers: {
@@ -91,7 +85,7 @@ const DownlineStats: React.FC<DownlineStatsProps> = ({ stats, teamMembers }) => 
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white/5 p-4 rounded-lg text-center">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-gray-300 text-sm">Direct downlines</span>
@@ -106,14 +100,6 @@ const DownlineStats: React.FC<DownlineStatsProps> = ({ stats, teamMembers }) => 
               </div>
               <p className="text-2xl font-bold text-white">{formatNumber(stats.currentDownlines)}</p>
               <p className="text-gray-400 text-xs">total da rede</p>
-            </div>
-            
-            <div className="bg-white/5 p-4 rounded-lg text-center">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-300 text-sm">Active Team</span>
-              </div>
-              <p className="text-2xl font-bold text-white">{stats.currentTeam}</p>
-              <p className="text-gray-400 text-xs">membros ativos</p>
             </div>
           </div>
         </CardContent>
@@ -146,19 +132,6 @@ const DownlineStats: React.FC<DownlineStatsProps> = ({ stats, teamMembers }) => 
           </div>
 
           <div className="mt-6">
-            <h3 className="text-white text-lg font-medium mb-4">Team (Activated)</h3>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/5 p-4 rounded-lg text-center">
-                <p className="text-gray-300 mb-1">Beginner</p>
-                <p className="text-white font-bold text-2xl">{stats.beginnerTeam} <span className="text-sm font-normal">people</span></p>
-              </div>
-              <div className="bg-white/5 p-4 rounded-lg text-center">
-                <p className="text-gray-300 mb-1">Intermediate</p>
-                <p className="text-white font-bold text-2xl">{stats.intermediateTeam} <span className="text-sm font-normal">people</span></p>
-              </div>
-            </div>
-
             <div className="flex justify-between items-center mt-8 mb-4">
               <h3 className="text-white text-lg font-medium">Direct downline details</h3>
               <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700">

@@ -97,11 +97,12 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
           
         if (error) throw error;
       } else {
-        // Insert new settings
+        // Insert new settings with required trader_address
         const { error } = await supabase
           .from('copy_settings')
           .insert({
             user_id: userId,
+            trader_address: 'smart_contract', // Fixed value for smart contract system
             is_active: settings.isActive,
             allocated_capital_sol: capitalValue
           });

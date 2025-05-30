@@ -1,4 +1,3 @@
-
 import React from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,11 +16,10 @@ const NetworkPage = () => {
   const networkStats = {
     totalMembers: 1247,
     totalVolume: 25800,
-    averageRank: 2.5,
     directReferrals: 15,
     totalCommissions: 5.4,
     monthlyCommissions: 1.2,
-    networkDepth: "8",
+    networkDepth: "∞",
     activeMembers: 892
   };
 
@@ -37,14 +35,8 @@ const NetworkPage = () => {
     totalMembers: 1247,
     activeMembers: 892,
     inactiveMembers: 355,
-    beginnerTeam: 583,
-    intermediateTeam: 20,
     directDownlines: 15,
-    maxTeamRequirement: 20,
-    currentTeam: 2,
-    maxDownlinesRequirement: 1500,
     currentDownlines: 621,
-    maxDirectRequirement: 20,
     currentDirect: 15
   };
 
@@ -143,7 +135,7 @@ const NetworkPage = () => {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-700/20 rounded-xl flex items-center justify-center">
@@ -175,17 +167,6 @@ const NetworkPage = () => {
               </div>
               <h3 className="text-2xl font-light text-white mb-1">25.8K</h3>
               <p className="text-gray-400 text-sm font-light">SOL Volume</p>
-            </div>
-
-            <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-700/20 rounded-xl flex items-center justify-center">
-                  <Network className="w-6 h-6 text-purple-400" />
-                </div>
-                <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">Níveis</span>
-              </div>
-              <h3 className="text-2xl font-light text-white mb-1">8</h3>
-              <p className="text-gray-400 text-sm font-light">Níveis Ativos</p>
             </div>
           </div>
 
@@ -220,7 +201,6 @@ const NetworkPage = () => {
                   <NetworkStats 
                     totalMembers={networkStats.totalMembers}
                     totalVolume={networkStats.totalVolume}
-                    averageRank={networkStats.averageRank}
                   />
                   <DownlineStats 
                     stats={downlineStats}
