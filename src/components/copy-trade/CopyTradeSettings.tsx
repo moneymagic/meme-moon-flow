@@ -1,18 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { RefreshCw, Save, Wallet } from 'lucide-react';
+import { RefreshCw, Save, Wallet, Minus, DollarSign } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 import AllocateCapitalModal from './AllocateCapitalModal';
+import DecreaseAllocationModal from './DecreaseAllocationModal';
+import WithdrawAllModal from './WithdrawAllModal';
 
 interface CopyTradeSettingsProps {
   walletData: {
     balance: number;
-    depositAddress: string;
     isActive: boolean;
   };
   isLoading: boolean;
@@ -21,7 +21,9 @@ interface CopyTradeSettingsProps {
 const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) => {
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAllocateModalOpen, setIsAllocateModalOpen] = useState(false);
+  const [isDecreaseModalOpen, setIsDecreaseModalOpen] = useState(false);
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [settings, setSettings] = useState({
     isActive: walletData.isActive,
     allocatedCapital: 0
@@ -55,12 +57,36 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
   const handleAllocationSuccess = (amount: number) => {
     setSettings(prev => ({
       ...prev,
-      allocatedCapital: amount
+      allocatedCapital: prev.allocatedCapital + amount
     }));
     
     toast({
       title: "Capital alocado com sucesso!",
-      description: `${amount} SOL alocado para copy trading`
+      description: `${amount} SOL adicionado. Total: ${settings.allocatedCapital + amount} SOL`
+    });
+  };
+
+  const handleDecreaseSuccess = (newAmount: number) => {
+    setSettings(prev => ({
+      ...prev,
+      allocatedCapital: newAmount
+    }));
+    
+    toast({
+      title: "Alocação reduzida com sucesso!",
+      description: `Nova alocação: ${newAmount} SOL`
+    });
+  };
+
+  const handleWithdrawSuccess = () => {
+    setSettings(prev => ({
+      ...prev,
+      allocatedCapital: 0
+    }));
+    
+    toast({
+      title: "Retirada realizada com sucesso!",
+      description: "Todos os fundos foram retirados da alocação"
     });
   };
   
@@ -182,7 +208,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
           <div className="space-y-2">
             <Label className="text-white">Capital Alocado</Label>
             <div className="bg-black/40 border border-gray-700 rounded-md p-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-white font-medium">
                     {settings.allocatedCapital > 0 ? `${settings.allocatedCapital} SOL` : 'Nenhum capital alocado'}
@@ -191,14 +217,42 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
                     Capital disponível para operações automáticas
                   </p>
                 </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                 <Button
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => setIsAllocateModalOpen(true)}
                   variant="outline"
                   className="border-blue-500 text-blue-400 hover:bg-blue-500/10"
+                  size="sm"
                 >
                   <Wallet className="h-4 w-4 mr-2" />
-                  {settings.allocatedCapital > 0 ? 'Ajustar' : 'Alocar'}
+                  {settings.allocatedCapital > 0 ? 'Alocar Mais' : 'Alocar'}
                 </Button>
+                
+                {settings.allocatedCapital > 0 && (
+                  <>
+                    <Button
+                      onClick={() => setIsDecreaseModalOpen(true)}
+                      variant="outline"
+                      className="border-yellow-500 text-yellow-400 hover:bg-yellow-500/10"
+                      size="sm"
+                    >
+                      <Minus className="h-4 w-4 mr-2" />
+                      Diminuir
+                    </Button>
+                    
+                    <Button
+                      onClick={() => setIsWithdrawModalOpen(true)}
+                      variant="outline"
+                      className="border-red-500 text-red-400 hover:bg-red-500/10"
+                      size="sm"
+                    >
+                      <DollarSign className="h-4 w-4 mr-2" />
+                      Retirar Tudo
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -231,10 +285,24 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
       </Card>
 
       <AllocateCapitalModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isAllocateModalOpen}
+        onClose={() => setIsAllocateModalOpen(false)}
         onSuccess={handleAllocationSuccess}
         currentBalance={walletData.balance}
+      />
+
+      <DecreaseAllocationModal
+        isOpen={isDecreaseModalOpen}
+        onClose={() => setIsDecreaseModalOpen(false)}
+        onSuccess={handleDecreaseSuccess}
+        currentAllocation={settings.allocatedCapital}
+      />
+
+      <WithdrawAllModal
+        isOpen={isWithdrawModalOpen}
+        onClose={() => setIsWithdrawModalOpen(false)}
+        onSuccess={handleWithdrawSuccess}
+        currentAllocation={settings.allocatedCapital}
       />
     </>
   );
