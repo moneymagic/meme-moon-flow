@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { Rank, Upline } from './CommissionTypes';
 
@@ -204,15 +205,15 @@ export const MEMEMOON_RANK_PERCENTAGES: Record<Rank, number> = {
 };
 
 /**
- * Requisitos de volume para cada ranking
+ * Requisitos de volume e estrutura para cada ranking conforme tabela oficial
  */
 export const MEMEMOON_RANK_REQUIREMENTS: Record<Rank, { volume: number, structure: string }> = {
-  'V1': { volume: 10, structure: '—' },
-  'V2': { volume: 30, structure: '2 linhas com V1' },
-  'V3': { volume: 100, structure: '2 linhas com V2' },
-  'V4': { volume: 300, structure: '2 linas com V3' },
-  'V5': { volume: 1000, structure: '2 linhas com V4' },
-  'V6': { volume: 3000, structure: '2 linhas com V5' },
-  'V7': { volume: 10000, structure: '2 linhas com V6' },
-  'V8': { volume: 30000, structure: '2 linhas com V7' },
+  'V1': { volume: 0, structure: '—' },
+  'V2': { volume: 30, structure: '2 linhas diferentes com pelo menos 1 membro V1' },
+  'V3': { volume: 100, structure: '2 linhas diferentes com pelo menos 1 membro V2' },
+  'V4': { volume: 300, structure: '2 linhas diferentes com pelo menos 1 membro V3' },
+  'V5': { volume: 1000, structure: '2 linhas diferentes com pelo menos 1 membro V4' },
+  'V6': { volume: 3000, structure: '2 linhas diferentes com pelo menos 1 membro V5' },
+  'V7': { volume: 10000, structure: '2 linhas diferentes com pelo menos 1 membro V6' },
+  'V8': { volume: 30000, structure: '2 linhas diferentes com pelo menos 1 membro V7' },
 };
