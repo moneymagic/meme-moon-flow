@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import { Users, TrendingUp, DollarSign } from 'lucide-react';
-import TabComponents from '@/components/network/TabComponents';
+import NetworkStats from '@/components/network/NetworkStats';
+import DownlineStats from '@/components/network/DownlineStats';
 import Layout from '@/components/Layout';
 
 const NetworkPage = () => {
@@ -53,8 +53,6 @@ const NetworkPage = () => {
       rank: 2
     }
   ];
-
-  const [activeTab, setActiveTab] = useState("downline");
 
   useEffect(() => {
     // Simulate loading
@@ -143,7 +141,7 @@ const NetworkPage = () => {
             </Card>
           </div>
 
-          {/* Main Content */}
+          {/* Main Content - Direct Network Analysis */}
           <Card className="bg-white/5 backdrop-blur-md border-white/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
@@ -152,40 +150,11 @@ const NetworkPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 bg-white/10">
-                  <TabsTrigger 
-                    value="downline" 
-                    className="text-white data-[state=active]:bg-gray-600 data-[state=active]:text-white"
-                  >
-                    Downline
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="commissions" 
-                    className="text-white data-[state=active]:bg-gray-600 data-[state=active]:text-white"
-                  >
-                    Comissões
-                  </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="downline" className="mt-6">
-                  <TabComponents
-                    activeTab={activeTab}
-                    stats={stats}
-                    downlineStats={downlineStats}
-                    teamMembers={teamMembers}
-                  />
-                </TabsContent>
-
-                <TabsContent value="commissions" className="mt-6">
-                  <TabComponents
-                    activeTab={activeTab}
-                    stats={stats}
-                    downlineStats={downlineStats}
-                    teamMembers={teamMembers}
-                  />
-                </TabsContent>
-              </Tabs>
+              <NetworkStats
+                totalMembers={stats.totalMembers}
+                totalVolume={stats.totalVolume}
+              />
+              <DownlineStats stats={downlineStats} teamMembers={teamMembers} />
             </CardContent>
           </Card>
         </div>
