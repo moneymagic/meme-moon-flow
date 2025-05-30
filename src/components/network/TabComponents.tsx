@@ -11,7 +11,6 @@ interface TabComponentsProps {
     directReferrals: number;
     totalCommissions: number;
     monthlyCommissions: number;
-    networkDepth: string;
     activeMembers: number;
   };
   downlineStats: {
