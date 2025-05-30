@@ -46,11 +46,6 @@ const RankIcon: React.FC<RankIconProps> = ({ rank }) => {
 };
 
 const DownlineStats: React.FC<DownlineStatsProps> = ({ stats, teamMembers }) => {
-  // Utility function to calculate progress percentage
-  const calculateProgress = (current: number, max: number): number => {
-    return Math.min((current / max) * 100, 100);
-  };
-
   // Utility function to format numbers
   const formatNumber = (num: number): string => {
     return num.toLocaleString('pt-BR');
@@ -101,25 +96,31 @@ const DownlineStats: React.FC<DownlineStatsProps> = ({ stats, teamMembers }) => 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-gray-300">Direct downline count</span>
-                <span className="text-gray-300">({stats.currentDirect}/{stats.maxDirectRequirement})</span>
+                <span className="text-gray-300">{stats.currentDirect}</span>
               </div>
-              <Progress value={calculateProgress(stats.currentDirect, stats.maxDirectRequirement)} className="h-2 bg-gray-700" />
+              <div className="h-2 w-full bg-gray-700 rounded-full">
+                <div className="h-2 bg-blue-500 rounded-full" style={{ width: '75%' }}></div>
+              </div>
             </div>
             
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-gray-300">Team count</span>
-                <span className="text-gray-300">({formatNumber(stats.currentDownlines)}/{formatNumber(stats.maxDownlinesRequirement)})</span>
+                <span className="text-gray-300">{formatNumber(stats.currentDownlines)}</span>
               </div>
-              <Progress value={calculateProgress(stats.currentDownlines, stats.maxDownlinesRequirement)} className="h-2 bg-gray-700" />
+              <div className="h-2 w-full bg-gray-700 rounded-full">
+                <div className="h-2 bg-green-500 rounded-full" style={{ width: '41%' }}></div>
+              </div>
             </div>
             
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-gray-300">Team</span>
-                <span className="text-gray-300">({stats.currentTeam}/{stats.maxTeamRequirement})</span>
+                <span className="text-gray-300">{stats.currentTeam}</span>
               </div>
-              <Progress value={calculateProgress(stats.currentTeam, stats.maxTeamRequirement)} className="h-2 bg-gray-700" />
+              <div className="h-2 w-full bg-gray-700 rounded-full">
+                <div className="h-2 bg-purple-500 rounded-full" style={{ width: '10%' }}></div>
+              </div>
             </div>
           </div>
         </CardContent>
