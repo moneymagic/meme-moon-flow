@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
 import { RefreshCw, Save } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -24,8 +23,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
   const [isProcessing, setIsProcessing] = useState(false);
   const [settings, setSettings] = useState({
     isActive: walletData.isActive,
-    traderAddress: "",
-    allocatedCapital: 1
+    allocatedCapital: '1'
   });
   
   useEffect(() => {
@@ -42,8 +40,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
         if (data) {
           setSettings({
             isActive: data.is_active,
-            traderAddress: data.trader_address,
-            allocatedCapital: data.allocated_capital_sol
+            allocatedCapital: data.allocated_capital_sol.toString()
           });
         }
       } catch (error) {
@@ -58,11 +55,12 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
     try {
       setIsProcessing(true);
       
-      // Validate trader address
-      if (!settings.traderAddress.trim()) {
+      // Validate allocated capital
+      const capitalValue = parseFloat(settings.allocatedCapital);
+      if (isNaN(capitalValue) || capitalValue <= 0) {
         toast({
-          title: "Invalid address",
-          description: "Please enter a valid trader address",
+          title: "Valor inválido",
+          description: "Por favor, insira um valor válido para o capital alocado",
           variant: "destructive"
         });
         return;
@@ -73,8 +71,8 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
       
       if (!userId) {
         toast({
-          title: "Authentication error",
-          description: "Please log in to save settings",
+          title: "Erro de autenticação",
+          description: "Faça login para salvar as configurações",
           variant: "destructive"
         });
         return;
@@ -92,8 +90,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
           .from('copy_settings')
           .update({
             is_active: settings.isActive,
-            trader_address: settings.traderAddress,
-            allocated_capital_sol: settings.allocatedCapital,
+            allocated_capital_sol: capitalValue,
             updated_at: new Date().toISOString()
           })
           .eq('id', existingSettings.id);
@@ -106,25 +103,24 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
           .insert({
             user_id: userId,
             is_active: settings.isActive,
-            trader_address: settings.traderAddress,
-            allocated_capital_sol: settings.allocatedCapital
+            allocated_capital_sol: capitalValue
           });
           
         if (error) throw error;
       }
       
       toast({
-        title: "Settings saved!",
+        title: "Configurações salvas!",
         description: settings.isActive 
-          ? "Your bot trading is now active" 
-          : "Bot trading has been paused"
+          ? "Seu bot trading está ativo" 
+          : "Bot trading foi pausado"
       });
       
     } catch (error) {
       console.error("Error saving settings:", error);
       toast({
-        title: "Failed to save settings",
-        description: "Please try again later",
+        title: "Falha ao salvar configurações",
+        description: "Tente novamente mais tarde",
         variant: "destructive"
       });
     } finally {
@@ -180,34 +176,19 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="trader-address" className="text-white">Trader Address</Label>
+          <Label htmlFor="allocated-capital" className="text-white">Allocated Capital (SOL)</Label>
           <Input 
-            id="trader-address"
-            placeholder="Enter the trader's wallet address"
+            id="allocated-capital"
+            type="number"
+            placeholder="Enter capital amount"
             className="bg-black/40 border-gray-700 text-white"
-            value={settings.traderAddress}
-            onChange={(e) => setSettings({...settings, traderAddress: e.target.value})}
+            value={settings.allocatedCapital}
+            onChange={(e) => setSettings({...settings, allocatedCapital: e.target.value})}
+            step="0.1"
+            min="0.1"
           />
           <p className="text-gray-400 text-xs">
-            This is the address of the Master Trader whose trades you want to copy
-          </p>
-        </div>
-        
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-white">Allocated Capital (SOL)</Label>
-            <span className="text-white font-medium">{settings.allocatedCapital} SOL</span>
-          </div>
-          <Slider 
-            value={[settings.allocatedCapital]}
-            min={0.1}
-            max={10}
-            step={0.1}
-            onValueChange={(value) => setSettings({...settings, allocatedCapital: value[0]})}
-            className="py-4"
-          />
-          <p className="text-gray-400 text-xs">
-            This determines the size of your bot trades relative to the Master Trader
+            This determines the size of your bot trades
           </p>
         </div>
         
