@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CopyTradeWallet from "@/components/copy-trade/CopyTradeWallet";
@@ -7,14 +8,35 @@ import CopyTradeHistory from "@/components/copy-trade/CopyTradeHistory";
 import { useWallet } from "@/contexts/WalletContext";
 import WalletConnect from "@/components/WalletConnect";
 import { Bot, Zap, TrendingUp, Settings } from "lucide-react";
+import { getUserBalance } from "@/services/UserBalanceService";
 
 const CopyTradePage = () => {
-  const { isConnected } = useWallet();
+  const { isConnected, walletAddress } = useWallet();
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data for the components
+  useEffect(() => {
+    const fetchWalletBalance = async () => {
+      if (walletAddress) {
+        setIsLoading(true);
+        try {
+          const balance = await getUserBalance(walletAddress);
+          setWalletBalance(balance);
+        } catch (error) {
+          console.error("Erro ao buscar saldo da carteira:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWalletBalance();
+  }, [walletAddress]);
+
   const walletData = {
-    balance: 3.2,
-    depositAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
+    balance: walletBalance,
     isActive: true
   };
 
@@ -25,7 +47,6 @@ const CopyTradePage = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-800/30 via-transparent to-gray-900/30"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-600/10 via-transparent to-transparent"></div>
         
-        {/* Animated Background Elements */}
         <div className="absolute top-20 left-20 w-72 h-72 bg-gray-600/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-gray-700/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         
@@ -112,8 +133,8 @@ const CopyTradePage = () => {
                 </div>
                 <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">Config</span>
               </div>
-              <h3 className="text-2xl font-light text-white mb-1">3.2 SOL</h3>
-              <p className="text-gray-400 text-sm font-light">Capital Alocado</p>
+              <h3 className="text-2xl font-light text-white mb-1">{walletBalance} SOL</h3>
+              <p className="text-gray-400 text-sm font-light">Saldo Disponível</p>
             </div>
           </div>
 
@@ -145,15 +166,15 @@ const CopyTradePage = () => {
               
               <div className="p-8">
                 <TabsContent value="wallet" className="mt-0">
-                  <CopyTradeWallet walletData={walletData} isLoading={false} />
+                  <CopyTradeWallet walletData={walletData} isLoading={isLoading} />
                 </TabsContent>
                 
                 <TabsContent value="settings" className="mt-0">
-                  <CopyTradeSettings walletData={walletData} isLoading={false} />
+                  <CopyTradeSettings walletData={walletData} isLoading={isLoading} />
                 </TabsContent>
                 
                 <TabsContent value="history" className="mt-0">
-                  <CopyTradeHistory isLoading={false} />
+                  <CopyTradeHistory isLoading={isLoading} />
                 </TabsContent>
               </div>
             </Tabs>
