@@ -4,7 +4,7 @@ import { useWallet } from '@/contexts/WalletContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Users, TrendingUp, DollarSign, Calendar } from 'lucide-react';
+import { Users, TrendingUp, DollarSign } from 'lucide-react';
 import TabComponents from '@/components/network/TabComponents';
 
 const NetworkPage = () => {
@@ -18,7 +18,6 @@ const NetworkPage = () => {
     directReferrals: 12,
     totalCommissions: 2345.67,
     monthlyCommissions: 567.89,
-    networkDepth: "8 níveis",
     activeMembers: 89
   };
 
@@ -101,7 +100,7 @@ const NetworkPage = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <Card className="bg-white/10 backdrop-blur-md border-white/20">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -134,18 +133,6 @@ const NetworkPage = () => {
                   <p className="text-2xl font-bold text-white">{stats.totalCommissions.toLocaleString()} SOL</p>
                 </div>
                 <DollarSign className="h-8 w-8 text-yellow-400" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/10 backdrop-blur-md border-white/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-300 text-sm">Profundidade</p>
-                  <p className="text-2xl font-bold text-white">{stats.networkDepth}</p>
-                </div>
-                <Calendar className="h-8 w-8 text-purple-400" />
               </div>
             </CardContent>
           </Card>
