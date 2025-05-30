@@ -29,42 +29,30 @@ const RankingProgress = ({ className }: RankingProgressProps) => {
   const directReferrals = rankingStats?.direct_referrals || 0;
   const networkSize = rankingStats?.network_size || 0;
   
-  const nextRank = rankingUpgrade?.next_rank || currentRank + 1;
+  const nextRank = currentRank + 1;
   const canUpgrade = rankingUpgrade?.can_upgrade || false;
-  const requirementsOr = rankingUpgrade?.requirements_met || false;
   
-  // Lógica de requisitos baseada no rank atual
-  const getRequirements = (rank: number) => {
+  // Lógica de requisitos corrigida baseada no sistema real
+  const getRequirements = (targetRank: number) => {
     const requirements = {
-      volume: rank * 100,
-      directs: rank >= 3 ? 2 : 0
+      volume: targetRank * 30, // 30 SOL por nível
+      directs: 2, // Sempre 2 diretos do nível atual
+      directRankRequired: targetRank - 1 // Rank necessário dos diretos
     };
     return requirements;
   };
 
   const nextRankRequirements = getRequirements(nextRank);
   const volumeProgress = Math.min((totalProfit / nextRankRequirements.volume) * 100, 100);
-  const directsProgress = nextRankRequirements.directs > 0 ? 
-    Math.min((directReferrals / nextRankRequirements.directs) * 100, 100) : 100;
+  
+  // Para V1 -> V2 precisa de 2 diretos V1, para V2 -> V3 precisa de 2 diretos V2, etc.
+  const directsProgress = Math.min((directReferrals / nextRankRequirements.directs) * 100, 100);
   
   const getNextLevelBenefits = () => {
-    switch (nextRank) {
-      case 2:
-        return [
-          { text: "+2% Bônus MLM", bgColor: "bg-purple-100", textColor: "text-purple-700" },
-          { text: "Acesso a 2 níveis", bgColor: "bg-blue-100", textColor: "text-blue-700" }
-        ];
-      case 3:
-        return [
-          { text: "+4% Bônus MLM", bgColor: "bg-purple-100", textColor: "text-purple-700" },
-          { text: "Acesso a 3 níveis", bgColor: "bg-blue-100", textColor: "text-blue-700" }
-        ];
-      default:
-        return [
-          { text: `+${nextRank * 2}% Bônus MLM`, bgColor: "bg-purple-100", textColor: "text-purple-700" },
-          { text: `Acesso a ${nextRank} níveis`, bgColor: "bg-blue-100", textColor: "text-blue-700" }
-        ];
-    }
+    return [
+      { text: `+${nextRank * 2}% Bônus MLM`, bgColor: "bg-purple-100", textColor: "text-purple-700" },
+      { text: "Profundidade infinita", bgColor: "bg-blue-100", textColor: "text-blue-700" }
+    ];
   };
 
   const nextLevelBenefits = getNextLevelBenefits();
@@ -101,7 +89,7 @@ const RankingProgress = ({ className }: RankingProgressProps) => {
       <CardContent className="space-y-6">
         <div className="space-y-3">
           <div className="flex justify-between">
-            <span className="text-slate-600 font-light">Volume da Rede</span>
+            <span className="text-slate-600 font-light">Lucro dos Indicados</span>
             <span className="text-slate-900 font-medium">
               {totalProfit.toFixed(1)} / {nextRankRequirements.volume} SOL
             </span>
@@ -120,30 +108,28 @@ const RankingProgress = ({ className }: RankingProgressProps) => {
           </div>
         </div>
         
-        {nextRank >= 3 && (
-          <div className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-slate-600 font-light">
-                Diretos V{nextRank - 1}+
-              </span>
-              <span className="text-slate-900 font-medium">
-                {directReferrals} / {nextRankRequirements.directs}
-              </span>
-            </div>
-            <div className="relative h-3 w-full bg-slate-200 rounded-full overflow-hidden">
-              <Progress 
-                value={directsProgress} 
-                className="h-3 bg-gradient-to-r from-purple-500 to-blue-600"
-              />
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-500">
-                Faltam {Math.max(0, nextRankRequirements.directs - directReferrals)} diretos qualificados
-              </span>
-              <span className="text-slate-500">{directsProgress.toFixed(1)}%</span>
-            </div>
+        <div className="space-y-3">
+          <div className="flex justify-between">
+            <span className="text-slate-600 font-light">
+              Diretos V{nextRankRequirements.directRankRequired}+
+            </span>
+            <span className="text-slate-900 font-medium">
+              {directReferrals} / {nextRankRequirements.directs}
+            </span>
           </div>
-        )}
+          <div className="relative h-3 w-full bg-slate-200 rounded-full overflow-hidden">
+            <Progress 
+              value={directsProgress} 
+              className="h-3 bg-gradient-to-r from-purple-500 to-blue-600"
+            />
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-500">
+              Faltam {Math.max(0, nextRankRequirements.directs - directReferrals)} diretos V{nextRankRequirements.directRankRequired}
+            </span>
+            <span className="text-slate-500">{directsProgress.toFixed(1)}%</span>
+          </div>
+        </div>
 
         <div className="text-center text-sm text-slate-600">
           <p>Rede total: {networkSize} membros</p>
