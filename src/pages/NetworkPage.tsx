@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -106,7 +105,7 @@ const NetworkPage = () => {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <Card className="bg-white/5 backdrop-blur-md border-white/10">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
@@ -154,18 +153,12 @@ const NetworkPage = () => {
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-3 bg-white/10">
+                <TabsList className="grid w-full grid-cols-2 bg-white/10">
                   <TabsTrigger 
                     value="downline" 
                     className="text-white data-[state=active]:bg-gray-600 data-[state=active]:text-white"
                   >
                     Downline
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="trading" 
-                    className="text-white data-[state=active]:bg-gray-600 data-[state=active]:text-white"
-                  >
-                    Trading
                   </TabsTrigger>
                   <TabsTrigger 
                     value="commissions" 
@@ -176,15 +169,6 @@ const NetworkPage = () => {
                 </TabsList>
 
                 <TabsContent value="downline" className="mt-6">
-                  <TabComponents
-                    activeTab={activeTab}
-                    stats={stats}
-                    downlineStats={downlineStats}
-                    teamMembers={teamMembers}
-                  />
-                </TabsContent>
-
-                <TabsContent value="trading" className="mt-6">
                   <TabComponents
                     activeTab={activeTab}
                     stats={stats}

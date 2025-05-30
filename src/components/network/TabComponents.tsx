@@ -47,18 +47,6 @@ const TabComponents: React.FC<TabComponentsProps> = ({
           <DownlineStats stats={downlineStats} teamMembers={teamMembers} />
         </>
       );
-    case "trading":
-      return (
-        <>
-          <NetworkStats
-            totalMembers={stats.totalMembers}
-            totalVolume={stats.totalVolume}
-          />
-          <div className="text-center py-12">
-            <p className="text-gray-400">Trading analytics coming soon...</p>
-          </div>
-        </>
-      );
     case "commissions":
       return (
         <>
@@ -67,7 +55,7 @@ const TabComponents: React.FC<TabComponentsProps> = ({
             totalVolume={stats.totalVolume}
           />
           <div className="text-center py-12">
-            <p className="text-gray-400">Commission details coming soon...</p>
+            <p className="text-gray-400">Detalhes de comissões em breve...</p>
           </div>
         </>
       );
