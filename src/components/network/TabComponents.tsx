@@ -1,42 +1,25 @@
 
-import React from 'react';
-import NetworkStats from './NetworkStats';
-import NetworkMembersTable from './NetworkMembersTable';
-import DownlineStats from './DownlineStats';
-import MLMContent from './MLMContent';
+import React from "react";
+import NetworkStats from "./NetworkStats";
+import DownlineStats from "./DownlineStats";
 
-export type Rank = 'V1' | 'V2' | 'V3' | 'V4' | 'V5' | 'V6' | 'V7' | 'V8';
-
-export interface NetworkTabsData {
-  networkStats: {
+interface TabComponentsProps {
+  activeTab: string;
+  stats: {
     totalMembers: number;
     totalVolume: number;
-    averageRank: number;
     directReferrals: number;
     totalCommissions: number;
     monthlyCommissions: number;
     networkDepth: string;
     activeMembers: number;
   };
-  networkData: {
-    user: string;
-    level: number;
-    volume: number;
-    rank: string;
-    referrals: number;
-  }[];
   downlineStats: {
     totalMembers: number;
     activeMembers: number;
     inactiveMembers: number;
-    beginnerTeam: number;
-    intermediateTeam: number;
     directDownlines: number;
-    maxTeamRequirement: number;
-    currentTeam: number;
-    maxDownlinesRequirement: number;
     currentDownlines: number;
-    maxDirectRequirement: number;
     currentDirect: number;
   };
   teamMembers: {
@@ -46,52 +29,60 @@ export interface NetworkTabsData {
     teamSize: number;
     rank?: number;
   }[];
-  rankPercents: Record<Rank, number>;
-  rankRequirements: Record<Rank, { sol: number; linesWithRank: Rank | null }>;
-  topPerformers: {
-    name: string;
-    level: number;
-    earnings: string;
-    referrals: number;
-  }[];
-  levels: {
-    level: number;
-    members: number;
-    commission: string;
-    earnings: string;
-  }[];
 }
 
-export const OverviewTabContent: React.FC<{ data: NetworkTabsData }> = ({ data }) => {
-  return (
-    <>
-      <NetworkStats 
-        totalMembers={data.networkStats.totalMembers} 
-        totalVolume={data.networkStats.totalVolume} 
-        averageRank={data.networkStats.averageRank}
-      />
-      <NetworkMembersTable members={data.networkData} />
-    </>
-  );
+const TabComponents: React.FC<TabComponentsProps> = ({
+  activeTab,
+  stats,
+  downlineStats,
+  teamMembers,
+}) => {
+  switch (activeTab) {
+    case "downline":
+      return (
+        <>
+          <NetworkStats
+            totalMembers={stats.totalMembers}
+            totalVolume={stats.totalVolume}
+          />
+          <DownlineStats stats={downlineStats} teamMembers={teamMembers} />
+        </>
+      );
+    case "trading":
+      return (
+        <>
+          <NetworkStats
+            totalMembers={stats.totalMembers}
+            totalVolume={stats.totalVolume}
+          />
+          <div className="text-center py-12">
+            <p className="text-gray-400">Trading analytics coming soon...</p>
+          </div>
+        </>
+      );
+    case "commissions":
+      return (
+        <>
+          <NetworkStats
+            totalMembers={stats.totalMembers}
+            totalVolume={stats.totalVolume}
+          />
+          <div className="text-center py-12">
+            <p className="text-gray-400">Commission details coming soon...</p>
+          </div>
+        </>
+      );
+    default:
+      return (
+        <>
+          <NetworkStats
+            totalMembers={stats.totalMembers}
+            totalVolume={stats.totalVolume}
+          />
+          <DownlineStats stats={downlineStats} teamMembers={teamMembers} />
+        </>
+      );
+  }
 };
 
-export const DownlineTabContent: React.FC<{ data: NetworkTabsData }> = ({ data }) => {
-  return (
-    <DownlineStats 
-      stats={data.downlineStats} 
-      teamMembers={data.teamMembers}
-    />
-  );
-};
-
-export const MLMTabContent: React.FC<{ data: NetworkTabsData }> = ({ data }) => {
-  return (
-    <MLMContent 
-      networkStats={data.networkStats} 
-      rankPercents={data.rankPercents}
-      rankRequirements={data.rankRequirements}
-      topPerformers={data.topPerformers}
-      levels={data.levels}
-    />
-  );
-};
+export default TabComponents;

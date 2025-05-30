@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { RefreshCw, Save } from 'lucide-react';
+import { RefreshCw, Save, Wallet } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
+import AllocateCapitalModal from './AllocateCapitalModal';
 
 interface CopyTradeSettingsProps {
   walletData: {
@@ -21,9 +21,10 @@ interface CopyTradeSettingsProps {
 const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) => {
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [settings, setSettings] = useState({
     isActive: walletData.isActive,
-    allocatedCapital: '1'
+    allocatedCapital: 0
   });
   
   useEffect(() => {
@@ -40,7 +41,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
         if (data) {
           setSettings({
             isActive: data.is_active,
-            allocatedCapital: data.allocated_capital_sol.toString()
+            allocatedCapital: data.allocated_capital_sol || 0
           });
         }
       } catch (error) {
@@ -50,21 +51,22 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
     
     fetchSettings();
   }, []);
+
+  const handleAllocationSuccess = (amount: number) => {
+    setSettings(prev => ({
+      ...prev,
+      allocatedCapital: amount
+    }));
+    
+    toast({
+      title: "Capital alocado com sucesso!",
+      description: `${amount} SOL alocado para copy trading`
+    });
+  };
   
   const handleSaveSettings = async () => {
     try {
       setIsProcessing(true);
-      
-      // Validate allocated capital
-      const capitalValue = parseFloat(settings.allocatedCapital);
-      if (isNaN(capitalValue) || capitalValue <= 0) {
-        toast({
-          title: "Valor inválido",
-          description: "Por favor, insira um valor válido para o capital alocado",
-          variant: "destructive"
-        });
-        return;
-      }
       
       // Get current user ID
       const userId = (await supabase.auth.getUser()).data.user?.id;
@@ -90,7 +92,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
           .from('copy_settings')
           .update({
             is_active: settings.isActive,
-            allocated_capital_sol: capitalValue,
+            allocated_capital_sol: settings.allocatedCapital,
             updated_at: new Date().toISOString()
           })
           .eq('id', existingSettings.id);
@@ -104,7 +106,7 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
             user_id: userId,
             trader_address: 'smart_contract', // Fixed value for smart contract system
             is_active: settings.isActive,
-            allocated_capital_sol: capitalValue
+            allocated_capital_sol: settings.allocatedCapital
           });
           
         if (error) throw error;
@@ -144,81 +146,97 @@ const CopyTradeSettings = ({ walletData, isLoading }: CopyTradeSettingsProps) =>
   const lowBalanceWarning = walletData.balance < 0.05;
   
   return (
-    <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="text-white">Bot Trading Settings</CardTitle>
-        <CardDescription className="text-gray-400">
-          Configure your bot trading parameters
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="copy-active" className="text-white text-lg">Trading Status</Label>
-              <p className="text-gray-400 text-sm">Enable or disable bot trading</p>
+    <>
+      <Card className="bg-black/30 border-white/10 backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle className="text-white">Bot Trading Settings</CardTitle>
+          <CardDescription className="text-gray-400">
+            Configure your bot trading parameters
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="copy-active" className="text-white text-lg">Trading Status</Label>
+                <p className="text-gray-400 text-sm">Enable or disable bot trading</p>
+              </div>
+              <Switch 
+                id="copy-active"
+                checked={settings.isActive}
+                onCheckedChange={(checked) => setSettings({...settings, isActive: checked})}
+                disabled={lowBalanceWarning}
+                className={lowBalanceWarning ? "cursor-not-allowed opacity-50" : ""}
+              />
             </div>
-            <Switch 
-              id="copy-active"
-              checked={settings.isActive}
-              onCheckedChange={(checked) => setSettings({...settings, isActive: checked})}
-              disabled={lowBalanceWarning}
-              className={lowBalanceWarning ? "cursor-not-allowed opacity-50" : ""}
-            />
+            
+            {lowBalanceWarning && (
+              <div className="bg-red-900/30 border border-red-500/20 rounded-lg p-3 mt-2">
+                <p className="text-red-300 text-sm">
+                  Insufficient balance! Add at least 0.05 SOL to enable bot trading.
+                </p>
+              </div>
+            )}
           </div>
           
-          {lowBalanceWarning && (
-            <div className="bg-red-900/30 border border-red-500/20 rounded-lg p-3 mt-2">
-              <p className="text-red-300 text-sm">
-                Insufficient balance! Add at least 0.05 SOL to enable bot trading.
-              </p>
+          <div className="space-y-2">
+            <Label className="text-white">Capital Alocado</Label>
+            <div className="bg-black/40 border border-gray-700 rounded-md p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white font-medium">
+                    {settings.allocatedCapital > 0 ? `${settings.allocatedCapital} SOL` : 'Nenhum capital alocado'}
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    Capital disponível para operações automáticas
+                  </p>
+                </div>
+                <Button
+                  onClick={() => setIsModalOpen(true)}
+                  variant="outline"
+                  className="border-blue-500 text-blue-400 hover:bg-blue-500/10"
+                >
+                  <Wallet className="h-4 w-4 mr-2" />
+                  {settings.allocatedCapital > 0 ? 'Ajustar' : 'Alocar'}
+                </Button>
+              </div>
             </div>
-          )}
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="allocated-capital" className="text-white">Allocated Capital (SOL)</Label>
-          <Input 
-            id="allocated-capital"
-            type="number"
-            placeholder="Enter capital amount"
-            className="bg-black/40 border-gray-700 text-white"
-            value={settings.allocatedCapital}
-            onChange={(e) => setSettings({...settings, allocatedCapital: e.target.value})}
-            step="0.1"
-            min="0.1"
-          />
-          <p className="text-gray-400 text-xs">
-            This determines the size of your bot trades
-          </p>
-        </div>
-        
-        <div className="space-y-2">
-          <div className="bg-blue-900/30 border border-blue-500/20 rounded-lg p-4">
-            <h4 className="text-blue-300 font-medium mb-2">Performance Fee Structure</h4>
-            <p className="text-gray-300 text-sm">30% of profit is deducted from your gas fee wallet:</p>
-            <ul className="list-disc list-inside text-gray-300 text-sm pl-2 space-y-1 mt-1">
-              <li>10% goes to Master Trader</li>
-              <li>20% goes to the affiliate network</li>
-            </ul>
           </div>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button 
-          onClick={handleSaveSettings}
-          disabled={isProcessing || lowBalanceWarning}
-          className="w-full bg-blue-600 hover:bg-blue-700"
-        >
-          {isProcessing ? (
-            <RefreshCw className="h-4 w-4 animate-spin mr-2" />
-          ) : (
-            <Save className="h-4 w-4 mr-2" />
-          )}
-          Save Settings
-        </Button>
-      </CardFooter>
-    </Card>
+          
+          <div className="space-y-2">
+            <div className="bg-blue-900/30 border border-blue-500/20 rounded-lg p-4">
+              <h4 className="text-blue-300 font-medium mb-2">Performance Fee Structure</h4>
+              <p className="text-gray-300 text-sm">30% de taxa sobre lucros:</p>
+              <ul className="list-disc list-inside text-gray-300 text-sm pl-2 space-y-1 mt-1">
+                <li>10% para o Master Trader</li>
+                <li>20% para a rede de afiliados</li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button 
+            onClick={handleSaveSettings}
+            disabled={isProcessing || lowBalanceWarning}
+            className="w-full bg-blue-600 hover:bg-blue-700"
+          >
+            {isProcessing ? (
+              <RefreshCw className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              <Save className="h-4 w-4 mr-2" />
+            )}
+            Save Settings
+          </Button>
+        </CardFooter>
+      </Card>
+
+      <AllocateCapitalModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleAllocationSuccess}
+        currentBalance={walletData.balance}
+      />
+    </>
   );
 };
 
