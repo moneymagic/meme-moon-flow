@@ -1,4 +1,3 @@
-
 import React from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,10 +14,8 @@ const CopyTradePage = () => {
   // Mock data for the components
   const walletData = {
     balance: 3.2,
-    allocatedCapital: 2.8,
-    availableBalance: 0.4,
-    totalProfit: 0.45,
-    profitPercentage: 15.6
+    depositAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
+    isActive: true
   };
 
   if (!isConnected) {
