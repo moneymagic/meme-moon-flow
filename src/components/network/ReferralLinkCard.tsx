@@ -68,18 +68,16 @@ const ReferralLinkCard: React.FC = () => {
           url: link
         });
       } catch (error) {
-        // Se o share falhar, copia o link
         handleCopyLink();
       }
     } else {
-      // Fallback para copiar
       handleCopyLink();
     }
   };
 
   if (!walletAddress) {
     return (
-      <Card className="bg-slate-700/50 border-slate-600/50 backdrop-blur-sm">
+      <Card className="bg-slate-800/90 border-slate-700/50 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="text-center text-slate-300">
             Conecte sua carteira para ver seu link de convite
@@ -92,7 +90,7 @@ const ReferralLinkCard: React.FC = () => {
   const referralLink = generateReferralLink(walletAddress);
 
   return (
-    <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-purple-500/30 backdrop-blur-sm">
+    <Card className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border-purple-500/30 backdrop-blur-sm">
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
           <Share className="h-5 w-5 text-purple-400" />
@@ -100,28 +98,28 @@ const ReferralLinkCard: React.FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Stats Overview */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="text-center p-3 bg-black/20 rounded-lg">
-            <div className="flex items-center justify-center mb-1">
-              <Users className="h-4 w-4 text-blue-400" />
+        {/* Stats Overview - seguindo o padrão da imagem */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="text-center p-4 bg-purple-500/20 rounded-lg border border-purple-400/30">
+            <div className="flex items-center justify-center mb-2">
+              <Users className="h-5 w-5 text-blue-400" />
             </div>
-            <p className="text-white font-bold text-lg">{stats.directReferrals}</p>
-            <p className="text-slate-300 text-xs">Diretos</p>
+            <p className="text-white font-bold text-2xl">{stats.directReferrals}</p>
+            <p className="text-slate-300 text-sm">Diretos</p>
           </div>
-          <div className="text-center p-3 bg-black/20 rounded-lg">
-            <div className="flex items-center justify-center mb-1">
-              <TrendingUp className="h-4 w-4 text-green-400" />
+          <div className="text-center p-4 bg-purple-500/20 rounded-lg border border-purple-400/30">
+            <div className="flex items-center justify-center mb-2">
+              <TrendingUp className="h-5 w-5 text-green-400" />
             </div>
-            <p className="text-white font-bold text-lg">{stats.totalReferrals}</p>
-            <p className="text-slate-300 text-xs">Total</p>
+            <p className="text-white font-bold text-2xl">{stats.totalReferrals}</p>
+            <p className="text-slate-300 text-sm">Total</p>
           </div>
-          <div className="text-center p-3 bg-black/20 rounded-lg">
-            <div className="flex items-center justify-center mb-1">
-              <TrendingUp className="h-4 w-4 text-yellow-400" />
+          <div className="text-center p-4 bg-purple-500/20 rounded-lg border border-purple-400/30">
+            <div className="flex items-center justify-center mb-2">
+              <TrendingUp className="h-5 w-5 text-yellow-400" />
             </div>
-            <p className="text-white font-bold text-lg">{stats.totalEarnings.toFixed(2)}</p>
-            <p className="text-slate-300 text-xs">SOL Ganhos</p>
+            <p className="text-white font-bold text-2xl">{stats.totalEarnings.toFixed(2)}</p>
+            <p className="text-slate-300 text-sm">SOL Ganhos</p>
           </div>
         </div>
 
@@ -129,21 +127,21 @@ const ReferralLinkCard: React.FC = () => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h4 className="text-white font-medium">Seu Link de Convite</h4>
-            <Badge className="bg-purple-600/20 text-purple-300 border-purple-500/30">
+            <Badge className="bg-purple-600/30 text-purple-300 border-purple-500/50">
               Ativo
             </Badge>
           </div>
           
-          <div className="p-3 bg-black/30 rounded-lg border border-slate-600/50">
+          <div className="p-4 bg-slate-700/50 rounded-lg border border-slate-600/50">
             <p className="text-slate-300 text-sm font-mono break-all">
               {referralLink}
             </p>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <Button 
               onClick={handleCopyLink}
-              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white border-0"
               size="sm"
             >
               <Copy className="h-4 w-4 mr-2" />
@@ -161,12 +159,12 @@ const ReferralLinkCard: React.FC = () => {
           </div>
         </div>
 
-        {/* Instructions */}
-        <div className="p-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30">
-          <p className="text-slate-200 text-sm">
-            💡 <strong>Como funciona:</strong>
+        {/* Instructions - seguindo o padrão da imagem */}
+        <div className="p-4 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-lg border border-blue-500/30">
+          <p className="text-white text-sm font-medium mb-2">
+            💡 Como funciona:
           </p>
-          <ul className="text-slate-300 text-xs mt-2 space-y-1">
+          <ul className="text-slate-300 text-sm space-y-1">
             <li>• Compartilhe esse link para expandir sua rede</li>
             <li>• Ganhe comissões sobre o lucro dos seus indicados</li>
             <li>• Quanto maior sua rede, maior seu ranking e comissões</li>
