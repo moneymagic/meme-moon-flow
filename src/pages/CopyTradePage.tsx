@@ -1,44 +1,18 @@
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CopyTradeWallet from "@/components/copy-trade/CopyTradeWallet";
 import CopyTradeSettings from "@/components/copy-trade/CopyTradeSettings";
 import CopyTradeHistory from "@/components/copy-trade/CopyTradeHistory";
 import { useWallet } from "@/contexts/WalletContext";
+import { useWalletData } from "@/hooks/useWalletData";
 import WalletConnect from "@/components/WalletConnect";
 import { Bot, Zap, TrendingUp, Settings } from "lucide-react";
-import { getUserBalance } from "@/services/UserBalanceService";
 
 const CopyTradePage = () => {
   const { isConnected, walletAddress } = useWallet();
-  const [walletBalance, setWalletBalance] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchWalletBalance = async () => {
-      if (walletAddress) {
-        setIsLoading(true);
-        try {
-          const balance = await getUserBalance(walletAddress);
-          setWalletBalance(balance);
-        } catch (error) {
-          console.error("Erro ao buscar saldo da carteira:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        setIsLoading(false);
-      }
-    };
-
-    fetchWalletBalance();
-  }, [walletAddress]);
-
-  const walletData = {
-    balance: walletBalance,
-    isActive: true
-  };
+  const { phantomBalance, copyTradeData, isLoading } = useWalletData();
 
   if (!isConnected) {
     return (
@@ -71,6 +45,11 @@ const CopyTradePage = () => {
     );
   }
 
+  const walletData = {
+    balance: phantomBalance,
+    isActive: copyTradeData?.isActive || false
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black py-8">
@@ -100,7 +79,9 @@ const CopyTradePage = () => {
                 </div>
                 <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">24h</span>
               </div>
-              <h3 className="text-2xl font-light text-white mb-1">+12.5%</h3>
+              <h3 className="text-2xl font-light text-white mb-1">
+                +{copyTradeData?.todayReturn?.toFixed(2) || '0.00'}%
+              </h3>
               <p className="text-gray-400 text-sm font-light">Retorno Hoje</p>
             </div>
 
@@ -111,7 +92,7 @@ const CopyTradePage = () => {
                 </div>
                 <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">Ativo</span>
               </div>
-              <h3 className="text-2xl font-light text-white mb-1">47</h3>
+              <h3 className="text-2xl font-light text-white mb-1">{copyTradeData?.totalTrades || 0}</h3>
               <p className="text-gray-400 text-sm font-light">Trades Executados</p>
             </div>
 
@@ -122,7 +103,9 @@ const CopyTradePage = () => {
                 </div>
                 <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">IA</span>
               </div>
-              <h3 className="text-2xl font-light text-white mb-1">98.2%</h3>
+              <h3 className="text-2xl font-light text-white mb-1">
+                {copyTradeData?.successRate?.toFixed(1) || '0.0'}%
+              </h3>
               <p className="text-gray-400 text-sm font-light">Taxa de Sucesso</p>
             </div>
 
@@ -133,7 +116,7 @@ const CopyTradePage = () => {
                 </div>
                 <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">Config</span>
               </div>
-              <h3 className="text-2xl font-light text-white mb-1">{walletBalance} SOL</h3>
+              <h3 className="text-2xl font-light text-white mb-1">{phantomBalance.toFixed(2)} SOL</h3>
               <p className="text-gray-400 text-sm font-light">Saldo Disponível</p>
             </div>
           </div>

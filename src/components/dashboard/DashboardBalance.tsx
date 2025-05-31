@@ -2,12 +2,12 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp, RefreshCw } from "lucide-react";
-import { useUserData } from "@/hooks/useUserData";
+import { useWalletData } from "@/hooks/useWalletData";
 
 const DashboardBalance: React.FC = () => {
-  const { walletBalance, loading, refreshData } = useUserData();
+  const { userData, isLoading, refreshData } = useWalletData();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Card className="mb-8 bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">
         <CardContent className="p-8">
@@ -20,9 +20,9 @@ const DashboardBalance: React.FC = () => {
     );
   }
 
-  const totalProfit = walletBalance?.total_profit || 0;
-  const todayProfit = walletBalance?.today_profit || 0;
-  const commissionEarnings = walletBalance?.commission_earnings || 0;
+  const totalProfit = userData?.totalProfit || 0;
+  const todayProfit = userData?.todayProfit || 0;
+  const commissionEarnings = userData?.commissionEarnings || 0;
 
   return (
     <Card className="mb-8 bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-3xl shadow-sm">

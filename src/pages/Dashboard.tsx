@@ -3,12 +3,12 @@ import React from "react";
 import { useToast } from "@/components/ui/use-toast";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import WalletConnect from "@/components/WalletConnect";
-import { useUserData } from "@/hooks/useUserData";
+import { useWalletData } from "@/hooks/useWalletData";
 import { useWallet } from "@/contexts/WalletContext";
 
 const Dashboard = () => {
   const { isConnected } = useWallet();
-  const { loading: dataLoading } = useUserData();
+  const { userData, isLoading } = useWalletData();
   const { toast } = useToast();
 
   // Se a carteira não está conectada, mostrar tela de conexão com estilo aprimorado
@@ -38,10 +38,12 @@ const Dashboard = () => {
     );
   }
 
+  const isActive = userData?.totalProfit ? userData.totalProfit > 0 : false;
+
   return (
     <DashboardLayout 
-      isActive={true}
-      isLoading={dataLoading}
+      isActive={isActive}
+      isLoading={isLoading}
     />
   );
 };
