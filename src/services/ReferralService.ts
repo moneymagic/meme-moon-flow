@@ -137,28 +137,30 @@ async function createUplineRelationship(userId: string, uplineId: string): Promi
  */
 async function updateReferrerStats(referrerId: string): Promise<void> {
   try {
-    const { error } = await supabase.rpc('increment', {
-      table_name: 'affiliates',
-      row_id: referrerId,
-      column_name: 'direct_referrals_count'
-    });
+    // Buscar estatísticas atuais do referrer
+    const { data: referrer, error: fetchError } = await supabase
+      .from('affiliates')
+      .select('direct_referrals_count, total_referrals')
+      .eq('user_id', referrerId)
+      .single();
 
-    if (error) {
-      // Fallback: atualizar manualmente
-      const { data: referrer } = await supabase
+    if (fetchError) {
+      console.error('Erro ao buscar dados do referrer:', fetchError);
+      return;
+    }
+
+    if (referrer) {
+      // Atualizar manualmente incrementando os valores
+      const { error: updateError } = await supabase
         .from('affiliates')
-        .select('direct_referrals_count')
-        .eq('user_id', referrerId)
-        .single();
+        .update({ 
+          direct_referrals_count: (referrer.direct_referrals_count || 0) + 1,
+          total_referrals: (referrer.total_referrals || 0) + 1 
+        })
+        .eq('user_id', referrerId);
 
-      if (referrer) {
-        await supabase
-          .from('affiliates')
-          .update({ 
-            direct_referrals_count: (referrer.direct_referrals_count || 0) + 1,
-            total_referrals: (referrer.direct_referrals_count || 0) + 1 
-          })
-          .eq('user_id', referrerId);
+      if (updateError) {
+        console.error('Erro ao atualizar estatísticas do referrer:', updateError);
       }
     }
   } catch (error) {

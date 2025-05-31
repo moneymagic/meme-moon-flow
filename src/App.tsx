@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { WalletProvider } from '@/contexts/WalletContext';
+import { saveReferralFromUrl } from '@/services/ReferralService';
 import Index from './pages/Index';
 import Dashboard from './pages/Dashboard';
 import NetworkPage from './pages/NetworkPage';
@@ -8,8 +10,6 @@ import NotFound from './pages/NotFound';
 import CopyTradePage from './pages/CopyTradePage';
 
 function App() {
-  const { saveReferralFromUrl } = await import('@/services/ReferralService');
-  
   // Processar referral da URL na inicialização
   React.useEffect(() => {
     saveReferralFromUrl();
