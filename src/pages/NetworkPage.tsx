@@ -6,62 +6,11 @@ import { Users, TrendingUp, DollarSign } from 'lucide-react';
 import NetworkStats from '@/components/network/NetworkStats';
 import DownlineStats from '@/components/network/DownlineStats';
 import Layout from '@/components/Layout';
+import { useWalletData } from '@/hooks/useWalletData';
 
 const NetworkPage = () => {
   const { walletAddress, isConnected } = useWallet();
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Mock data for demonstration
-  const stats = {
-    totalMembers: 156,
-    totalVolume: 45678.90,
-    directReferrals: 12,
-    totalCommissions: 2345.67,
-    monthlyCommissions: 567.89,
-    activeMembers: 89
-  };
-
-  const downlineStats = {
-    totalMembers: 156,
-    activeMembers: 89,
-    inactiveMembers: 67,
-    directDownlines: 12,
-    currentDownlines: 144,
-    currentDirect: 12
-  };
-
-  const teamMembers = [
-    {
-      id: "1",
-      username: "trader_pro",
-      joinDate: "2024-01-15",
-      teamSize: 23,
-      rank: 3
-    },
-    {
-      id: "2", 
-      username: "crypto_master",
-      joinDate: "2024-02-01",
-      teamSize: 45,
-      rank: 5
-    },
-    {
-      id: "3",
-      username: "sol_investor", 
-      joinDate: "2024-02-15",
-      teamSize: 12,
-      rank: 2
-    }
-  ];
-
-  useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
+  const { networkData, isLoading } = useWalletData();
 
   if (!isConnected) {
     return (
@@ -92,6 +41,10 @@ const NetworkPage = () => {
     );
   }
 
+  const totalMembers = networkData?.totalMembers || 0;
+  const totalVolume = networkData?.totalVolume || 0;
+  const totalCommissions = networkData?.cumulativeProfit || 0;
+
   return (
     <Layout>
       <div className="min-h-screen p-4">
@@ -109,7 +62,7 @@ const NetworkPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-300 text-sm">Total de Membros</p>
-                    <p className="text-2xl font-bold text-white">{stats.totalMembers}</p>
+                    <p className="text-2xl font-bold text-white">{totalMembers}</p>
                   </div>
                   <Users className="h-8 w-8 text-blue-400" />
                 </div>
@@ -121,7 +74,7 @@ const NetworkPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-300 text-sm">Volume Total</p>
-                    <p className="text-2xl font-bold text-white">{stats.totalVolume.toLocaleString()} SOL</p>
+                    <p className="text-2xl font-bold text-white">{totalVolume.toLocaleString()} SOL</p>
                   </div>
                   <TrendingUp className="h-8 w-8 text-green-400" />
                 </div>
@@ -133,7 +86,7 @@ const NetworkPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-300 text-sm">Comissões Totais</p>
-                    <p className="text-2xl font-bold text-white">{stats.totalCommissions.toLocaleString()} SOL</p>
+                    <p className="text-2xl font-bold text-white">{totalCommissions.toLocaleString()} SOL</p>
                   </div>
                   <DollarSign className="h-8 w-8 text-yellow-400" />
                 </div>
@@ -150,11 +103,8 @@ const NetworkPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <NetworkStats
-                totalMembers={stats.totalMembers}
-                totalVolume={stats.totalVolume}
-              />
-              <DownlineStats stats={downlineStats} teamMembers={teamMembers} />
+              <NetworkStats />
+              <DownlineStats />
             </CardContent>
           </Card>
         </div>

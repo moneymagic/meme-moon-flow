@@ -32,28 +32,19 @@ interface TabComponentsProps {
 
 const TabComponents: React.FC<TabComponentsProps> = ({
   activeTab,
-  stats,
-  downlineStats,
-  teamMembers,
 }) => {
   switch (activeTab) {
     case "downline":
       return (
         <>
-          <NetworkStats
-            totalMembers={stats.totalMembers}
-            totalVolume={stats.totalVolume}
-          />
-          <DownlineStats stats={downlineStats} teamMembers={teamMembers} />
+          <NetworkStats />
+          <DownlineStats />
         </>
       );
     case "commissions":
       return (
         <>
-          <NetworkStats
-            totalMembers={stats.totalMembers}
-            totalVolume={stats.totalVolume}
-          />
+          <NetworkStats />
           <div className="text-center py-12">
             <p className="text-gray-400">Detalhes de comissões em breve...</p>
           </div>
@@ -62,11 +53,8 @@ const TabComponents: React.FC<TabComponentsProps> = ({
     default:
       return (
         <>
-          <NetworkStats
-            totalMembers={stats.totalMembers}
-            totalVolume={stats.totalVolume}
-          />
-          <DownlineStats stats={downlineStats} teamMembers={teamMembers} />
+          <NetworkStats />
+          <DownlineStats />
         </>
       );
   }
