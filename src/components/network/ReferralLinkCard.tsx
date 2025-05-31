@@ -6,35 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Copy, Share, Users, TrendingUp } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { useWallet } from '@/contexts/WalletContext';
-import { generateReferralLink, copyReferralLink, getUserReferralStats } from '@/services/ReferralService';
+import { useReferralSystem } from '@/hooks/useReferralSystem';
+import { generateReferralLink, copyReferralLink } from '@/services/ReferralService';
 
 const ReferralLinkCard: React.FC = () => {
   const { walletAddress } = useWallet();
+  const { referralStats } = useReferralSystem();
   const { toast } = useToast();
-  const [stats, setStats] = useState({
-    directReferrals: 0,
-    totalReferrals: 0,
-    totalEarnings: 0
-  });
-  const [loading, setLoading] = useState(false);
-
-  React.useEffect(() => {
-    const fetchStats = async () => {
-      if (walletAddress) {
-        setLoading(true);
-        try {
-          const referralStats = await getUserReferralStats(walletAddress);
-          setStats(referralStats);
-        } catch (error) {
-          console.error('Erro ao buscar estatísticas:', error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchStats();
-  }, [walletAddress]);
 
   const handleCopyLink = async () => {
     if (!walletAddress) return;
@@ -98,28 +76,21 @@ const ReferralLinkCard: React.FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Stats Overview - clean minimal design */}
-        <div className="grid grid-cols-3 gap-4">
+        {/* Stats Overview simplificadas */}
+        <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-4 bg-purple-500/10 rounded-xl border border-purple-400/20">
             <div className="flex items-center justify-center mb-2">
               <Users className="h-5 w-5 text-blue-400" />
             </div>
-            <p className="text-white font-light text-2xl">{stats.directReferrals}</p>
+            <p className="text-white font-light text-2xl">{referralStats.directReferrals}</p>
             <p className="text-slate-400 text-sm font-light">Diretos</p>
           </div>
           <div className="text-center p-4 bg-purple-500/10 rounded-xl border border-purple-400/20">
             <div className="flex items-center justify-center mb-2">
               <TrendingUp className="h-5 w-5 text-green-400" />
             </div>
-            <p className="text-white font-light text-2xl">{stats.totalReferrals}</p>
+            <p className="text-white font-light text-2xl">{referralStats.totalReferrals}</p>
             <p className="text-slate-400 text-sm font-light">Total</p>
-          </div>
-          <div className="text-center p-4 bg-purple-500/10 rounded-xl border border-purple-400/20">
-            <div className="flex items-center justify-center mb-2">
-              <TrendingUp className="h-5 w-5 text-yellow-400" />
-            </div>
-            <p className="text-white font-light text-2xl">{stats.totalEarnings.toFixed(2)}</p>
-            <p className="text-slate-400 text-sm font-light">SOL Ganhos</p>
           </div>
         </div>
 

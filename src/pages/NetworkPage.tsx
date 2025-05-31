@@ -3,15 +3,13 @@ import React from 'react';
 import { useWallet } from '@/contexts/WalletContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, TrendingUp, DollarSign } from 'lucide-react';
 import Layout from '@/components/Layout';
-import { useReferralSystem } from '@/hooks/useReferralSystem';
 import ReferralLinkCard from '@/components/network/ReferralLinkCard';
+import NetworkStatsCards from '@/components/network/NetworkStatsCards';
 import MLMCommissionTracker from '@/components/network/mlm/MLMCommissionTracker';
 
 const NetworkPage = () => {
   const { walletAddress, isConnected } = useWallet();
-  const { referralStats, loading: referralLoading } = useReferralSystem();
 
   if (!isConnected) {
     return (
@@ -32,16 +30,6 @@ const NetworkPage = () => {
     );
   }
 
-  if (referralLoading) {
-    return (
-      <Layout>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-white text-xl font-light">Carregando dados da rede...</div>
-        </div>
-      </Layout>
-    );
-  }
-
   return (
     <Layout>
       <div className="min-h-screen p-6">
@@ -52,44 +40,8 @@ const NetworkPage = () => {
             <p className="text-slate-400 font-light">Sistema multinível com profundidade infinita</p>
           </div>
 
-          {/* Quick Stats - following the design pattern */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-slate-400 text-sm font-light">Total de Membros</p>
-                    <p className="text-3xl font-light text-white mt-1">{referralStats.totalReferrals}</p>
-                  </div>
-                  <Users className="h-8 w-8 text-blue-400" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-slate-400 text-sm font-light">Volume Total</p>
-                    <p className="text-3xl font-light text-white mt-1">0 SOL</p>
-                  </div>
-                  <TrendingUp className="h-8 w-8 text-green-400" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-slate-400 text-sm font-light">Comissões Totais</p>
-                    <p className="text-3xl font-light text-white mt-1">{referralStats.totalEarnings.toFixed(4)} SOL</p>
-                  </div>
-                  <DollarSign className="h-8 w-8 text-yellow-400" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          {/* Stats Cards */}
+          <NetworkStatsCards />
 
           {/* Main Content */}
           <Tabs defaultValue="overview" className="space-y-6">
