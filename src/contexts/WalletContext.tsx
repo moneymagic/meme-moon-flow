@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface WalletContextType {
@@ -18,6 +17,8 @@ interface WalletProviderProps {
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Verificar se já existe uma carteira conectada
@@ -30,25 +31,38 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
   const connectWallet = async () => {
     try {
-      // Verificar se o Phantom está instalado
-      if (typeof window !== 'undefined' && 'solana' in window) {
-        const solana = (window as any).solana;
-        
-        if (solana.isPhantom) {
-          const response = await solana.connect();
-          const address = response.publicKey.toString();
-          
-          setWalletAddress(address);
-          setIsConnected(true);
-          localStorage.setItem('walletAddress', address);
-          
-          console.log('Carteira conectada:', address);
-        }
-      } else {
-        alert('Phantom wallet não encontrada. Por favor, instale a extensão Phantom.');
+      setIsConnecting(true);
+      setError(null);
+
+      if (!window.solana || !window.solana.isPhantom) {
+        throw new Error('Phantom wallet not found');
       }
-    } catch (error) {
-      console.error('Erro ao conectar carteira:', error);
+
+      const response = await window.solana.connect();
+      const publicKey = response.publicKey.toString();
+      
+      setWalletAddress(publicKey);
+      setIsConnected(true);
+      
+      // Processar referral automaticamente quando conectar
+      const { processNewUserWithReferral } = await import('@/services/ReferralService');
+      await processNewUserWithReferral(publicKey);
+
+      toast({
+        title: "Carteira conectada",
+        description: `Conectado com ${publicKey.slice(0, 8)}...${publicKey.slice(-8)}`,
+      });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to connect wallet';
+      setError(errorMessage);
+      
+      toast({
+        title: "Erro ao conectar",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setIsConnecting(false);
     }
   };
 
