@@ -62,8 +62,6 @@ const NetworkPage = () => {
             </TabsContent>
 
             <TabsContent value="referral" className="space-y-6">
-              <ReferralLinkCard />
-              
               <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
                 <CardHeader>
                   <CardTitle className="text-white font-light">Como Funciona o Sistema MLM</CardTitle>
