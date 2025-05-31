@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Copy, Share, Users, TrendingUp } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useWallet } from '@/contexts/WalletContext';
 import { generateReferralLink, copyReferralLink, getUserReferralStats } from '@/services/ReferralService';
 
@@ -77,9 +77,9 @@ const ReferralLinkCard: React.FC = () => {
 
   if (!walletAddress) {
     return (
-      <Card className="bg-slate-800/90 border-slate-700/50 backdrop-blur-sm">
+      <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
         <CardContent className="p-6">
-          <div className="text-center text-slate-300">
+          <div className="text-center text-slate-400 font-light">
             Conecte sua carteira para ver seu link de convite
           </div>
         </CardContent>
@@ -90,49 +90,49 @@ const ReferralLinkCard: React.FC = () => {
   const referralLink = generateReferralLink(walletAddress);
 
   return (
-    <Card className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border-purple-500/30 backdrop-blur-sm">
+    <Card className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 border-purple-500/30 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle className="text-white flex items-center gap-2">
+        <CardTitle className="text-white flex items-center gap-2 font-light">
           <Share className="h-5 w-5 text-purple-400" />
           Link de Convite
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Stats Overview - seguindo o padrão da imagem */}
+        {/* Stats Overview - clean minimal design */}
         <div className="grid grid-cols-3 gap-4">
-          <div className="text-center p-4 bg-purple-500/20 rounded-lg border border-purple-400/30">
+          <div className="text-center p-4 bg-purple-500/10 rounded-xl border border-purple-400/20">
             <div className="flex items-center justify-center mb-2">
               <Users className="h-5 w-5 text-blue-400" />
             </div>
-            <p className="text-white font-bold text-2xl">{stats.directReferrals}</p>
-            <p className="text-slate-300 text-sm">Diretos</p>
+            <p className="text-white font-light text-2xl">{stats.directReferrals}</p>
+            <p className="text-slate-400 text-sm font-light">Diretos</p>
           </div>
-          <div className="text-center p-4 bg-purple-500/20 rounded-lg border border-purple-400/30">
+          <div className="text-center p-4 bg-purple-500/10 rounded-xl border border-purple-400/20">
             <div className="flex items-center justify-center mb-2">
               <TrendingUp className="h-5 w-5 text-green-400" />
             </div>
-            <p className="text-white font-bold text-2xl">{stats.totalReferrals}</p>
-            <p className="text-slate-300 text-sm">Total</p>
+            <p className="text-white font-light text-2xl">{stats.totalReferrals}</p>
+            <p className="text-slate-400 text-sm font-light">Total</p>
           </div>
-          <div className="text-center p-4 bg-purple-500/20 rounded-lg border border-purple-400/30">
+          <div className="text-center p-4 bg-purple-500/10 rounded-xl border border-purple-400/20">
             <div className="flex items-center justify-center mb-2">
               <TrendingUp className="h-5 w-5 text-yellow-400" />
             </div>
-            <p className="text-white font-bold text-2xl">{stats.totalEarnings.toFixed(2)}</p>
-            <p className="text-slate-300 text-sm">SOL Ganhos</p>
+            <p className="text-white font-light text-2xl">{stats.totalEarnings.toFixed(2)}</p>
+            <p className="text-slate-400 text-sm font-light">SOL Ganhos</p>
           </div>
         </div>
 
         {/* Referral Link */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h4 className="text-white font-medium">Seu Link de Convite</h4>
-            <Badge className="bg-purple-600/30 text-purple-300 border-purple-500/50">
+            <h4 className="text-white font-light">Seu Link de Convite</h4>
+            <Badge className="bg-purple-600/30 text-purple-300 border-purple-500/50 font-light">
               Ativo
             </Badge>
           </div>
           
-          <div className="p-4 bg-slate-700/50 rounded-lg border border-slate-600/50">
+          <div className="p-4 bg-slate-700/30 rounded-xl border border-slate-600/30">
             <p className="text-slate-300 text-sm font-mono break-all">
               {referralLink}
             </p>
@@ -141,7 +141,7 @@ const ReferralLinkCard: React.FC = () => {
           <div className="flex gap-3">
             <Button 
               onClick={handleCopyLink}
-              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white border-0"
+              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white border-0 font-light"
               size="sm"
             >
               <Copy className="h-4 w-4 mr-2" />
@@ -150,7 +150,7 @@ const ReferralLinkCard: React.FC = () => {
             <Button 
               onClick={handleShare}
               variant="outline"
-              className="flex-1 border-purple-500/50 text-purple-300 hover:bg-purple-600/20"
+              className="flex-1 border-purple-500/50 text-purple-300 hover:bg-purple-600/20 font-light"
               size="sm"
             >
               <Share className="h-4 w-4 mr-2" />
@@ -159,12 +159,12 @@ const ReferralLinkCard: React.FC = () => {
           </div>
         </div>
 
-        {/* Instructions - seguindo o padrão da imagem */}
-        <div className="p-4 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-lg border border-blue-500/30">
+        {/* Instructions */}
+        <div className="p-4 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-xl border border-blue-500/20">
           <p className="text-white text-sm font-medium mb-2">
             💡 Como funciona:
           </p>
-          <ul className="text-slate-300 text-sm space-y-1">
+          <ul className="text-slate-400 text-sm space-y-1 font-light">
             <li>• Compartilhe esse link para expandir sua rede</li>
             <li>• Ganhe comissões sobre o lucro dos seus indicados</li>
             <li>• Quanto maior sua rede, maior seu ranking e comissões</li>
