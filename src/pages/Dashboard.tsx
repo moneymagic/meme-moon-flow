@@ -8,8 +8,19 @@ import { useWallet } from "@/contexts/WalletContext";
 
 const Dashboard = () => {
   const { isConnected } = useWallet();
-  const { userData, isLoading } = useWalletData();
+  const { userData, isLoading, error } = useWalletData();
   const { toast } = useToast();
+
+  // Show error toast if there's an error
+  React.useEffect(() => {
+    if (error) {
+      toast({
+        title: "Erro ao carregar dados",
+        description: error,
+        variant: "destructive"
+      });
+    }
+  }, [error, toast]);
 
   // Se a carteira não está conectada, mostrar tela de conexão com estilo aprimorado
   if (!isConnected) {
@@ -29,7 +40,7 @@ const Dashboard = () => {
               Conecte sua carteira
             </h2>
             <p className="text-gray-300 font-extralight">
-              Para acessar o dashboard, conecte sua Phantom Wallet
+              Para acessar o dashboard com dados reais, conecte sua Phantom Wallet
             </p>
           </div>
           <WalletConnect />

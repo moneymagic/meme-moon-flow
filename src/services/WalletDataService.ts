@@ -31,6 +31,16 @@ export interface NetworkData {
   todayProfit: number;
 }
 
+export interface TradeHistoryItem {
+  id: string;
+  tokenSymbol: string;
+  entryPrice: number;
+  exitPrice: number;
+  profitSol: number;
+  timestamp: Date;
+  isSuccessful: boolean;
+}
+
 /**
  * Busca ou cria um usuário no banco baseado no endereço da carteira
  */
@@ -201,6 +211,38 @@ export async function getNetworkData(walletAddress: string): Promise<NetworkData
   } catch (error) {
     console.error('Erro ao buscar dados da rede:', error);
     return null;
+  }
+}
+
+/**
+ * Busca histórico de trades do usuário
+ */
+export async function getTradeHistory(walletAddress: string): Promise<TradeHistoryItem[]> {
+  try {
+    const { data: trades, error } = await supabase
+      .from('copy_trades')
+      .select('*')
+      .eq('user_id', walletAddress)
+      .order('timestamp', { ascending: false })
+      .limit(20);
+
+    if (error) {
+      console.error('Erro ao buscar histórico de trades:', error);
+      return [];
+    }
+
+    return trades?.map(trade => ({
+      id: trade.id,
+      tokenSymbol: trade.token_symbol,
+      entryPrice: trade.entry_price,
+      exitPrice: trade.exit_price,
+      profitSol: trade.profit_sol,
+      timestamp: new Date(trade.timestamp),
+      isSuccessful: trade.is_successful
+    })) || [];
+  } catch (error) {
+    console.error('Erro ao buscar histórico de trades:', error);
+    return [];
   }
 }
 

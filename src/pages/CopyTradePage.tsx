@@ -4,7 +4,7 @@ import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CopyTradeWallet from "@/components/copy-trade/CopyTradeWallet";
 import CopyTradeSettings from "@/components/copy-trade/CopyTradeSettings";
-import CopyTradeHistory from "@/components/copy-trade/CopyTradeHistory";
+import RealTimeCopyTradeHistory from "@/components/copy-trade/RealTimeCopyTradeHistory";
 import { useWallet } from "@/contexts/WalletContext";
 import { useWalletData } from "@/hooks/useWalletData";
 import WalletConnect from "@/components/WalletConnect";
@@ -12,7 +12,7 @@ import { Bot, Zap, TrendingUp, Settings } from "lucide-react";
 
 const CopyTradePage = () => {
   const { isConnected, walletAddress } = useWallet();
-  const { phantomBalance, copyTradeData, isLoading } = useWalletData();
+  const { phantomBalance, copyTradeData, isLoading, error } = useWalletData();
 
   if (!isConnected) {
     return (
@@ -36,12 +36,28 @@ const CopyTradePage = () => {
               Acesse o Copy Trading
             </h2>
             <p className="text-gray-300 font-extralight">
-              Para configurar o trading automatizado, conecte sua Phantom Wallet
+              Para configurar o trading automatizado com dados reais, conecte sua Phantom Wallet
             </p>
           </div>
           <WalletConnect />
         </div>
       </div>
+    );
+  }
+
+  // Show error if there's one
+  if (error) {
+    return (
+      <Layout>
+        <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black py-8">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="text-center text-white">
+              <h2 className="text-2xl font-bold mb-4">Erro ao carregar dados</h2>
+              <p className="text-gray-300">{error}</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
     );
   }
 
@@ -65,12 +81,12 @@ const CopyTradePage = () => {
               </div>
               <div>
                 <h1 className="text-4xl font-light text-white mb-2 tracking-tight">Copy Trading</h1>
-                <p className="text-gray-300 font-light">Trading automatizado com inteligência artificial</p>
+                <p className="text-gray-300 font-light">Trading automatizado com dados reais em tempo real</p>
               </div>
             </div>
           </div>
 
-          {/* Stats Grid */}
+          {/* Real-time Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
@@ -82,7 +98,7 @@ const CopyTradePage = () => {
               <h3 className="text-2xl font-light text-white mb-1">
                 +{copyTradeData?.todayReturn?.toFixed(2) || '0.00'}%
               </h3>
-              <p className="text-gray-400 text-sm font-light">Retorno Hoje</p>
+              <p className="text-gray-400 text-sm font-light">Retorno Hoje (Real)</p>
             </div>
 
             <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
@@ -93,7 +109,7 @@ const CopyTradePage = () => {
                 <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">Ativo</span>
               </div>
               <h3 className="text-2xl font-light text-white mb-1">{copyTradeData?.totalTrades || 0}</h3>
-              <p className="text-gray-400 text-sm font-light">Trades Executados</p>
+              <p className="text-gray-400 text-sm font-light">Trades Executados (Real)</p>
             </div>
 
             <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
@@ -106,7 +122,7 @@ const CopyTradePage = () => {
               <h3 className="text-2xl font-light text-white mb-1">
                 {copyTradeData?.successRate?.toFixed(1) || '0.0'}%
               </h3>
-              <p className="text-gray-400 text-sm font-light">Taxa de Sucesso</p>
+              <p className="text-gray-400 text-sm font-light">Taxa de Sucesso (Real)</p>
             </div>
 
             <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-black/80 transition-all duration-300">
@@ -114,10 +130,10 @@ const CopyTradePage = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-700/20 rounded-xl flex items-center justify-center">
                   <Settings className="w-6 h-6 text-purple-400" />
                 </div>
-                <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">Config</span>
+                <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">Phantom</span>
               </div>
-              <h3 className="text-2xl font-light text-white mb-1">{phantomBalance.toFixed(2)} SOL</h3>
-              <p className="text-gray-400 text-sm font-light">Saldo Disponível</p>
+              <h3 className="text-2xl font-light text-white mb-1">{phantomBalance.toFixed(4)} SOL</h3>
+              <p className="text-gray-400 text-sm font-light">Saldo Real Phantom</p>
             </div>
           </div>
 
@@ -142,7 +158,7 @@ const CopyTradePage = () => {
                     value="history" 
                     className="rounded-xl font-medium data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-300"
                   >
-                    Histórico
+                    Histórico Real
                   </TabsTrigger>
                 </TabsList>
               </div>
@@ -157,7 +173,7 @@ const CopyTradePage = () => {
                 </TabsContent>
                 
                 <TabsContent value="history" className="mt-0">
-                  <CopyTradeHistory isLoading={isLoading} />
+                  <RealTimeCopyTradeHistory />
                 </TabsContent>
               </div>
             </Tabs>
